@@ -9,56 +9,126 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-class Node {
-    private String name;
-    private int x;
-    private int y;
 
-    public Node(String name, int x, int y) {
-        this.name = name;
-        this.x = x;
-        this.y = y;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-    
-    public void setName(String name)
-    {
-    	this.name = name;
-    }
-}
 
 class GraphPanel extends JPanel {
-    private java.util.List<Node> nodes;
-    private Node selectedNode;
+    private java.util.List<DragNode> nodes;
+    private DragNode selectedNode;
     private Point dragOffset;
+    //pop-up menu for editing Nodes
+    public JPopupMenu menu = new JPopupMenu("Menu");
+	public JMenuItem c = new JMenuItem("Color");
+	public JMenuItem r = new JMenuItem("Rename");
+	public JMenuItem aC = new JMenuItem("Add Connection");
+	public JMenuItem aN = new JMenuItem("Add Child Node");
+	public JMenuItem dC = new JMenuItem("Delete Connection");
+	public JMenuItem dN = new JMenuItem("Delete This Node");
 
     public GraphPanel() {
     
-    
-   
-    
-    	
+    	//list of all nodes currently on the Workspace
         nodes = new java.util.ArrayList<>();
-
+       
+        //options in the pop-up
+        menu.add(r);
+        menu.add(c);
+        menu.add(aC);
+        menu.add(aN);
+        menu.add(dC);
+        menu.add(dN);
+        
+        //renaming a node
+        r.addActionListener(new ActionListener() { 
+        	  public void actionPerformed(ActionEvent e) { 
+        	    
+        		  menu.setVisible(false);
+	
+        		  String name = selectedNode.getName();
+        		  name = JOptionPane.showInputDialog("rename the node:", selectedNode.getName());
+        		  selectedNode.setName(name);
+        		  
+        		  if(name != null)
+        		  repaint(); 
+	
+        	  } 
+        	} );
+        
+        
+        
+        //re-coloring a nodes
+        c.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+      	    
+      		  menu.setVisible(false);
+      		  //option colors for drop down menu
+      		  String[] options = {"White", "Blue", "Green", "Yellow", "Magenta", "Gray"};
+      		  DragNode node = selectedNode;
+      		  String selection = (String) JOptionPane.showInputDialog(null, "Choose color", "Menu", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+      		  //change color based on choice
+      		  switch(selection)
+      		  {
+      		   case "White" : 
+      			   
+      			   selectedNode.setCol(Color.white);
+      			   break;
+      			   
+      		   case "Blue" :
+      			 selectedNode.setCol(Color.blue);
+    			   break;
+      			 
+      		   case "Green" :
+      			 selectedNode.setCol(Color.green);
+    			   break;
+      			
+      		   case "Yellow" :
+      			 selectedNode.setCol(Color.yellow);
+    			   break;
+      			
+      		   case "Magenta" :
+      			 selectedNode.setCol(Color.magenta);
+    			   break;
+      			
+      		   case "Gray" :
+      			 selectedNode.setCol(Color.gray);
+    			   break;
+      		  
+      		  }
+      		  
+      		  repaint(); 
+	
+      	  } 
+      	} );
+        
+        aN.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+      	    
+      		  String name = "";
+      		  name = JOptionPane.showInputDialog("name for new node:");
+      		  
+      		  if(name != null)
+      		  addNode(name, 100, 100);
+      		  repaint(); 
+	
+      	  } 
+      	} );
+        
+        //Deleting Node:
+        dN.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+      	    
+      		  menu.setVisible(false);
+      		  int choice = JOptionPane.showConfirmDialog(null, "Are you Sure you want to delete " + selectedNode.getName() + " ?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+      		  
+      		  if(choice == 0)
+      		  {
+      		  nodes.remove(selectedNode);
+      		  repaint(); 
+      		  }
+      		  
+      		  
+	
+      	  } 
+      	} );
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 selectNode(e.getX(), e.getY());
@@ -70,37 +140,27 @@ class GraphPanel extends JPanel {
             
             public void mouseClicked(MouseEvent e)
             {
+            	selectNode(e.getX(), e.getY());
+            	if(e.getButton() == MouseEvent.BUTTON1 || e.getButton() == MouseEvent.BUTTON2)
+            	{
+            		menu.setVisible(false);
+            	}
+            	
+            	if(selectedNode != null) {
+            
             	if(e.getButton() == MouseEvent.BUTTON3)
             	{
-            		selectNode(e.getX(), e.getY());
             		
-            		String name = selectedNode.getName();
+                            menu.show(null, selectedNode.getX(), selectedNode.getY());
             		
-            		if(selectedNode != null)
-            		{
-            			
-            			name = JOptionPane.showInputDialog("rename the node:");
-            			if(name != null) {
-            				selectedNode.setName(name);
             			}
-            			
-            			else
-            			{
-            				name = selectedNode.getName();
-            			}
-            			
-            			repaint();
-            			
             		}
             		
-            			
-            		
             	}
-            		
-            		
-            }
         });
 
+        
+        
         addMouseMotionListener(new MouseAdapter() {
             public void mouseDragged(MouseEvent e) {
                 if (selectedNode != null) {
@@ -115,7 +175,7 @@ class GraphPanel extends JPanel {
     }
 
     public void addNode(String name, int x, int y) {
-        nodes.add(new Node(name, x, y));
+        nodes.add(new DragNode(name, x, y));
         repaint();
     }
 
@@ -123,10 +183,10 @@ class GraphPanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        for (Node node : nodes) {
+        for (DragNode node : nodes) {
             int x = node.getX();
             int y = node.getY();
-            g2.setColor(Color.WHITE);
+            g2.setColor(node.getColor());
             g2.fillOval(x, y, 50, 50);
             g2.setColor(Color.BLACK);
             g2.drawOval(x, y, 50, 50);
@@ -134,22 +194,22 @@ class GraphPanel extends JPanel {
         }
 
         g2.setColor(Color.BLACK);
-        for (Node node : nodes) {
+        DragNode node = nodes.get(0);
+
             int startX = node.getX() + 25;
             int startY = node.getY() + 50;
 
-            for (Node connectedNode : nodes) {
+            for (DragNode connectedNode : nodes) {
                 if (connectedNode != node) {
                     int endX = connectedNode.getX() + 25;
                     int endY = connectedNode.getY();
                     g2.drawLine(startX, startY, endX, endY);
-                }
             }
         }
     }
 
     private void selectNode(int x, int y) {
-        for (Node node : nodes) {
+        for (DragNode node : nodes) {
             int nodeX = node.getX();
             int nodeY = node.getY();
             if (x >= nodeX && x <= nodeX + 50 && y >= nodeY && y <= nodeY + 50) {
@@ -171,34 +231,28 @@ public class GraphMain {
         JFrame frame = new JFrame("Graph Visualization");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        GraphPanel graphPanel = new GraphPanel();
-        
-      
- 
-        
-        JMenuBar options = new JMenuBar();
-        JMenuItem addN = new JMenuItem();
-        JMenuItem delN = new JMenuItem();
-        JMenuItem help = new JMenuItem();
-        JMenuItem connect = new JMenuItem();
-        JMenuItem delConnect = new JMenuItem();
-        
-    	
+        final GraphPanel graphPanel = new GraphPanel();
+        JMenuBar bar = new JMenuBar();
+        JMenu options = new JMenu("Actions");
+        JMenuItem help = new JMenuItem("Help");
+        JMenuItem addN = new JMenuItem("Add new Node");
+        JMenuItem connect = new JMenuItem("Add a connection");
+        JMenuItem delConnect = new JMenuItem("Remove existing connection");
     	options.add(help);
     	options.add(addN);
-    	options.add(delN);
     	options.add(connect);
     	options.add(delConnect);
-    	frame.setJMenuBar(options);
+    	
+    	
+    	bar.add(options);
+    	frame.setJMenuBar(bar);
     	options.setVisible(true);
-
+    	
         frame.add(graphPanel);
         
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
      
-        frame.setVisible(true);
-        
-        
+        frame.setVisible(true); 
 
         graphPanel.addNode("Node 1", 100, 100);
         graphPanel.addNode("Node 2", 300, 200);
