@@ -13,26 +13,27 @@ import javax.swing.*;
 
 class GraphPanel extends JPanel {
     private java.util.List<DragNode> nodes;
+    private java.util.List<LineComp> lines;
     private DragNode selectedNode;
     private Point dragOffset;
     //pop-up menu for editing Nodes
     public JPopupMenu menu = new JPopupMenu("Menu");
 	public JMenuItem c = new JMenuItem("Color");
 	public JMenuItem r = new JMenuItem("Rename");
-	public JMenuItem aC = new JMenuItem("Add Connection");
 	public JMenuItem aN = new JMenuItem("Add Child Node");
 	public JMenuItem dC = new JMenuItem("Delete Connection");
 	public JMenuItem dN = new JMenuItem("Delete This Node");
 
     public GraphPanel() {
     
-    	//list of all nodes currently on the Workspace
+    	//list of all nodes and lines currently on the Workspace
         nodes = new java.util.ArrayList<>();
+        
+        lines = new java.util.ArrayList<>();
        
         //options in the pop-up
         menu.add(r);
         menu.add(c);
-        menu.add(aC);
         menu.add(aN);
         menu.add(dC);
         menu.add(dN);
@@ -106,7 +107,7 @@ class GraphPanel extends JPanel {
       		  name = JOptionPane.showInputDialog("name for new node:");
       		  
       		  if(name != null)
-      		  addNode(name, 100, 100);
+      		  addNode(selectedNode, name, 100, 100);
       		  repaint(); 
 	
       	  } 
@@ -121,14 +122,22 @@ class GraphPanel extends JPanel {
       		  
       		  if(choice == 0)
       		  {
-      		  nodes.remove(selectedNode);
-      		  repaint(); 
+      		   for(int i = 0; i < lines.size(); i++)
+      		   {
+      			   if(lines.get(i).getStartNode().equals(selectedNode) || lines.get(i).getEndNode().equals(selectedNode))
+      			   {
+      				   lines.remove(i);
+      				   i--;
+      			   }
+      		   }
+      		   nodes.remove(selectedNode);
+      		   repaint(); 
       		  }
-      		  
       		  
 	
       	  } 
       	} );
+        
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 selectNode(e.getX(), e.getY());
@@ -168,12 +177,37 @@ class GraphPanel extends JPanel {
                     int newY = e.getY() - dragOffset.y;
                     selectedNode.setX(newX);
                     selectedNode.setY(newY);
+                    
+                    for(LineComp line : lines)
+                    {
+                    	if(line.getStartNode().equals(selectedNode))
+                    	{
+                    		line.setStX(selectedNode.getX() + 25);
+                    		line.setStY(selectedNode.getY() + 50);
+                    		break;
+                    	}
+                    	
+                    	else if(line.getEndNode().equals(selectedNode))
+                    	{
+                    		line.setEndX(selectedNode.getX() + 25);
+                    		line.setEndY(selectedNode.getY());
+                    		break;
+                    	}
+                    }
                     repaint();
                 }
             }
         });
     }
 
+    public void addNode(DragNode startNode, String name, int x, int y) {
+        nodes.add(new DragNode(name, x, y));
+        lines.add(new LineComp("", startNode.getX() + 25, startNode.getY() + 50, nodes.get(nodes.size()-1).getX() + 25, nodes.get(nodes.size()-1).getY()));
+        lines.get(lines.size()-1).setEndNode(nodes.get(nodes.size()-1));
+        lines.get(lines.size()-1).setStartNode(startNode);
+        repaint();
+    }
+    
     public void addNode(String name, int x, int y) {
         nodes.add(new DragNode(name, x, y));
         repaint();
@@ -182,7 +216,8 @@ class GraphPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-
+       
+     
         for (DragNode node : nodes) {
             int x = node.getX();
             int y = node.getY();
@@ -191,22 +226,18 @@ class GraphPanel extends JPanel {
             g2.setColor(Color.BLACK);
             g2.drawOval(x, y, 50, 50);
             g2.drawString(node.getName(), x + 20, y + 30);
+        
         }
-
-        g2.setColor(Color.BLACK);
-        DragNode node = nodes.get(0);
-
-            int startX = node.getX() + 25;
-            int startY = node.getY() + 50;
-
-            for (DragNode connectedNode : nodes) {
-                if (connectedNode != node) {
-                    int endX = connectedNode.getX() + 25;
-                    int endY = connectedNode.getY();
-                    g2.drawLine(startX, startY, endX, endY);
-            }
+        
+       
+        for (LineComp line : lines){
+        g2.setColor(line.getColor());
+        g2.drawLine(line.getStX(), line.getStY(), line.getEndX(), line.getEndY());
         }
+        
     }
+    
+ 
 
     private void selectNode(int x, int y) {
         for (DragNode node : nodes) {
@@ -236,6 +267,18 @@ public class GraphMain {
         JMenu options = new JMenu("Actions");
         JMenuItem help = new JMenuItem("Help");
         JMenuItem addN = new JMenuItem("Add new Node");
+        addN.addActionListener(new ActionListener() { 
+        	  public void actionPerformed(ActionEvent e) { 
+
+          		  String name = "";
+          		  name = JOptionPane.showInputDialog("name for new node:");
+          		  
+          		  if(name != null)
+          		  graphPanel.addNode(name, 100, 100);
+          		  graphPanel.repaint(); 
+        	  } 
+        	} );
+        
         JMenuItem connect = new JMenuItem("Add a connection");
         JMenuItem delConnect = new JMenuItem("Remove existing connection");
     	options.add(help);
@@ -254,8 +297,8 @@ public class GraphMain {
      
         frame.setVisible(true); 
 
-        graphPanel.addNode("Node 1", 100, 100);
-        graphPanel.addNode("Node 2", 300, 200);
-        graphPanel.addNode("Node 3", 500, 300);
+        graphPanel.addNode("Node 1", 200, 200);
+
     }
+	
 }
