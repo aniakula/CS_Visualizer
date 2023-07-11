@@ -1,14 +1,18 @@
 import java.awt.Color;
+import java.awt.geom.Line2D;
 
 public class LineComp {
     private int stx;
     private int sty;
     private int endx;
     private int endy;
+    private int weight;
     private String name;
     private Color col;
     private DragNode stNode;
     private DragNode endNode;
+    private boolean isDirected;
+    private int thickness;
 
     public LineComp(String name, int stx, int sty, int endx, int endy) {
         this.name = name;
@@ -17,7 +21,11 @@ public class LineComp {
         this.stx = stx;
         this.sty = sty;
         this.col = Color.black;
+        this.isDirected = false;
+        this.weight = 0;
+        this.thickness = 1;
     }
+   
 
     public String getName() {  
         return name;
@@ -66,6 +74,21 @@ public class LineComp {
     	return stNode;
     }
     
+    public boolean isDirected()
+    {
+    	return isDirected;
+    }
+    
+    public int getWeight()
+    {
+    	return weight;
+    }
+    
+    public int getThick()
+    {
+    	return thickness;
+    }
+    
     public void setEndNode(DragNode node)
     {
     	endNode = node;		
@@ -95,4 +118,34 @@ public class LineComp {
     {
     	endy = newn;
     }
+    
+    public void setDirected(boolean bool) 
+    {
+    	isDirected = bool;
+    }
+    
+    public void setWeight(int weight)
+    {
+    	this.weight = weight;
+    }
+    
+    public void setThick(int t)
+    {
+    	thickness = t;
+    }
+
+    //for checking if a click was made close to a LineComp object
+    public boolean isInsideLine(int x, int y) {
+        int startX = this.getStartNode().getX() + 25;
+        int startY = this.getStartNode().getY() + 25;
+        int endX = this.getEndNode().getX() + 25;
+        int endY = this.getEndNode().getY() + 25;
+
+        Line2D lineSegment = new Line2D.Double(startX, startY, endX, endY);
+        double distance = lineSegment.ptSegDist(x, y);
+
+        return distance <= 20; // Adjust the range as needed
+    }
+
+    
 }
