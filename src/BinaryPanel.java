@@ -316,16 +316,43 @@ public class BinaryPanel extends JPanel {
                     selectedNode.setX(newX);
                     selectedNode.setY(newY);
 
-                    for (LineComp line : lines) {
-                        if (line.getStartNode().equals(selectedNode)) {
-                            line.setStX(selectedNode.getX() + 100);
-                            line.setStY(selectedNode.getY() + 100);
-                        } else if (line.getEndNode().equals(selectedNode)) {
-                            line.setEndX(selectedNode.getX() + 100);
-                            line.setEndY(selectedNode.getY() + 100);
-                        }
-                    }
                     repaint();
+                  for(LineComp line: lines)
+                  {
+                	  if(line.getStartNode().equals(selectedNode)||line.getEndNode().equals(selectedNode))
+                	  {
+                		  int p1 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 7, line.getEndNode().getX() + 43, line.getEndNode().getY() + 43);
+                		  int p2 = line.Dist(line.getStartNode().getX(), line.getStartNode().getY() + 25, line.getEndNode().getX() + 50, line.getEndNode().getY() + 25);
+                		 int p3 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 43, line.getEndNode().getX() + 43, line.getEndNode().getY() + 7);
+                		  int p4 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY() + 50, line.getEndNode().getX() + 25, line.getEndNode().getY());
+                		  int p5 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 43, line.getEndNode().getX() + 7, line.getEndNode().getY() + 7);
+                		  int p6 = line.Dist(line.getStartNode().getX() + 50, line.getStartNode().getY() + 25, line.getEndNode().getX() + 0, line.getEndNode().getY() + 25);
+                		 int p7 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 7, line.getEndNode().getX() + 7, line.getEndNode().getY() + 43);
+                		  int p8 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY(), line.getEndNode().getX() + 25, line.getEndNode().getY() + 50);
+                		  int dist = line.Dist(line.getStartNode().getX(), line.getStartNode().getY(), line.getEndNode().getX(), line.getEndNode().getY());
+                		  
+                		  int pf = Math.min(Math.min(Math.min(Math.min(dist, p1), Math.min(p2, p3)),Math.min(Math.min(p4, p5), Math.min(p6, p7))), p8);
+                		 
+                		  if(pf == p1)
+                			  line.setPreset(1);
+                		  else if( pf == p2)
+                			  line.setPreset(2);
+                		  else if( pf == p3)
+                			  line.setPreset(3);
+                		  else if( pf == p4)
+                			  line.setPreset(4);
+                		  else if( pf == p5)
+                			  line.setPreset(5);
+                		  else if( pf == p6)
+                			  line.setPreset(6);			  
+                		  else if( pf == p7)
+                			  line.setPreset(7);				  
+                		  else if(pf == p8)
+                			  line.setPreset(8);
+                			  
+                	  }
+                	  
+                  }
                 }
             }
         });
@@ -374,7 +401,7 @@ public class BinaryPanel extends JPanel {
         repaint();
     }
     
-    //basic addnode with no line drawn
+    //basic add node with no line drawn
     public void addNode(String name, int x, int y) {
         nodes.add(new DragNode(name, x, y));
         repaint();
@@ -425,14 +452,72 @@ public class BinaryPanel extends JPanel {
         
         }
         
-       //drawing all the lines witgh provided color and thickness
+       //drawing all the lines with provided color and thickness, and setting proper orientation preset
         for (LineComp line : lines){
         	g2.setColor(line.getColor());
-            int startX = line.getStartNode().getX() + 7;
-            int startY = line.getStartNode().getY() + 7;
-            int endX = line.getEndNode().getX() + 43;
-            int endY = line.getEndNode().getY() + 43;
-
+        	int startX = 0;
+    		int startY = 0;
+    		int endX = 0;
+    		int endY = 0;
+        	switch(line.getPreset()) {
+        	
+        	case 1:
+        	    startX = line.getStartNode().getX() + 7;
+        	    startY = line.getStartNode().getY() + 7;
+        		endX = line.getEndNode().getX() + 43;
+        		endY = line.getEndNode().getY() + 43;
+        		break;
+        		
+        	case 2:
+        		startX = line.getStartNode().getX();
+        	    startY = line.getStartNode().getY() + 25;
+        		endX = line.getEndNode().getX() + 50;
+        		endY = line.getEndNode().getY() + 25;
+        		break;
+        		
+        	case 3:
+        		startX = line.getStartNode().getX() + 7;
+        	    startY = line.getStartNode().getY() + 43;
+        		endX = line.getEndNode().getX() + 43;
+        		endY = line.getEndNode().getY() + 7;
+        		break;
+        		
+        	case 4:
+        		startX = line.getStartNode().getX() + 25;
+        		startY = line.getStartNode().getY() + 50;
+        		endX = line.getEndNode().getX() + 25;
+        		endY = line.getEndNode().getY();
+        		break;
+        		
+        	case 5:
+        		startX = line.getStartNode().getX() + 43;
+        	    startY = line.getStartNode().getY() + 43;
+        		endX = line.getEndNode().getX() + 7;
+        		endY = line.getEndNode().getY() + 7;
+        		break;
+        		
+        	case 6:
+        		startX = line.getStartNode().getX() + 50;
+        	    startY = line.getStartNode().getY() + 25;
+        		endX = line.getEndNode().getX();
+        		endY = line.getEndNode().getY() + 25;
+        		break;
+        		
+        	case 7:
+        		startX = line.getStartNode().getX() + 43;
+        	    startY = line.getStartNode().getY() + 7;
+        		endX = line.getEndNode().getX() + 7;
+        		endY = line.getEndNode().getY() + 43;
+        		break;
+        		
+        	case 8:
+        		startX = line.getStartNode().getX() + 25;
+        	    startY = line.getStartNode().getY();
+        		endX = line.getEndNode().getX() + 25;
+        		endY = line.getEndNode().getY() + 50;
+        		break;
+            
+        	}
             // Draw a line between nodes
             g2.setStroke(new BasicStroke(line.getThick()));
             g2.drawLine(startX, startY, endX, endY);

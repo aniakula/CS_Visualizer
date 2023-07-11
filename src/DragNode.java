@@ -15,8 +15,10 @@ public class DragNode {
     private String display;
     //level of depth in the tree
     private int level;
-    //children is the arraylist of nodes that represents the current object's children nodes
+    //children is the arrayList of nodes that represents the current object's children nodes
     private ArrayList<DragNode> children;
+    //used to indicate a loop in graph
+    private boolean isBold;
 
     public DragNode(String name, int x, int y) {
         this.name = name;
@@ -27,6 +29,7 @@ public class DragNode {
         this.display = "names";
         this.level = 0;
         children = new ArrayList<DragNode>();
+        this.isBold = false;
     }
     
     // getters:::
@@ -64,6 +67,10 @@ public class DragNode {
     {
     	return children;
     }
+    public boolean getBold()
+    {
+    	return isBold;
+    }
     //:::getters
     
     //setters:::
@@ -96,6 +103,10 @@ public class DragNode {
     public void setLevel(int lev)
     {
     	level = lev;
+    }
+    public void setBold(boolean set)
+    {
+    	isBold = set;
     }
     //:::setters^^^
     

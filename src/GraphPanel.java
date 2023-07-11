@@ -4,6 +4,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -79,17 +80,40 @@ public class GraphPanel extends JPanel {
                 menu.setVisible(false);
                 if(nodes.size() > 1)
                 {
-                final DragNode startNode = selectedNode; 
-                JOptionPane.showConfirmDialog(null, "Select Node to draw Edge towards", "Draw Directed Edge", JOptionPane.OK_OPTION, JOptionPane.PLAIN_MESSAGE);
-                addMouseListener(new MouseAdapter() {
-                    public void mouseClicked(MouseEvent e) {
+                  final DragNode startNode = selectedNode; 
+                  JOptionPane.showMessageDialog(null, "Select Node to draw Edge towards", "Draw Directed Edge", JOptionPane.PLAIN_MESSAGE);
+
+                  addMouseListener(new MouseAdapter() {
+                     public void mouseClicked(MouseEvent e) {
                         selectNode(e.getX(), e.getY());
 
-                        if (selectedNode != null) {
-                            addEdge(startNode, selectedNode, true);
-                        }
+                        if(selectedNode != null) {
+                        	
                         
                         
+                        if(!(selectedNode.getChildren().contains(startNode) || startNode.getChildren().contains(selectedNode)))
+                        		{
+                        			if(selectedNode.equals(startNode))	
+                        			{
+                        				selectedNode.setBold(true);
+                        				repaint();
+                        			}
+                        			
+                        			else
+                        			addEdge(startNode, selectedNode, true);
+                        			
+                        			startNode.getChildren().add(selectedNode);
+                        			
+                        		}
+                        		
+                        		else
+                        		{
+                        			JOptionPane.showConfirmDialog(null, "edge already drawn here", "Draw Directed Edge", JOptionPane.CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+                        		}
+                        	
+                        } 
+                        
+                        removeMouseListener(this);
                     }
                 });
 
@@ -360,16 +384,41 @@ public class GraphPanel extends JPanel {
                     int newY = e.getY() - dragOffset.y;
                     selectedNode.setX(newX);
                     selectedNode.setY(newY);
-
-                    for (LineComp line : lines) {
-                        if (line.getStartNode().equals(selectedNode)) {
-                            line.setStX(selectedNode.getX() + 25);
-                            line.setStY(selectedNode.getY() + 25);
-                        } else if (line.getEndNode().equals(selectedNode)) {
-                            line.setEndX(selectedNode.getX() + 25);
-                            line.setEndY(selectedNode.getY() + 25);
-                        }
-                    }
+                   
+                 for(LineComp line : lines) {   
+                    if(line.getStartNode().equals(selectedNode)||line.getEndNode().equals(selectedNode))
+              	  {
+              		  int p1 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 7, line.getEndNode().getX() + 43, line.getEndNode().getY() + 43);
+              		  int p2 = line.Dist(line.getStartNode().getX(), line.getStartNode().getY() + 25, line.getEndNode().getX() + 50, line.getEndNode().getY() + 25);
+              		 int p3 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 43, line.getEndNode().getX() + 43, line.getEndNode().getY() + 7);
+              		  int p4 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY() + 50, line.getEndNode().getX() + 25, line.getEndNode().getY());
+              		  int p5 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 43, line.getEndNode().getX() + 7, line.getEndNode().getY() + 7);
+              		  int p6 = line.Dist(line.getStartNode().getX() + 50, line.getStartNode().getY() + 25, line.getEndNode().getX() + 0, line.getEndNode().getY() + 25);
+              		 int p7 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 7, line.getEndNode().getX() + 7, line.getEndNode().getY() + 43);
+              		  int p8 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY(), line.getEndNode().getX() + 25, line.getEndNode().getY() + 50);
+              		  int dist = line.Dist(line.getStartNode().getX(), line.getStartNode().getY(), line.getEndNode().getX(), line.getEndNode().getY());
+              		  
+              		  int pf = Math.min(Math.min(Math.min(Math.min(dist, p1), Math.min(p2, p3)),Math.min(Math.min(p4, p5), Math.min(p6, p7))), p8);
+              		 
+              		  if(pf == p1)
+              			  line.setPreset(1);
+              		  else if( pf == p2)
+              			  line.setPreset(2);
+              		  else if( pf == p3)
+              			  line.setPreset(3);
+              		  else if( pf == p4)
+              			  line.setPreset(4);
+              		  else if( pf == p5)
+              			  line.setPreset(5);
+              		  else if( pf == p6)
+              			  line.setPreset(6);			  
+              		  else if( pf == p7)
+              			  line.setPreset(7);				  
+              		  else if(pf == p8)
+              			  line.setPreset(8);
+              			  
+              	  }
+                 }
                     repaint();
                 }
             }
@@ -389,6 +438,7 @@ public class GraphPanel extends JPanel {
         nodes.get(nodes.size()-1).setDisplay(startNode.getDisplay());
         nodes.get(nodes.size()-1).setLevel(startNode.getLevel()+1);
         startNode.getChildren().add(nodes.get(nodes.size()-1));
+        nodes.get(nodes.size()-1).getChildren().add(startNode);
         repaint();
     }
     
@@ -397,13 +447,19 @@ public class GraphPanel extends JPanel {
         DragNode endNode = nodes.get(nodes.size()-1);
         nodes.get(nodes.size()-1).setDisplay(startNode.getDisplay());
         nodes.get(nodes.size()-1).setLevel(startNode.getLevel()+1);
+        
         if(direction.equals("toNew"))
-        addEdge(startNode, endNode, true);
+        {
+        	addEdge(startNode, endNode, true);
+        	startNode.getChildren().add(endNode);
+        }
         
         else if (direction.equals("toOld"))
         {
         	addEdge(endNode, startNode, true);
+        	endNode.getChildren().add(startNode);
         }
+        
         repaint();
     }
 
@@ -439,17 +495,80 @@ public class GraphPanel extends JPanel {
             g2.setColor(node.getColor());
             g2.fillOval(x, y, 50, 50);
             g2.setColor(Color.BLACK);
+            if(node.getBold())
+            {
+            	g2.setStroke(new BasicStroke(3));
+            }
             g2.drawOval(x, y, 50, 50);
             g2.drawString(node.getName(), x + 20, y + 30);
         }
 
         for (LineComp line : lines) {
             g2.setColor(line.getColor());
-            int startX = line.getStartNode().getX() + 7;
-            int startY = line.getStartNode().getY() + 7;
-            int endX = line.getEndNode().getX() + 43;
-            int endY = line.getEndNode().getY() + 43;
+            int startX = 0;
+            int startY = 0;
+            int endX = 0;
+            int endY = 0;
 
+switch(line.getPreset()) {
+        	
+        	case 1:
+        	    startX = line.getStartNode().getX() + 7;
+        	    startY = line.getStartNode().getY() + 7;
+        		endX = line.getEndNode().getX() + 43;
+        		endY = line.getEndNode().getY() + 43;
+        		break;
+        		
+        	case 2:
+        		startX = line.getStartNode().getX();
+        	    startY = line.getStartNode().getY() + 25;
+        		endX = line.getEndNode().getX() + 50;
+        		endY = line.getEndNode().getY() + 25;
+        		break;
+        		
+        	case 3:
+        		startX = line.getStartNode().getX() + 7;
+        	    startY = line.getStartNode().getY() + 43;
+        		endX = line.getEndNode().getX() + 43;
+        		endY = line.getEndNode().getY() + 7;
+        		break;
+        		
+        	case 4:
+        		startX = line.getStartNode().getX() + 25;
+        		startY = line.getStartNode().getY() + 50;
+        		endX = line.getEndNode().getX() + 25;
+        		endY = line.getEndNode().getY();
+        		break;
+        		
+        	case 5:
+        		startX = line.getStartNode().getX() + 43;
+        	    startY = line.getStartNode().getY() + 43;
+        		endX = line.getEndNode().getX() + 7;
+        		endY = line.getEndNode().getY() + 7;
+        		break;
+        		
+        	case 6:
+        		startX = line.getStartNode().getX() + 50;
+        	    startY = line.getStartNode().getY() + 25;
+        		endX = line.getEndNode().getX();
+        		endY = line.getEndNode().getY() + 25;
+        		break;
+        		
+        	case 7:
+        		startX = line.getStartNode().getX() + 43;
+        	    startY = line.getStartNode().getY() + 7;
+        		endX = line.getEndNode().getX() + 7;
+        		endY = line.getEndNode().getY() + 43;
+        		break;
+        		
+        	case 8:
+        		startX = line.getStartNode().getX() + 25;
+        	    startY = line.getStartNode().getY();
+        		endX = line.getEndNode().getX() + 25;
+        		endY = line.getEndNode().getY() + 50;
+        		break;
+            
+        	}
             // Draw a line between nodes
             g2.setStroke(new BasicStroke(line.getThick()));
             g2.drawLine(startX, startY, endX, endY);
@@ -526,4 +645,3 @@ public class GraphPanel extends JPanel {
         }
     }
 }
-

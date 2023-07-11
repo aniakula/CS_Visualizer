@@ -13,6 +13,16 @@ public class LineComp {
     private DragNode endNode;
     private boolean isDirected;
     private int thickness;
+    //represents orientation of line with respect to Start and End Node:
+    //preset = 1: NW
+    //preset = 2: W
+    //preset = 3: SW
+    //preset = 4: S
+    //preset = 5: SE
+    //preset = 6: E
+    //preset = 7: NE
+    //preset = 8: N
+    private int preset; 
 
     public LineComp(String name, int stx, int sty, int endx, int endy) {
         this.name = name;
@@ -24,6 +34,7 @@ public class LineComp {
         this.isDirected = false;
         this.weight = 0;
         this.thickness = 1;
+        this.preset = 1;
     }
    
 
@@ -89,6 +100,11 @@ public class LineComp {
     	return thickness;
     }
     
+    public int getPreset()
+    {
+    	return preset;
+    }
+    
     public void setEndNode(DragNode node)
     {
     	endNode = node;		
@@ -133,6 +149,17 @@ public class LineComp {
     {
     	thickness = t;
     }
+    
+    public void setPreset(int p)
+    {
+    	preset = p;
+    	
+    	if(p>8)
+    		preset = 1;
+    	else if(p < 1)
+    		preset = 8;
+    }
+    		
 
     //for checking if a click was made close to a LineComp object
     public boolean isInsideLine(int x, int y) {
@@ -147,5 +174,18 @@ public class LineComp {
         return distance <= 20; // Adjust the range as needed
     }
 
+        public int calculateDistance() {
+            int deltaX = endx - stx;
+            int deltaY = endy - sty;
+            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            return (int)distance;
+        }
+        
+        public int Dist(int x1, int y1, int x2, int y2) {
+            int deltaX = x2 - x1;
+            int deltaY = y2 - y1;
+            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            return (int)distance;
+        }
     
 }
