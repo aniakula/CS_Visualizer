@@ -1,12 +1,17 @@
 # CS_Visualizer
 Interactive model builder for graph theory, binary trees, and programming flow-charts
 
-# HOW TO USE:
+# Setup:
+- Download Java Run-Time Environment (JRE)
+- Download desired version of CS_Vision_ (.jar file)
+- Once download is complete, execute the .jar file
+- Refer to documentation below for version history and user guide
+  
+# How to use:
 
 
 
-
-# VERSION HISTORY:
+# Version History:
 
 version 1.0 : CS_Vision_1.0.jar
 - first version
