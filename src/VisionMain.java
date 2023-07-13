@@ -15,13 +15,16 @@ import javax.swing.*;
 
 public class VisionMain {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Graph Visualization");
+    	
+    	
+        JFrame frame = new JFrame("CS Vision");
         final JPanel overall = new JPanel();
         final CardLayout c1 = new CardLayout();
         overall.setLayout(c1);
         frame.add(overall);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        frame.setResizable(false);
+        try {
         final BinaryPanel binPanel = new BinaryPanel();
         final GraphPanel graphPanel = new GraphPanel();
         final FlowPanel flowPanel = new FlowPanel();
@@ -31,20 +34,26 @@ public class VisionMain {
         JMenuBar bar = new JMenuBar();
         JMenu options = new JMenu("Actions");
         
-        final JMenuItem helpGraph = new JMenuItem("Help");
-        final JMenuItem helpFlow = new JMenuItem("Help");
+        //Flow Chart Main Menu Items:
+        final JMenuItem addNFlow = new JMenuItem("Add new Flow Structure"); //add new flow structure
+        final JMenuItem helpFlow = new JMenuItem("Help"); //help screen for flow
+        final JMenuItem flowScreen = new JMenuItem("Go to \"Flow Chart\" work space");//go to flow space
+        //----------------------------------------------------------------------------------------------
         
-        final JMenuItem addNGraph = new JMenuItem("Add new Node");
-        final JMenuItem addNFlow = new JMenuItem("Add new Flow Structure");
-        final JMenuItem graphScreen = new JMenuItem("Go to \"Graph work\" space");
-        final JMenuItem flowScreen = new JMenuItem("Go to \"Flow Chart\" work space");
+        //Graph Main Menu Items:
+        final JMenuItem helpGraph = new JMenuItem("Help"); //help screen for graph
+        final JMenuItem addNGraph = new JMenuItem("Add new Node"); //add graph node
+        final JMenuItem graphScreen = new JMenuItem("Go to \"Graph work\" space");//go to graph space
+        final JMenuItem setUndirected = new JMenuItem("make graph non-directional");//set all edges to undirected 
+        //----------------------------------------------------------------------------------------------
         
-        final JMenuItem binScreen = new JMenuItem("Go to \"Binary Tree\" work space");
         //Binary Tree Main Menu Items:
-        final JMenuItem OrganizeTree = new JMenuItem("Organize Binary Tree");
-        final JMenuItem helpBin = new JMenuItem("Help");
-        final JMenuItem addNBin = new JMenuItem("Add new Node");
-        
+        final JMenuItem OrganizeTree = new JMenuItem("Organize Binary Tree"); //organizes tree in level order
+        final JMenuItem helpBin = new JMenuItem("Help"); // help screen for tree
+        final JMenuItem addNBin = new JMenuItem("Add new Node"); // adds a new tree node
+        final JMenuItem binScreen = new JMenuItem("Go to \"Binary Tree\" work space");// go to binary tree space
+        final JMenuItem binDisp = new JMenuItem("Change Display"); // change display mode of nodes (name, value, level)
+        //----------------------------------------------------------------------------------------------
         graphScreen.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
 
@@ -59,6 +68,8 @@ public class VisionMain {
         		  helpGraph.setVisible(true);
         		  helpFlow.setVisible(false);
         		  OrganizeTree.setVisible(false);
+        		  binDisp.setVisible(false);
+        		  setUndirected.setVisible(true);
         	  } 
         	} );
         
@@ -77,6 +88,8 @@ public class VisionMain {
         		  helpGraph.setVisible(false);
         		  helpFlow.setVisible(true);
         		  OrganizeTree.setVisible(false);
+        		  binDisp.setVisible(false);
+        		  setUndirected.setVisible(true);
         	  } 
         	} );
         
@@ -94,8 +107,32 @@ public class VisionMain {
 		  helpGraph.setVisible(false);
 		  helpFlow.setVisible(false);
 		  OrganizeTree.setVisible(true);
+		  binDisp.setVisible(true);
+		  setUndirected.setVisible(true);
       	  } 
       	} );
+        
+        setUndirected.addActionListener(new ActionListener() { 
+        	  public void actionPerformed(ActionEvent e) { 
+          		  
+        		  int choice = JOptionPane.showConfirmDialog(null,
+                          "Are you sure you want to set all edges to undirected? ", "Confirm",
+                          JOptionPane.YES_NO_OPTION);
+
+                  if (choice == 0) 
+                  {
+                	  for(LineComp line : graphPanel.getLineList())
+                	  {
+                		  line.setDirected(false);
+                		  
+                      }
+          		  
+                  } 
+                  
+                  graphPanel.repaint();
+                  
+        	  }
+        	} );
         
         OrganizeTree.addActionListener(new ActionListener() { 
       	  public void actionPerformed(ActionEvent e) { 
@@ -109,6 +146,18 @@ public class VisionMain {
       			 }
       		  }
       		  
+    	  } 
+    	} );
+        
+        addNGraph.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+
+      		  String name = "";
+      		  name = JOptionPane.showInputDialog("name for new node:");
+      		  
+      		  if(name != null)
+      		  graphPanel.addNode(name, 100, 100);
+      		  graphPanel.repaint(); 
     	  } 
     	} );
  
@@ -168,8 +217,8 @@ public class VisionMain {
       	  } 
       	} );
       
-        JMenuItem disp = new JMenuItem("Change Display");
-        disp.addActionListener(new ActionListener() { 
+        
+        binDisp.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
 
           		  String disp = "";
@@ -188,11 +237,12 @@ public class VisionMain {
     	options.add(addNBin);
     	options.add(addNGraph);
     	options.add(addNFlow);
-    	options.add(disp);
+    	options.add(binDisp);
     	options.add(flowScreen);
     	options.add(graphScreen);
     	options.add(binScreen);
     	options.add(OrganizeTree);
+    	options.add(setUndirected);
     	//initialize visible options to Binary Tree Screen defaults:
     	graphScreen.setVisible(true);
 		flowScreen.setVisible(true);
@@ -209,8 +259,8 @@ public class VisionMain {
     	options.setVisible(true);
     	
         
-        
-        
+    	ImageIcon img = new ImageIcon("CS_Vision_Icon.jpg");
+        frame.setIconImage(img.getImage());
         
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
      
@@ -220,8 +270,15 @@ public class VisionMain {
         binPanel.getNodeList().get(0).setLevel(0);
         
         graphPanel.addNode("Graph Node", 200, 200);
-        
+      
 
     }
+    	catch(Exception e)
+    	{
+    		JOptionPane.showMessageDialog(null, "An error occured, the application will now close " +'\n'+ "Error: " + e.getLocalizedMessage(), "Fatal Error", JOptionPane.ERROR_MESSAGE );
+    		frame.dispose();
+    	}
+    
 	
+}
 }

@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-public class GraphPanel extends JPanel {
+public class LogicPanel extends JPanel {
     private List<DragNode> nodes;
     private List<LineComp> lines;
     private DragNode selectedNode;
@@ -41,7 +41,7 @@ public class GraphPanel extends JPanel {
     public JMenuItem cL = new JMenuItem("Set Edge Color");
     public JMenuItem sT = new JMenuItem("Set Edge Thickness");
 
-    public GraphPanel() {
+    public LogicPanel() {
         // List of all nodes and lines currently on the workspace
         nodes = new ArrayList<>();
         lines = new ArrayList<>();
@@ -659,10 +659,5 @@ switch(line.getPreset()) {
                 selectedLine = null;
             }
         }
-    }
-    
-    public java.util.List<LineComp> getLineList()
-    {
-    	return lines;
     }
 }

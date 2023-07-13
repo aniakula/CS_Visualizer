@@ -20,9 +20,23 @@ public class DragNode {
     //orientation of the children
     private ArrayList<String> orient;
     //used to indicate a loop in graph
-    private boolean isBold;
+    private boolean isBold  = false;
+     
+    final int IN, OUT, NOT, AND, OR, XOR, NAND, NOR, XNOR;
+    	
+    
+    private int type;
 
     public DragNode(String name, int x, int y) {
+    	IN = 1;
+    	OUT = 2;
+    	NOT = 3;
+    	AND= 4;
+    	OR = 5;
+    	XOR = 6;
+    	NAND = 7;
+    	NOR = 8;
+    	XNOR = 9;
         this.name = name;
         this.x = x;
         this.y = y;
@@ -33,6 +47,7 @@ public class DragNode {
         children = new ArrayList<DragNode>();
         orient = new ArrayList<String>();
         this.isBold = false;
+        this.type = this.IN;
     }
     
     // getters:::
@@ -78,6 +93,10 @@ public class DragNode {
     {
     	return orient;
     }
+    public int getType()
+    {
+    	return type;
+    }
     //:::getters
     
     //setters:::
@@ -114,6 +133,40 @@ public class DragNode {
     public void setBold(boolean set)
     {
     	isBold = set;
+    }
+
+    public void setType(int x)
+    {
+    	switch(x)
+    	{
+    	case(1):
+    		type = this.IN;
+    		break;
+    	case(2):
+    		type = this.OUT;
+    		break;
+    	case(3):
+    		type = this.NOT;
+    		break;
+    	case(4):
+    		type = this.AND;
+    		break;
+    	case(5):
+    		type = this.OR;
+    		break;
+    	case(6):
+    		type = this.XOR;
+    		break;
+    	case(7):
+    		type = this.NAND;
+    		break;
+    	case(8):
+    		type = this.NOR;
+    		break;
+    	case(9):
+    		type = this.XNOR;
+    		break;
+    	}
     }
     //:::setters^^^
     

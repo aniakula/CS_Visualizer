@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+@SuppressWarnings("serial")
 public class BinaryPanel extends JPanel {
     private java.util.List<DragNode> nodes;
     private java.util.List<LineComp> lines;
@@ -77,7 +78,6 @@ public class BinaryPanel extends JPanel {
       		  menu.setVisible(false);
       		  //option colors for drop down menu
       		  String[] options = {"White", "Cyan", "Green", "Yellow", "Magenta", "Orange", "Gray"};
-      		  DragNode node = selectedNode;
       		  String selection = (String) JOptionPane.showInputDialog(null, "Choose color", "Menu", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
       		  //change color based on choice
       		  if(selection != null)
@@ -234,7 +234,7 @@ public class BinaryPanel extends JPanel {
                         break;
                         
                     case "Orange":
-                    	selectedNode.setCol(Color.orange);
+                    	selectedLine.setCol(Color.orange);
                         break;
                         
                     case "Gray":

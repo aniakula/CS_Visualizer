@@ -1,7 +1,9 @@
 import java.awt.Color;
 import java.awt.geom.Line2D;
 
-public class LineComp {
+import javax.swing.JPanel;
+
+public class LineComp extends JPanel {
     private int stx;
     private int sty;
     private int endx;
