@@ -30,15 +30,20 @@ public class VisionMain {
         overall.add(flowPanel, "Flow Chart Builder");
         JMenuBar bar = new JMenuBar();
         JMenu options = new JMenu("Actions");
-        final JMenuItem helpBin = new JMenuItem("Help");
+        
         final JMenuItem helpGraph = new JMenuItem("Help");
         final JMenuItem helpFlow = new JMenuItem("Help");
-        final JMenuItem addNBin = new JMenuItem("Add new Node");
+        
         final JMenuItem addNGraph = new JMenuItem("Add new Node");
         final JMenuItem addNFlow = new JMenuItem("Add new Flow Structure");
         final JMenuItem graphScreen = new JMenuItem("Go to \"Graph work\" space");
         final JMenuItem flowScreen = new JMenuItem("Go to \"Flow Chart\" work space");
+        
         final JMenuItem binScreen = new JMenuItem("Go to \"Binary Tree\" work space");
+        //Binary Tree Main Menu Items:
+        final JMenuItem OrganizeTree = new JMenuItem("Organize Binary Tree");
+        final JMenuItem helpBin = new JMenuItem("Help");
+        final JMenuItem addNBin = new JMenuItem("Add new Node");
         
         graphScreen.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
@@ -53,6 +58,7 @@ public class VisionMain {
         		  helpBin.setVisible(false);
         		  helpGraph.setVisible(true);
         		  helpFlow.setVisible(false);
+        		  OrganizeTree.setVisible(false);
         	  } 
         	} );
         
@@ -70,6 +76,7 @@ public class VisionMain {
         		  helpBin.setVisible(false);
         		  helpGraph.setVisible(false);
         		  helpFlow.setVisible(true);
+        		  OrganizeTree.setVisible(false);
         	  } 
         	} );
         
@@ -86,9 +93,25 @@ public class VisionMain {
   		  helpBin.setVisible(true);
 		  helpGraph.setVisible(false);
 		  helpFlow.setVisible(false);
+		  OrganizeTree.setVisible(true);
       	  } 
       	} );
         
+        OrganizeTree.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+      		  
+      		  for(DragNode node :  binPanel.getNodeList())
+      		  {
+      			 if(node.getLevel() == 0)
+      			 {
+      				 node.setX(730);
+      				 node.setY(0);
+      			 }
+      		  }
+      		  
+    	  } 
+    	} );
+ 
         addNBin.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
 
@@ -128,6 +151,22 @@ public class VisionMain {
           		  help.setVisible(true);
         	  } 
         	} );
+        
+        OrganizeTree.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+      		  
+      		  for(DragNode node : binPanel.getNodeList())
+      		  {
+      		     if(node.getLevel() == 0) {
+      		    	 node.organize(80, 20);
+      		    	 binPanel.align();
+      		    	 break;
+      		     }
+      		  }
+
+        		  binPanel.repaint();
+      	  } 
+      	} );
       
         JMenuItem disp = new JMenuItem("Change Display");
         disp.addActionListener(new ActionListener() { 
@@ -153,6 +192,7 @@ public class VisionMain {
     	options.add(flowScreen);
     	options.add(graphScreen);
     	options.add(binScreen);
+    	options.add(OrganizeTree);
     	//initialize visible options to Binary Tree Screen defaults:
     	graphScreen.setVisible(true);
 		flowScreen.setVisible(true);
@@ -176,10 +216,10 @@ public class VisionMain {
      
         frame.setVisible(true); 
 
-        binPanel.addNode("Node 1", 200, 200);
+        binPanel.addNode("Tree Node", 200, 200);
         binPanel.getNodeList().get(0).setLevel(0);
         
-        graphPanel.addNode("Node 1", 200, 200);
+        graphPanel.addNode("Graph Node", 200, 200);
         
 
     }

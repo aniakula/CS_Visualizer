@@ -123,4 +123,53 @@ public class DragNode {
     	}
     }
     
+    public void organize(int xdiff, int ydiff)
+    {
+    	if(this.getLevel() == 0)
+    	{
+    		this.setX(730);
+    		this.setY(0);
+    	
+    		if(this.getChildren().size() == 1)
+    		{
+    			this.getChildren().get(0).setX(this.getX() - xdiff);
+    			this.getChildren().get(0).setY(this.getY() + ydiff);
+    			this.getChildren().get(0).organize(xdiff, ydiff);
+    		}
+    		
+    		else if(this.getChildren().size() == 2)
+    		{
+    			this.getChildren().get(0).setX(this.getX() - xdiff);
+    			this.getChildren().get(0).setY(this.getY() + ydiff);
+    			this.getChildren().get(1).setX(this.getX() + xdiff);
+    			this.getChildren().get(1).setY(this.getY() + ydiff);
+    			this.getChildren().get(0).organize(xdiff, ydiff);
+    			this.getChildren().get(1).organize(xdiff, ydiff);
+    			
+    		}
+    	}
+    	
+    	else
+    	{
+    		if(this.getChildren().size() == 1)
+    		{
+    			this.getChildren().get(0).setX(this.getX() - xdiff);
+    			this.getChildren().get(0).setY(this.getY() + ydiff);
+    			this.getChildren().get(0).organize(xdiff, ydiff);
+    		}
+    		
+    		else if(this.getChildren().size() == 2)
+    		{
+    			this.getChildren().get(0).setX(this.getX() - xdiff);
+    			this.getChildren().get(0).setY(this.getY() + ydiff);
+    			this.getChildren().get(1).setX(this.getX() + xdiff);
+    			this.getChildren().get(1).setY(this.getY() + ydiff);
+    			this.getChildren().get(0).organize(xdiff, ydiff);
+    			this.getChildren().get(1).organize(xdiff, ydiff);
+    		}
+    	}
+    	
+    }
+    
+    
 }

@@ -143,8 +143,10 @@ public class BinaryPanel extends JPanel {
       		  String name = "";
       		  name = JOptionPane.showInputDialog("name for new node:");
       		  
-      		  if(name != null)
-      		  addNode(selectedNode, name, 100, 100);
+      		  if(name != null) 
+      				  addNode(selectedNode, name, selectedNode.getX() - 20, selectedNode.getY() - 20);
+      			  
+      		  
       		  repaint(); 
 	
       	  } 
@@ -200,7 +202,6 @@ public class BinaryPanel extends JPanel {
                 menuLine.setVisible(false);
                 // Option colors for drop-down menu
                 String[] options = {"Black", "Cyan", "Green", "Yellow", "Magenta", "Orange", "Gray"};
-                LineComp line = selectedLine;
                 String selection = (String) JOptionPane.showInputDialog(null, "Choose color", "Menu",
                         JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
                 // Change color based on choice
@@ -315,7 +316,7 @@ public class BinaryPanel extends JPanel {
                     int newY = e.getY() - dragOffset.y;
                     selectedNode.setX(newX);
                     selectedNode.setY(newY);
-
+                   
                     repaint();
                   for(LineComp line: lines)
                   {
@@ -557,6 +558,42 @@ public class BinaryPanel extends JPanel {
                 selectedLine = null;
             }
         }
+    }
+    
+    //method for re-aligning all lines to proper preset
+    public void align()
+    {
+    	for(LineComp line : lines) {
+    	int p1 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 7, line.getEndNode().getX() + 43, line.getEndNode().getY() + 43);
+		  int p2 = line.Dist(line.getStartNode().getX(), line.getStartNode().getY() + 25, line.getEndNode().getX() + 50, line.getEndNode().getY() + 25);
+		 int p3 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 43, line.getEndNode().getX() + 43, line.getEndNode().getY() + 7);
+		  int p4 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY() + 50, line.getEndNode().getX() + 25, line.getEndNode().getY());
+		  int p5 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 43, line.getEndNode().getX() + 7, line.getEndNode().getY() + 7);
+		  int p6 = line.Dist(line.getStartNode().getX() + 50, line.getStartNode().getY() + 25, line.getEndNode().getX() + 0, line.getEndNode().getY() + 25);
+		 int p7 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 7, line.getEndNode().getX() + 7, line.getEndNode().getY() + 43);
+		  int p8 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY(), line.getEndNode().getX() + 25, line.getEndNode().getY() + 50);
+		  int dist = line.Dist(line.getStartNode().getX(), line.getStartNode().getY(), line.getEndNode().getX(), line.getEndNode().getY());
+		  
+		  int pf = Math.min(Math.min(Math.min(Math.min(dist, p1), Math.min(p2, p3)),Math.min(Math.min(p4, p5), Math.min(p6, p7))), p8);
+		 
+		  if(pf == p1)
+			  line.setPreset(1);
+		  else if( pf == p2)
+			  line.setPreset(2);
+		  else if( pf == p3)
+			  line.setPreset(3);
+		  else if( pf == p4)
+			  line.setPreset(4);
+		  else if( pf == p5)
+			  line.setPreset(5);
+		  else if( pf == p6)
+			  line.setPreset(6);			  
+		  else if( pf == p7)
+			  line.setPreset(7);				  
+		  else if(pf == p8)
+			  line.setPreset(8);
+			  
+	  }
     }
     
     //getter method for the list of nodes in the workspace
