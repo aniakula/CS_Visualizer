@@ -17,6 +17,8 @@ public class DragNode {
     private int level;
     //children is the arrayList of nodes that represents the current object's children nodes
     private ArrayList<DragNode> children;
+    //orientation of the children
+    private ArrayList<String> orient;
     //used to indicate a loop in graph
     private boolean isBold;
 
@@ -29,6 +31,7 @@ public class DragNode {
         this.display = "names";
         this.level = 0;
         children = new ArrayList<DragNode>();
+        orient = new ArrayList<String>();
         this.isBold = false;
     }
     
@@ -70,6 +73,10 @@ public class DragNode {
     public boolean getBold()
     {
     	return isBold;
+    }
+    public ArrayList<String> getOrient()
+    {
+    	return orient;
     }
     //:::getters
     
@@ -123,6 +130,22 @@ public class DragNode {
     	}
     }
     
+    public boolean isLeaf()
+    {
+    	if(this.getChildren().size() == 0)
+    		return true;
+    	
+    	return false;
+    }
+    
+    public boolean isRoot()
+    {
+    	if(this.getLevel() == 0)
+    		return true;
+    	
+    	return false;
+    }
+    
     public void organize(int xdiff, int ydiff)
     {
     	if(this.getLevel() == 0)
@@ -160,6 +183,7 @@ public class DragNode {
     		
     		else if(this.getChildren().size() == 2)
     		{
+    			
     			this.getChildren().get(0).setX(this.getX() - xdiff);
     			this.getChildren().get(0).setY(this.getY() + ydiff);
     			this.getChildren().get(1).setX(this.getX() + xdiff);

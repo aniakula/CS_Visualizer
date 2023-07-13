@@ -490,6 +490,23 @@ public class GraphPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
 
         for (DragNode node : nodes) {
+        	if(node.getX() >= 1485)
+        	{
+        		node.setX(1485);
+        	}
+        	else if(node.getX() <= 0)
+        	{
+        		node.setX(0);
+        	}
+        	
+        	if(node.getY() >= 720)
+        	{
+        		node.setY(720);
+        	}
+        	else if(node.getY() <= 0)
+        	{
+        		node.setY(0);
+        	}
             int x = node.getX();
             int y = node.getY();
             g2.setColor(node.getColor());

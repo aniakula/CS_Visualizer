@@ -158,7 +158,7 @@ public class VisionMain {
       		  for(DragNode node : binPanel.getNodeList())
       		  {
       		     if(node.getLevel() == 0) {
-      		    	 node.organize(80, 20);
+      		    	 node.organize(70, 50);
       		    	 binPanel.align();
       		    	 break;
       		     }

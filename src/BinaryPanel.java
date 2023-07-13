@@ -144,7 +144,12 @@ public class BinaryPanel extends JPanel {
       		  name = JOptionPane.showInputDialog("name for new node:");
       		  
       		  if(name != null) 
+      		  {
+      			  
+      			      
       				  addNode(selectedNode, name, selectedNode.getX() - 20, selectedNode.getY() - 20);
+      				  
+      		  }
       			  
       		  
       		  repaint(); 
@@ -398,6 +403,34 @@ public class BinaryPanel extends JPanel {
         lines.get(lines.size()-1).setStartNode(startNode);
         nodes.get(nodes.size()-1).setDisplay(startNode.getDisplay());
         nodes.get(nodes.size()-1).setLevel(startNode.getLevel()+1);
+        if(selectedNode.getChildren().size() == 1)
+		  {
+			  if(Integer.parseInt(selectedNode.getChildren().get(0).getValue()) >= 0)
+			  {
+				  selectedNode.getChildren().get(0).getOrient().set(0, "R");
+				  nodes.get(nodes.size()-1).getOrient().add("L");
+			  }
+			  
+			  else
+			  {
+				  selectedNode.getChildren().get(0).getOrient().set(0, "L");
+				  nodes.get(nodes.size()-1).getOrient().add("R");
+			  }
+		  }
+        
+        else if(selectedNode.getChildren().size() == 0)
+        {
+        	if(Integer.parseInt(selectedNode.getValue()) >= 0)
+        	{
+        		nodes.get(nodes.size()-1).getOrient().add("L");
+        	}
+        	
+        	else
+        	{
+        		nodes.get(nodes.size()-1).getOrient().add("R");
+        	}
+        		
+        }
         startNode.getChildren().add(nodes.get(nodes.size()-1));
         repaint();
     }
@@ -428,6 +461,25 @@ public class BinaryPanel extends JPanel {
      
         for (DragNode node : nodes) 
         {
+        	if(node.getX() >= 1485)
+        	{
+        		node.setX(1485);
+        	}
+        	else if(node.getX() <= 0)
+        	{
+        		node.setX(0);
+        	}
+        	
+        	if(node.getY() >= 720)
+        	{
+        		node.setY(720);
+        	}
+        	else if(node.getY() <= 0)
+        	{
+        		node.setY(0);
+        	}
+        	
+        				
         	//drawing the shape of the node
             int x = node.getX();
             int y = node.getY();
