@@ -2,9 +2,11 @@
 Interactive model builder for graph theory, binary trees, and programming flow-charts
 
 # Setup:
-- Download Java Run-Time Environment (JRE): https://www.java.com/en/download/manual.jsp
-- Download desired version of CS_Vision_ (.jar file)
-- Once download is complete, execute the .jar file
+- Download Java Runtime Environment (JRE): https://www.java.com/en/download/manual.jsp
+- Download desired version of CS_Vision, this should be a folder
+- Once download is complete, place a copy of your previously downloaded Java Runtime Environment into the CS_Vision folder
+- rename the copy of the jre that is in your CS_Vision folder to "jre"
+- run the executable file to start the application
 - Refer to documentation below for version history and user guide
   
 # How to use:
