@@ -22,21 +22,21 @@ public class DragNode {
     //used to indicate a loop in graph
     private boolean isBold  = false;
      
-    final int IN, OUT, NOT, AND, OR, XOR, NAND, NOR, XNOR;
+    static final int IN = 1;
+    static final int OUT = 2;
+    static final int NOT = 3;
+    static final int AND = 4;
+    static final int OR = 5;
+    static final int XOR = 6;
+    static final int NAND = 7;
+    static final int NOR = 8;
+    static final int XNOR = 9;
     	
     
     private int type;
 
     public DragNode(String name, int x, int y) {
-    	IN = 1;
-    	OUT = 2;
-    	NOT = 3;
-    	AND= 4;
-    	OR = 5;
-    	XOR = 6;
-    	NAND = 7;
-    	NOR = 8;
-    	XNOR = 9;
+    	
         this.name = name;
         this.x = x;
         this.y = y;
@@ -144,27 +144,35 @@ public class DragNode {
     		break;
     	case(2):
     		type = this.OUT;
+    		this.setName("OUTPUT");
     		break;
     	case(3):
     		type = this.NOT;
+    		this.setName("NOT");
     		break;
     	case(4):
     		type = this.AND;
+    	    this.setName("AND");
     		break;
     	case(5):
     		type = this.OR;
+    	 	this.setName("OR");
     		break;
     	case(6):
     		type = this.XOR;
+    		this.setName("XOR");
     		break;
     	case(7):
     		type = this.NAND;
+    		this.setName("NAND");
     		break;
     	case(8):
     		type = this.NOR;
+    		this.setName("NOR");
     		break;
     	case(9):
     		type = this.XNOR;
+    		this.setName("XNOR");
     		break;
     	}
     }

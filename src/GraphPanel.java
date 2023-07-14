@@ -661,8 +661,16 @@ switch(line.getPreset()) {
         }
     }
     
+    //getter method for the list of nodes in the workspace
+    public java.util.List<DragNode> getNodeList()
+    {
+    	return nodes;
+    }
+    
+  //getter method for the list of lines in the workspace
     public java.util.List<LineComp> getLineList()
     {
     	return lines;
     }
+    
 }

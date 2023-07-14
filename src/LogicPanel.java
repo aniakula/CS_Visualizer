@@ -30,14 +30,18 @@ public class LogicPanel extends JPanel {
     //Pop-up menu for editing Lines
     public JPopupMenu menuLine = new JPopupMenu("Menu");
     public JMenuItem c = new JMenuItem("Color");
-    public JMenuItem r = new JMenuItem("Rename");
-    public JMenuItem aN = new JMenuItem("Add Node");
+
+
     public JMenuItem dC = new JMenuItem("Delete Connection");
-    public JMenuItem aCD = new JMenuItem("Add Directed Edge");
+ 
     public JMenuItem aC = new JMenuItem("Add Non-directed Edge");
     public JMenuItem dN = new JMenuItem("Delete Node");
     public JMenuItem v = new JMenuItem("Set Node Value");
-    public JMenuItem sW = new JMenuItem("Set Edge Weight");
+    public JMenuItem aLI = new JMenuItem("Set Node as input for another logic structure");
+    public JMenuItem aLO = new JMenuItem("Set Node as output for another logic structure");
+    
+    public JMenuItem cD =  new JMenuItem("Toggle display (value or name)");
+    
     public JMenuItem cL = new JMenuItem("Set Edge Color");
     public JMenuItem sT = new JMenuItem("Set Edge Thickness");
 
@@ -47,83 +51,21 @@ public class LogicPanel extends JPanel {
         lines = new ArrayList<>();
 
         // Options in the pop-up menu for Nodes
-        menu.add(r);
         menu.add(c);
-        menu.add(aN);
         menu.add(dC);
-        menu.add(aCD);
         menu.add(dN);
         menu.add(v);
+        menu.add(aLI);
+        menu.add(aLO);
+        menu.add(cD);
         
         //Edge menu
-        menuLine.add(sW);
+        
         menuLine.add(cL);
         menuLine.add(sT);
 
-        // Renaming a node
-        r.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                menu.setVisible(false);
-                String name = selectedNode.getName();
-                name = JOptionPane.showInputDialog("Rename the node:", name);
-                selectedNode.setName(name);
-
-                if (name != null)
-                    repaint();
-            }
-        });
         
-        //adding a Directed Edge from an existing node to another existing node
-        aCD.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                menu.setVisible(false);
-                if(nodes.size() > 1)
-                {
-                  final DragNode startNode = selectedNode; 
-                  JOptionPane.showMessageDialog(null, "Select Node to draw Edge towards", "Draw Directed Edge", JOptionPane.PLAIN_MESSAGE);
-
-                  addMouseListener(new MouseAdapter() {
-                     public void mouseClicked(MouseEvent e) {
-                        selectNode(e.getX(), e.getY());
-
-                        if(selectedNode != null) {
-                        	
-                        
-                        
-                        if(!(selectedNode.getChildren().contains(startNode) || startNode.getChildren().contains(selectedNode)))
-                        		{
-                        			if(selectedNode.equals(startNode))	
-                        			{
-                        				selectedNode.setBold(true);
-                        				repaint();
-                        			}
-                        			
-                        			else
-                        			addEdge(startNode, selectedNode, true);
-                        			
-                        			startNode.getChildren().add(selectedNode);
-                        			
-                        		}
-                        		
-                        		else
-                        		{
-                        			JOptionPane.showConfirmDialog(null, "edge already drawn here", "Draw Directed Edge", JOptionPane.CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-                        		}
-                        	
-                        } 
-                        
-                        removeMouseListener(this);
-                    }
-                });
-
-                }
-                
-                else {
-                	JOptionPane.showConfirmDialog(null, "no other node to draw an edge to", "Draw Directed Edge", JOptionPane.CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-                }
-                    repaint();
-            }
-        });
+       
 
         // Re-coloring a node
         c.addActionListener(new ActionListener() {
@@ -171,42 +113,7 @@ public class LogicPanel extends JPanel {
             }
         });
 
-        //Adding a node connected to the currently selected node
-        aN.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	menu.setVisible(false);
-            	 String[] options = {"Non-Directed Edge", "Directed towards new node", "Directed away from new node"};
-                String name = JOptionPane.showInputDialog("Name for the new node:");
-                String directed = "";
-                if(name != null)
-                directed = (String) JOptionPane.showInputDialog(null, "Choose Edge Specifics", "Menu",
-                        JOptionPane.OK_OPTION, null, options, options[0]);
-                if (name != null && directed != null)
-                {
-                	switch(directed)
-                	{
-                	 case "Non-Directed Edge":
-                		 addNode(selectedNode, name, 100, 100);
-                		 break;
-                	
-                	 case "Directed towards new node":
-                		 addNode(selectedNode, name, 100, 100, "toNew");
-                		 break;
-                		 
-                	 case "Directed away from new node":
-                		 addNode(selectedNode, name, 100, 100, "toOld");
-                		 break;
-                	
-                	
-                	
-                	}
-                   
-                    
-                }
-                repaint();
-                
-            }
-        });
+       
 
         // Deleting Node, and all connections this node had with other nodes
         dN.addActionListener(new ActionListener() {
@@ -231,6 +138,20 @@ public class LogicPanel extends JPanel {
             }
         });
 
+        cD.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                menu.setVisible(false);
+
+                if (selectedNode.getDisplay().equals("values")) 
+                    selectedNode.setDisplay("names");
+                
+                
+                else
+                	selectedNode.setDisplay("values");
+                
+                repaint();
+            }
+        });
         //setting value of node
         v.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -238,34 +159,112 @@ public class LogicPanel extends JPanel {
 
                 String value = selectedNode.getValue();
                 value = JOptionPane.showInputDialog("Set Node Value:", value);
-                selectedNode.setValue(value);
-
-                if (!value.equals(null))
-                    repaint();
+               
+              
+                if (!(value == null)) {
+                	if((value.equals("1") || value.equals("0"))) {
+                		 selectedNode.setValue(value);
+                		   repaint();
+                	}
+                 
+                	
+                	else
+                    JOptionPane.showMessageDialog(null, "An input to a logic gate must either be \"0\"(false) or \"1\"(true)", "non-boolean input", JOptionPane.ERROR_MESSAGE);
+                	
+                }
             }
         });
         
-        //setting weight of an edge
-        sW.addActionListener(new ActionListener() {
+        //adding another Logic structure using selected as input
+        aLI.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                menuLine.setVisible(false);
-
-                int value = selectedLine.getWeight();
-                String valS = JOptionPane.showInputDialog("Set Line Value:", value);
-                if(!(valS == null))
-                {
-                try{
-                selectedLine.setWeight(Integer.parseInt(valS));
-                }
-                
-                catch(Exception e1)
-                {
-                	JOptionPane.showMessageDialog(null, "did not provide valid Integer value for edge weight", "non-Integer input", JOptionPane.ERROR_MESSAGE);
-                }
-               }
-                    repaint();
+                menu.setVisible(false);
+           
+                        // Option Operators for drop-down menu
+                        String[] options = {"NOT", "AND", "OR", "XOR", "NOR", "NAND", "XNOR"};
+                        String selection = (String) JOptionPane.showInputDialog(null, "Choose logic gate", "Menu",
+                                JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+                        
+                        if(selection != null)
+                        {
+                         switch (selection) {
+                            case "NOT":
+                                addLogIn(selectedNode);
+                                break;
+                            case "AND":
+                                addLogIn(selectedNode, DragNode.AND);
+                                break;
+                            case "OR":
+                                addLogIn(selectedNode, DragNode.OR);
+                                break;
+                            case "XOR":
+                                addLogIn(selectedNode, DragNode.XOR);
+                                break;
+                            case "NOR":
+                                addLogIn(selectedNode, DragNode.NOR);
+                                break;
+                            case "NAND":
+                                addLogIn(selectedNode, DragNode.NAND);
+                                break;
+                            case "XNOR":
+                                addLogIn(selectedNode, DragNode.XNOR);
+                                break;
+                                
+                            
+                           }
+                        }
+                        repaint();
+                        align();
             }
+            
         });
+        
+        aLO.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                menu.setVisible(false);
+
+                
+                
+                        // Option Operators for drop-down menu
+                        String[] options = {"NOT", "AND", "OR", "XOR", "NOR", "NAND", "XNOR"};
+                        String selection = (String) JOptionPane.showInputDialog(null, "Choose logic gate", "Menu",
+                                JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+                        
+                        if(selection != null)
+                        {
+                         switch (selection) {
+                            case "NOT":
+                                addLogOut(selectedNode);
+                                break;
+                            case "AND":
+                                addLogOut(selectedNode, DragNode.AND);
+                                break;
+                            case "OR":
+                                addLogOut(selectedNode, DragNode.OR);
+                                break;
+                            case "XOR":
+                                addLogOut(selectedNode, DragNode.XOR);
+                                break;
+                            case "NOR":
+                                addLogOut(selectedNode, DragNode.NOR);
+                                break;
+                            case "NAND":
+                                addLogOut(selectedNode, DragNode.NAND);
+                                break;
+                            case "XNOR":
+                                addLogOut(selectedNode, DragNode.XNOR);
+                                break;
+                                
+                            
+                           }
+                        }
+                        repaint();
+                        align();
+            }
+            
+        });
+        
+      
         
         cL.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -367,7 +366,27 @@ public class LogicPanel extends JPanel {
 
                 if (selectedNode != null) {
                     if (e.getButton() == MouseEvent.BUTTON3) {
+                    	
+                    	if(!(selectedNode.getType() == DragNode.IN))
+                    	{
+                    		v.setVisible(false);
+                    		aLI.setVisible(false);
+                    		aLO.setVisible(false);
+                    		cD.setVisible(false);
+                    		if(selectedNode.getType() == DragNode.OUT)
+                        	{
+                        		aLI.setVisible(true);
+                        	}
+                    		 menu.show(null, selectedNode.getX(), selectedNode.getY());
+                    	}
+                    	else
+                    	{
+                    		v.setVisible(true);
+                    		aLI.setVisible(true);
+                    		aLO.setVisible(true);
+                    		cD.setVisible(true);
                         menu.show(null, selectedNode.getX(), selectedNode.getY());
+                    	}
                     }
                 }
                 else if(selectedLine != null) {
@@ -389,11 +408,11 @@ public class LogicPanel extends JPanel {
               	  {
               		  int p1 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 7, line.getEndNode().getX() + 43, line.getEndNode().getY() + 43);
               		  int p2 = line.Dist(line.getStartNode().getX(), line.getStartNode().getY() + 25, line.getEndNode().getX() + 50, line.getEndNode().getY() + 25);
-              		 int p3 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 43, line.getEndNode().getX() + 43, line.getEndNode().getY() + 7);
+              		  int p3 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 43, line.getEndNode().getX() + 43, line.getEndNode().getY() + 7);
               		  int p4 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY() + 50, line.getEndNode().getX() + 25, line.getEndNode().getY());
               		  int p5 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 43, line.getEndNode().getX() + 7, line.getEndNode().getY() + 7);
               		  int p6 = line.Dist(line.getStartNode().getX() + 50, line.getStartNode().getY() + 25, line.getEndNode().getX() + 0, line.getEndNode().getY() + 25);
-              		 int p7 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 7, line.getEndNode().getX() + 7, line.getEndNode().getY() + 43);
+              		  int p7 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 7, line.getEndNode().getX() + 7, line.getEndNode().getY() + 43);
               		  int p8 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY(), line.getEndNode().getX() + 25, line.getEndNode().getY() + 50);
               		  int dist = line.Dist(line.getStartNode().getX(), line.getStartNode().getY(), line.getEndNode().getX(), line.getEndNode().getY());
               		  
@@ -516,7 +535,13 @@ public class LogicPanel extends JPanel {
             	g2.setStroke(new BasicStroke(3));
             }
             g2.drawOval(x, y, 50, 50);
+            
+            if(node.getType() == DragNode.IN && node.getDisplay().equals("values"))
+            g2.drawString(node.getValue(), x + 20, y + 30);
+            	
+            else
             g2.drawString(node.getName(), x + 20, y + 30);
+            	
         }
 
         for (LineComp line : lines) {
@@ -526,7 +551,7 @@ public class LogicPanel extends JPanel {
             int endX = 0;
             int endY = 0;
 
-switch(line.getPreset()) {
+            switch(line.getPreset()) {
         	
         	case 1:
         	    startX = line.getStartNode().getX() + 7;
@@ -588,30 +613,7 @@ switch(line.getPreset()) {
             // Draw a line between nodes
             g2.setStroke(new BasicStroke(line.getThick()));
             g2.drawLine(startX, startY, endX, endY);
-            //display the weight of the Edge
-            int midX = (startX + endX) / 2;
-            int midY = (startY + endY) / 2;
-
-            // Get the FontMetrics for the current graphics context
-            FontMetrics fontMetrics = g2.getFontMetrics();
-
-            // Calculate the width and height of the text
-            int textWidth = fontMetrics.stringWidth("Weight: " + line.getWeight());
-            int textHeight = fontMetrics.getHeight();
-
-            // Calculate the bounding box coordinates with padding
-            int boxX = midX - textWidth / 2 - 2; // Add padding of 2 pixels
-            int boxY = midY - textHeight / 2 - 2; // Add padding of 2 pixels
-            int boxWidth = textWidth + 4; // Add padding of 4 pixels
-            int boxHeight = textHeight + 4; // Add padding of 4 pixels
-
-            // Draw a filled white rectangle
-            g2.setColor(Color.WHITE);
-            g2.fillRect(boxX, boxY, boxWidth, boxHeight);
-
-            // Draw the number on top of the white rectangle
-            g2.setColor(Color.BLACK);
-            g2.drawString("Weight: " + line.getWeight(), midX - textWidth / 2, midY + textHeight / 2);
+            
 
             // Draw an arrow at the end of the line if it is directed
             if (line.isDirected()) {
@@ -660,4 +662,135 @@ switch(line.getPreset()) {
             }
         }
     }
+    
+    public void align()
+    {
+    	for(LineComp line : lines) {
+    	int p1 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 7, line.getEndNode().getX() + 43, line.getEndNode().getY() + 43);
+		  int p2 = line.Dist(line.getStartNode().getX(), line.getStartNode().getY() + 25, line.getEndNode().getX() + 50, line.getEndNode().getY() + 25);
+		 int p3 = line.Dist(line.getStartNode().getX() + 7, line.getStartNode().getY() + 43, line.getEndNode().getX() + 43, line.getEndNode().getY() + 7);
+		  int p4 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY() + 50, line.getEndNode().getX() + 25, line.getEndNode().getY());
+		  int p5 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 43, line.getEndNode().getX() + 7, line.getEndNode().getY() + 7);
+		  int p6 = line.Dist(line.getStartNode().getX() + 50, line.getStartNode().getY() + 25, line.getEndNode().getX() + 0, line.getEndNode().getY() + 25);
+		 int p7 = line.Dist(line.getStartNode().getX() + 43, line.getStartNode().getY() + 7, line.getEndNode().getX() + 7, line.getEndNode().getY() + 43);
+		  int p8 = line.Dist(line.getStartNode().getX() + 25, line.getStartNode().getY(), line.getEndNode().getX() + 25, line.getEndNode().getY() + 50);
+		  int dist = line.Dist(line.getStartNode().getX(), line.getStartNode().getY(), line.getEndNode().getX(), line.getEndNode().getY());
+		  
+		  int pf = Math.min(Math.min(Math.min(Math.min(dist, p1), Math.min(p2, p3)),Math.min(Math.min(p4, p5), Math.min(p6, p7))), p8);
+		 
+		  if(pf == p1)
+			  line.setPreset(1);
+		  else if( pf == p2)
+			  line.setPreset(2);
+		  else if( pf == p3)
+			  line.setPreset(3);
+		  else if( pf == p4)
+			  line.setPreset(4);
+		  else if( pf == p5)
+			  line.setPreset(5);
+		  else if( pf == p6)
+			  line.setPreset(6);			  
+		  else if( pf == p7)
+			  line.setPreset(7);				  
+		  else if(pf == p8)
+			  line.setPreset(8);
+			  
+	  }
+    }
+    //getter method for the list of nodes in the workspace
+    public java.util.List<DragNode> getNodeList()
+    {
+    	return nodes;
+    }
+    
+  //getter method for the list of lines in the workspace
+    public java.util.List<LineComp> getLineList()
+    {
+    	return lines;
+    }
+    
+    
+    public void addLog()
+    {
+    	addNode("", 100, 100);
+    	nodes.get(nodes.size()-1).setType(DragNode.NOT);
+    	addNode(nodes.get(nodes.size()-1), "", 40, 100, "toOld");
+    	nodes.get(nodes.size()-1).setType(DragNode.IN);
+    	addNode(nodes.get(nodes.size()-2), "", 160, 100, "toNew");
+    	nodes.get(nodes.size()-1).setType(DragNode.OUT);
+    }
+    
+    public void addLog(int type)
+    {
+    	addNode("", 100, 100);
+    	nodes.get(nodes.size()-1).setType(type);
+    	addNode(nodes.get(nodes.size()-1), "", 40, 150, "toOld");
+    	nodes.get(nodes.size()-1).setType(DragNode.IN);
+    	addNode(nodes.get(nodes.size()-2), "", 40, 50, "toOld");
+    	nodes.get(nodes.size()-1).setType(DragNode.IN);
+    	addNode(nodes.get(nodes.size()-3), "", 160, 100, "toNew");
+    	nodes.get(nodes.size()-1).setType(DragNode.OUT);
+    }
+    
+    public void addLogIn(DragNode input)
+    {
+    
+    	addNode("", input.getX(), input.getY() + 60);
+    	nodes.get(nodes.size()-1).setType(DragNode.NOT);
+    	addEdge(input, nodes.get(nodes.size()-1), true);
+    	addNode(nodes.get(nodes.size()-1), "", nodes.get(nodes.size()-1).getX(), nodes.get(nodes.size()-1).getY() + 60, "toNew");
+    	nodes.get(nodes.size()-1).setType(DragNode.OUT);
+    	
+    
+    }
+    	
+    
+    public void addLogIn(DragNode input, int type)
+    {
+    	
+    	addNode("", input.getX() + 60, input.getY() + 50);
+    	nodes.get(nodes.size()-1).setType(type);
+    	addEdge(input, nodes.get(nodes.size()-1), true);
+    	addNode(nodes.get(nodes.size()-1), "", nodes.get(nodes.size()-1).getX() - 60, nodes.get(nodes.size()-1).getY() + 50, "toOld");
+    	nodes.get(nodes.size()-1).setType(DragNode.IN);
+    	addNode(nodes.get(nodes.size()-2), "", nodes.get(nodes.size()-2).getX() + 60, nodes.get(nodes.size()-2).getY(), "toNew");
+    	nodes.get(nodes.size()-1).setType(DragNode.OUT);
+    	
+    }
+    
+    public void addLogOut(DragNode out)
+    {
+    	out.setType(DragNode.OUT);
+    	out.setDisplay("names");
+    	addNode("", out.getX(), out.getY() + 60);
+    	nodes.get(nodes.size()-1).setType(DragNode.NOT);
+    	addEdge(nodes.get(nodes.size()-1), out, true);
+    	addNode(nodes.get(nodes.size()-1), "", nodes.get(nodes.size()-1).getX(), nodes.get(nodes.size()-1).getY() + 60, "toOld");
+    	nodes.get(nodes.size()-1).setType(DragNode.IN);
+    	
+    
+    }
+    	
+    
+   public void addLogOut(DragNode out, int type)
+    {
+    	out.setType(DragNode.OUT);
+    	out.setDisplay("names");
+    	addNode("", out.getX(), out.getY() + 50);
+    	nodes.get(nodes.size()-1).setType(type);
+    	addEdge(nodes.get(nodes.size()-1), out, true);
+    	addNode(nodes.get(nodes.size()-1), "", nodes.get(nodes.size()-1).getX() - 60, nodes.get(nodes.size()-1).getY() + 50, "toOld");
+    	nodes.get(nodes.size()-1).setType(DragNode.IN);
+    	addNode(nodes.get(nodes.size()-2), "", nodes.get(nodes.size()-2).getX() + 60, nodes.get(nodes.size()-2).getY() - 50, "toOld");
+    	nodes.get(nodes.size()-1).setType(DragNode.IN);
+    	
+    	
+    }
+    
+  
+    
+   
+   
+   
+   
 }

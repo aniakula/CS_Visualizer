@@ -16,7 +16,6 @@ import javax.swing.*;
 public class VisionMain {
     public static void main(String[] args) {
     	
-    	
         JFrame frame = new JFrame("CS Vision");
         final JPanel overall = new JPanel();
         final CardLayout c1 = new CardLayout();
@@ -28,16 +27,26 @@ public class VisionMain {
         final BinaryPanel binPanel = new BinaryPanel();
         final GraphPanel graphPanel = new GraphPanel();
         final FlowPanel flowPanel = new FlowPanel();
+        final LogicPanel logPanel = new LogicPanel();
         overall.add(binPanel, "Binary Tree Builder");
         overall.add(graphPanel, "Graph Builder");
         overall.add(flowPanel, "Flow Chart Builder");
+        overall.add(logPanel, "Digital Electronics Builder");
         JMenuBar bar = new JMenuBar();
         JMenu options = new JMenu("Actions");
+        
+        //Digital Electronics Main Menu Items:
+        final JMenuItem addNLog = new JMenuItem("Add new Logic gate or input"); //add new flow structure
+        final JMenuItem  helpLog = new JMenuItem("Help"); // help screen for logic space
+        final JMenuItem logScreen = new JMenuItem("Go to \"Digital Electronics\" work space");//go to Digital electronics space
+        final JMenuItem logClear = new JMenuItem("Clear Workspace");//clear
+        //----------------------------------------------------------------------------------------------
         
         //Flow Chart Main Menu Items:
         final JMenuItem addNFlow = new JMenuItem("Add new Flow Structure"); //add new flow structure
         final JMenuItem helpFlow = new JMenuItem("Help"); //help screen for flow
         final JMenuItem flowScreen = new JMenuItem("Go to \"Flow Chart\" work space");//go to flow space
+        final JMenuItem flowClear = new JMenuItem("Clear Workspace");//clear
         //----------------------------------------------------------------------------------------------
         
         //Graph Main Menu Items:
@@ -45,6 +54,7 @@ public class VisionMain {
         final JMenuItem addNGraph = new JMenuItem("Add new Node"); //add graph node
         final JMenuItem graphScreen = new JMenuItem("Go to \"Graph work\" space");//go to graph space
         final JMenuItem setUndirected = new JMenuItem("make graph non-directional");//set all edges to undirected 
+        final JMenuItem graphClear = new JMenuItem("Clear Workspace");//clear
         //----------------------------------------------------------------------------------------------
         
         //Binary Tree Main Menu Items:
@@ -53,11 +63,47 @@ public class VisionMain {
         final JMenuItem addNBin = new JMenuItem("Add new Node"); // adds a new tree node
         final JMenuItem binScreen = new JMenuItem("Go to \"Binary Tree\" work space");// go to binary tree space
         final JMenuItem binDisp = new JMenuItem("Change Display"); // change display mode of nodes (name, value, level)
+        final JMenuItem binClear = new JMenuItem("Clear Workspace");//clear
         //----------------------------------------------------------------------------------------------
+        
+        logScreen.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+
+      		  c1.show(overall, "Digital Electronics Builder");
+      		  binClear.setVisible(false);
+      		  logClear.setVisible(true);
+      		  flowClear.setVisible(false);
+      		  graphClear.setVisible(false);
+      		  logScreen.setVisible(false);
+      		  helpLog.setVisible(true);
+      		  addNLog.setVisible(true);
+      		  graphScreen.setVisible(true);
+      		  flowScreen.setVisible(true);
+      		  binScreen.setVisible(true);
+      		  addNBin.setVisible(false);
+      		  addNGraph.setVisible(false);
+      		  addNFlow.setVisible(false);
+      		  helpBin.setVisible(false);
+      		  helpGraph.setVisible(false);
+      		  helpFlow.setVisible(false);
+      		  OrganizeTree.setVisible(false);
+      		  binDisp.setVisible(false);
+      		  setUndirected.setVisible(false);
+      	  } 
+      	} );
+      
+        
         graphScreen.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
 
         		  c1.show(overall, "Graph Builder");
+        		  binClear.setVisible(false);
+          		  logClear.setVisible(false);
+          		  flowClear.setVisible(false);
+          		  graphClear.setVisible(true);
+        		  logScreen.setVisible(true);
+          		  helpLog.setVisible(false);
+          		  addNLog.setVisible(false);
         		  graphScreen.setVisible(false);
         		  flowScreen.setVisible(true);
         		  binScreen.setVisible(true);
@@ -78,6 +124,13 @@ public class VisionMain {
         	  public void actionPerformed(ActionEvent e) { 
 
         		  c1.show(overall, "Flow Chart Builder");
+        		  binClear.setVisible(false);
+          		  logClear.setVisible(false);
+          		  flowClear.setVisible(true);
+          		  graphClear.setVisible(false);
+        		  logScreen.setVisible(true);
+          		  helpLog.setVisible(false);
+          		  addNLog.setVisible(false);
         		  graphScreen.setVisible(true);
         		  flowScreen.setVisible(false);
         		  binScreen.setVisible(true);
@@ -97,6 +150,13 @@ public class VisionMain {
       	  public void actionPerformed(ActionEvent e) { 
 
       		  c1.show(overall, "Binary Tree Builder");
+      		  binClear.setVisible(true);
+      		  logClear.setVisible(false);
+      		  flowClear.setVisible(false);
+      		  graphClear.setVisible(false);
+      		  logScreen.setVisible(true);
+      		  helpLog.setVisible(false);
+      		  addNLog.setVisible(false);
       		graphScreen.setVisible(true);
   		    flowScreen.setVisible(true);
   		    binScreen.setVisible(false);
@@ -214,6 +274,7 @@ public class VisionMain {
       		  }
 
         		  binPanel.repaint();
+        		  
       	  } 
       	} );
       
@@ -229,31 +290,149 @@ public class VisionMain {
         	  } 
         	} );
         
-       
+        addNLog.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               
+                // Option Operators for drop-down menu
+                String[] options = {"NOT", "AND", "OR", "XOR", "NOR", "NAND", "XNOR"};
+                String selection = (String) JOptionPane.showInputDialog(null, "Choose logic gate", "Menu",
+                        JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+                // Change color based on choice
+                if(selection != null)
+                {
+                switch (selection) {
+                    case "NOT":
+                        logPanel.addLog();
+                        break;
+                    case "AND":
+                        logPanel.addLog(DragNode.AND);
+                        break;
+                    case "OR":
+                        logPanel.addLog(DragNode.OR);
+                        break;
+                    case "XOR":
+                        logPanel.addLog(DragNode.XOR);
+                        break;
+                    case "NOR":
+                        logPanel.addLog(DragNode.NOR);
+                        break;
+                    case "NAND":
+                        logPanel.addLog(DragNode.NAND);
+                        break;
+                    case "XNOR":
+                        logPanel.addLog(DragNode.XNOR);
+                        break;
+                        
+                    
+                   }
+                }
+                logPanel.repaint();
+                logPanel.align();
+            }
+        });
 
-    	options.add(helpBin);
-    	options.add(helpGraph);
-    	options.add(helpFlow);
-    	options.add(addNBin);
-    	options.add(addNGraph);
-    	options.add(addNFlow);
-    	options.add(binDisp);
+        binClear.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+        		  
+      		  int choice = JOptionPane.showConfirmDialog(null,
+                        "Are you sure you want to clear this work space?", "Confirm",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (choice == 0) 
+                {
+              	  binPanel.getLineList().clear();
+              	  binPanel.getNodeList().clear();
+        		  
+                } 
+                
+                binPanel.repaint();
+                
+      	  }
+      	} );
+        
+   
+        
+        logClear.addActionListener(new ActionListener() { 
+        	  public void actionPerformed(ActionEvent e) { 
+          		  
+        		  int choice = JOptionPane.showConfirmDialog(null,
+                          "Are you sure you want to clear this work space?", "Confirm",
+                          JOptionPane.YES_NO_OPTION);
+
+                  if (choice == 0) 
+                  {
+                	  logPanel.getLineList().clear();
+                	  logPanel.getNodeList().clear();
+          		  
+                  } 
+                  
+                  logPanel.repaint();
+                  
+        	  }
+        	} );
+        
+        graphClear.addActionListener(new ActionListener() { 
+        	  public void actionPerformed(ActionEvent e) { 
+          		  
+        		  int choice = JOptionPane.showConfirmDialog(null,
+                          "Are you sure you want to clear this work space?", "Confirm",
+                          JOptionPane.YES_NO_OPTION);
+
+                  if (choice == 0) 
+                  {
+                	  graphPanel.getLineList().clear();
+                	  graphPanel.getNodeList().clear();
+          		  
+                  } 
+                  
+                  graphPanel.repaint();
+                  
+        	  }
+        	} );
+        
+        
     	options.add(flowScreen);
     	options.add(graphScreen);
     	options.add(binScreen);
+    	options.add(logScreen);
+    	options.add(helpBin);
+    	options.add(helpGraph);
+    	options.add(helpFlow);
+    	options.add(helpLog);
+    	options.add(addNBin);
+    	options.add(addNGraph);
+    	options.add(addNFlow);
+    	options.add(addNLog);
+    	options.add(binDisp);
     	options.add(OrganizeTree);
     	options.add(setUndirected);
+    	options.add(binClear);
+    	options.add(logClear);
+    	options.add(graphClear);
+    	options.add(flowClear);
+    
+    	  
     	//initialize visible options to Binary Tree Screen defaults:
-    	graphScreen.setVisible(true);
-		flowScreen.setVisible(true);
-		binScreen.setVisible(false);
-		addNBin.setVisible(true);
-		addNGraph.setVisible(false);
-	    addNFlow.setVisible(false);
-		helpBin.setVisible(true);
-	    helpGraph.setVisible(false);
-	    helpFlow.setVisible(false);
-    	
+    	 binClear.setVisible(true);
+ 		  logClear.setVisible(false);
+ 		  flowClear.setVisible(false);
+ 		  graphClear.setVisible(false);
+ 		  logScreen.setVisible(true);
+ 		  helpLog.setVisible(false);
+ 		  addNLog.setVisible(false);
+ 		graphScreen.setVisible(true);
+		    flowScreen.setVisible(true);
+		    binScreen.setVisible(false);
+		  addNBin.setVisible(true);
+		 addNGraph.setVisible(false);
+	  addNFlow.setVisible(false);
+		  helpBin.setVisible(true);
+	  helpGraph.setVisible(false);
+	  helpFlow.setVisible(false);
+	  OrganizeTree.setVisible(true);
+	  binDisp.setVisible(true);
+	  setUndirected.setVisible(true);
+		
     	bar.add(options);
     	frame.setJMenuBar(bar);
     	options.setVisible(true);
