@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\aniak\OneDrive\Desktop\Ani&apos;s stuff\Cs_Vision_versions\CS_Vision_1.0.jar</jar>
+  <outfile>C:\Users\aniak\OneDrive\Desktop\Ani&apos;s stuff\Cs_Vision_versions\CS_Vision_1.0.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\aniak\OneDrive\Desktop\Ani&apos;s stuff\Cs_Vision_versions\CS_Vision_Icon.ico</icon>
+  <classPath>
+    <mainClass>VisionMain</mainClass>
+  </classPath>
+  <jre>
+    <path>jre</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+  </jre>
+</launch4jConfig>
