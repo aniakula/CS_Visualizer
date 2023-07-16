@@ -27,7 +27,8 @@ public class DragNode {
     //type of boolean expression
     private int type;
     
-    //constants for Boolean operation statements:
+    
+    //constants for Boolean operation  :
     static final int IN = 1;
     static final int OUT = 2;
     static final int NOT = 3;
@@ -55,6 +56,7 @@ public class DragNode {
         pointsTo = new ArrayList<DragNode>();
         this.isBold = false;
         this.type = this.IN;
+        
     }
     
     // getters:::
@@ -123,6 +125,7 @@ public class DragNode {
     {
     	return children.toString();
     }
+   
     //:::getters
     
     
@@ -207,6 +210,7 @@ public class DragNode {
     		break;
     	}
     }
+
     //:::setters^^^
     
     //recursive method to update the levels when a node is deleted
@@ -240,7 +244,7 @@ public class DragNode {
     
     public int evaluate()
     {
-    	try {
+    	
     	if(this.getType() == DragNode.OUT)
     	{
     		this.setDisplay("values");
@@ -286,11 +290,8 @@ public class DragNode {
     	}
     	
     	return 0;
-    }
-    catch(StackOverflowError e)
-    {
-    	return 2;
-    }
+    
+ 
     }
     
     public int convert(boolean bool)
@@ -308,6 +309,32 @@ public class DragNode {
     	else
     		return false;
     }
+    
+    public static boolean validMerge(DragNode in, DragNode out)
+    {
+    	if(out.getType() == DragNode.IN)
+    	{
+    		if(out.equals(in))
+    		{
+    			return false;
+    		}
+    		else
+    		{
+    			return true;
+    		}
+    	}
+    	
+    	else if(out.getType() == DragNode.OUT || out.getType() == DragNode.NOT)
+    	{
+    		return validMerge(in, out.getParent().get(0));
+    	}
+    	
+    	else
+    	{
+    		return validMerge(in, out.getParent().get(0)) && validMerge(in, out.getParent().get(1));
+    	} 
+    }
+    
     public void organize(int xdiff, int ydiff)
     {
     	if(this.getLevel() == 0)

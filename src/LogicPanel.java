@@ -61,9 +61,9 @@ public class LogicPanel extends JPanel {
         menu.add(cD);
         menu.add(m);
         menu.add(E);
+       
         
         //Edge menu
-        
         menuLine.add(cL);
         menuLine.add(sT);
 
@@ -368,18 +368,17 @@ public class LogicPanel extends JPanel {
                   addMouseListener(new MouseAdapter() {
                      public void mouseClicked(MouseEvent e) {
                         selectNode(e.getX(), e.getY());
-
-                        if(selectedNode != null) {
-                        	
                         
-                        
-                        if(!(selectedNode.getChildren().contains(startNode) || startNode.getChildren().contains(selectedNode))){
+                        if(selectedNode != null ) {
                         	
+                       
+                         	
                         		if(selectedNode.getType() == DragNode.IN || selectedNode.getType() == DragNode.OUT ) {
+                        			 if(DragNode.validMerge(startNode, selectedNode)) {
                         			
                         			if(selectedNode.equals(startNode))	
                         			{
-                 
+                        				removeMouseListener(this);
                         				repaint();
                         			}
                         			
@@ -422,22 +421,28 @@ public class LogicPanel extends JPanel {
                         			
                         		}
                         		
-                        		
-                        	else
-                        	{
-                        		JOptionPane.showConfirmDialog(null, "not mergable, selected node is not an input or output node", "Merge Node", JOptionPane.CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+                        			 else {
+                                     	removeMouseListener(this);
+                                     	JOptionPane.showConfirmDialog(null, "merge failed, value of output cannot depend on itself", "Merge error" , JOptionPane.PLAIN_MESSAGE);
+                                     	repaint();
+                                         }
                         	}
-                        		}
+                        		
                         		else
-                        		{
-                        			JOptionPane.showConfirmDialog(null, "not mergable, already connected", "Merge Node", JOptionPane.CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
-                        		}
+                            	{
+                            		removeMouseListener(this);
+                            		JOptionPane.showConfirmDialog(null, "not mergable, selected node is not an input or output node", "Merge error", JOptionPane.PLAIN_MESSAGE);
+                            	}
+                            		
+                        		
                         	
                         
                         
                         removeMouseListener(this);
+                        }
+                        
                       }
-                    }
+                        
                 });
 
                 }
@@ -451,21 +456,11 @@ public class LogicPanel extends JPanel {
                 menu.setVisible(false);
                 
                 
-                int val = selectedNode.evaluate();
-                if(val != 2) {
+                selectedNode.evaluate();
+            
                 repaint();
                 JOptionPane.showConfirmDialog(null, "this node evaluated to: " + selectedNode.convert(Integer.parseInt(selectedNode.getValue())),"Evaluation Successful" ,JOptionPane.CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                }
-            	else
-                {
-                	JOptionPane.showConfirmDialog(null, "Evaluation failed, this may be caused by unreachable output, for example, an operator's output being used again as its own input","Evaluation Error" ,JOptionPane.CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                	repaint();
-                }
-                
-                
-               
-                
-                repaint();
+           
             }
         });
 
