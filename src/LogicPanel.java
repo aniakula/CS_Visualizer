@@ -30,7 +30,7 @@ public class LogicPanel extends JPanel {
     //Pop-up menu for editing Lines
     public JPopupMenu menuLine = new JPopupMenu("Menu");
     public JMenuItem c = new JMenuItem("Color");
-
+    public JMenuItem m = new JMenuItem("merge node");
 
     public JMenuItem dC = new JMenuItem("Delete Connection");
  
@@ -39,6 +39,7 @@ public class LogicPanel extends JPanel {
     public JMenuItem v = new JMenuItem("Set Node Value");
     public JMenuItem aLI = new JMenuItem("Set Node as input for another logic structure");
     public JMenuItem aLO = new JMenuItem("Set Node as output for another logic structure");
+    public JMenuItem E = new JMenuItem("Evaluate to this output");
     
     public JMenuItem cD =  new JMenuItem("Toggle display (value or name)");
     
@@ -58,6 +59,8 @@ public class LogicPanel extends JPanel {
         menu.add(aLI);
         menu.add(aLO);
         menu.add(cD);
+        menu.add(m);
+        menu.add(E);
         
         //Edge menu
         
@@ -71,6 +74,8 @@ public class LogicPanel extends JPanel {
         c.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 menu.setVisible(false);
+                System.out.println(selectedNode.dumpChildren());
+                System.out.println(selectedNode.dumpParent());
                 // Option colors for drop-down menu
                 String[] options = {"White", "Cyan", "Green", "Yellow", "Magenta", "Orange", "Gray"};
                 DragNode node = selectedNode;
@@ -164,6 +169,11 @@ public class LogicPanel extends JPanel {
                 if (!(value == null)) {
                 	if((value.equals("1") || value.equals("0"))) {
                 		 selectedNode.setValue(value);
+                		 for(DragNode node: nodes)
+                		 {
+                			 if(node.getType() == DragNode.OUT)
+                				 node.setDisplay("names");
+                		 }
                 		   repaint();
                 	}
                  
@@ -190,6 +200,7 @@ public class LogicPanel extends JPanel {
                          switch (selection) {
                             case "NOT":
                                 addLogIn(selectedNode);
+                                
                                 break;
                             case "AND":
                                 addLogIn(selectedNode, DragNode.AND);
@@ -345,6 +356,118 @@ public class LogicPanel extends JPanel {
                 
             }
         });
+        
+        m.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                menu.setVisible(false);
+                if(nodes.size() > 1 && selectedNode.getType() == DragNode.IN)
+                {
+                  final DragNode startNode = selectedNode; 
+                  JOptionPane.showMessageDialog(null, "Select Node to merge with (must be an Output or an Input node)", "Merge Node", JOptionPane.PLAIN_MESSAGE);
+
+                  addMouseListener(new MouseAdapter() {
+                     public void mouseClicked(MouseEvent e) {
+                        selectNode(e.getX(), e.getY());
+
+                        if(selectedNode != null) {
+                        	
+                        
+                        
+                        if(!(selectedNode.getChildren().contains(startNode) || startNode.getChildren().contains(selectedNode))){
+                        	
+                        		if(selectedNode.getType() == DragNode.IN || selectedNode.getType() == DragNode.OUT ) {
+                        			
+                        			if(selectedNode.equals(startNode))	
+                        			{
+                 
+                        				repaint();
+                        			}
+                        			
+                        			else
+                        			{
+                        				
+                        				for(LineComp line: lines)
+                        				{
+                        					if(line.getStartNode().equals(startNode))
+                        					{
+                        						line.setStartNode(selectedNode);
+                        						selectedNode.getChildren().add(line.getEndNode());
+                        						line.getEndNode().getParent().add(selectedNode);
+                        					}
+                        					
+                        					else if(line.getEndNode().equals(startNode))
+                        					{
+                        						line.setEndNode(selectedNode);
+                        						selectedNode.getParent().add(line.getEndNode());
+                        						line.getEndNode().getChildren().add(selectedNode);
+                        						
+                        					}
+                        					
+                        				}
+                        				for(DragNode C: startNode.getChildren())
+                        				{
+                        					C.getParent().remove(startNode);
+                        				}
+                        				for(DragNode P: startNode.getParent())
+                        				{
+                        					P.getChildren().remove(startNode);
+                        				}
+                        				
+                        				nodes.remove(startNode);
+                        				align();
+                        				repaint();
+                        				
+                        			}
+                        		
+                        			
+                        		}
+                        		
+                        		
+                        	else
+                        	{
+                        		JOptionPane.showConfirmDialog(null, "not mergable, selected node is not an input or output node", "Merge Node", JOptionPane.CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+                        	}
+                        		}
+                        		else
+                        		{
+                        			JOptionPane.showConfirmDialog(null, "not mergable, already connected", "Merge Node", JOptionPane.CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+                        		}
+                        	
+                        
+                        
+                        removeMouseListener(this);
+                      }
+                    }
+                });
+
+                }
+               
+            }
+        });
+
+        
+        E.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                menu.setVisible(false);
+                
+                
+                int val = selectedNode.evaluate();
+                if(val != 2) {
+                repaint();
+                JOptionPane.showConfirmDialog(null, "this node evaluated to: " + selectedNode.convert(Integer.parseInt(selectedNode.getValue())),"Evaluation Successful" ,JOptionPane.CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                }
+            	else
+                {
+                	JOptionPane.showConfirmDialog(null, "Evaluation failed, this may be caused by unreachable output, for example, an operator's output being used again as its own input","Evaluation Error" ,JOptionPane.CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                	repaint();
+                }
+                
+                
+               
+                
+                repaint();
+            }
+        });
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -373,9 +496,13 @@ public class LogicPanel extends JPanel {
                     		aLI.setVisible(false);
                     		aLO.setVisible(false);
                     		cD.setVisible(false);
+                    		m.setVisible(false);
+                    		E.setVisible(false);
                     		if(selectedNode.getType() == DragNode.OUT)
                         	{
                         		aLI.setVisible(true);
+                        		E.setVisible(true);
+                        	
                         	}
                     		 menu.show(null, selectedNode.getX(), selectedNode.getY());
                     	}
@@ -385,6 +512,8 @@ public class LogicPanel extends JPanel {
                     		aLI.setVisible(true);
                     		aLO.setVisible(true);
                     		cD.setVisible(true);
+                    		m.setVisible(true);
+                    		E.setVisible(false);
                         menu.show(null, selectedNode.getX(), selectedNode.getY());
                     	}
                     }
@@ -448,17 +577,17 @@ public class LogicPanel extends JPanel {
         repaint();
     }
     
-    public void addNode(DragNode startNode, String name, int x, int y) {
-        nodes.add(new DragNode(name, x, y));
-        lines.add(new LineComp("", startNode.getX() + 25, startNode.getY() + 50, nodes.get(nodes.size()-1).getX() + 25, nodes.get(nodes.size()-1).getY()));
-        lines.get(lines.size()-1).setEndNode(nodes.get(nodes.size()-1));
-        lines.get(lines.size()-1).setStartNode(startNode);
-        nodes.get(nodes.size()-1).setDisplay(startNode.getDisplay());
-        nodes.get(nodes.size()-1).setLevel(startNode.getLevel()+1);
-        startNode.getChildren().add(nodes.get(nodes.size()-1));
-        nodes.get(nodes.size()-1).getChildren().add(startNode);
-        repaint();
-    }
+//    public void addNode(DragNode startNode, String name, int x, int y) {
+//        nodes.add(new DragNode(name, x, y));
+//        lines.add(new LineComp("", startNode.getX() + 25, startNode.getY() + 50, nodes.get(nodes.size()-1).getX() + 25, nodes.get(nodes.size()-1).getY()));
+//        lines.get(lines.size()-1).setEndNode(nodes.get(nodes.size()-1));
+//        lines.get(lines.size()-1).setStartNode(startNode);
+//        nodes.get(nodes.size()-1).setDisplay(startNode.getDisplay());
+//        nodes.get(nodes.size()-1).setLevel(startNode.getLevel()+1);
+//        startNode.getChildren().add(nodes.get(nodes.size()-1));
+//        nodes.get(nodes.size()-1).getChildren().add(startNode);
+//        repaint();
+//    }
     
     public void addNode(DragNode startNode, String name, int x, int y, String direction) {
         nodes.add(new DragNode(name, x, y));
@@ -469,13 +598,13 @@ public class LogicPanel extends JPanel {
         if(direction.equals("toNew"))
         {
         	addEdge(startNode, endNode, true);
-        	startNode.getChildren().add(endNode);
+        	
         }
         
         else if (direction.equals("toOld"))
         {
         	addEdge(endNode, startNode, true);
-        	endNode.getChildren().add(startNode);
+        	
         }
         
         repaint();
@@ -489,6 +618,8 @@ public class LogicPanel extends JPanel {
         lines.get(lines.size()-1).setEndNode(endNode);
         lines.get(lines.size()-1).setStartNode(startNode);
         startNode.getChildren().add(endNode);
+        endNode.getParent().add(startNode);
+        
     	}
     	
     	else
@@ -536,7 +667,7 @@ public class LogicPanel extends JPanel {
             }
             g2.drawOval(x, y, 50, 50);
             
-            if(node.getType() == DragNode.IN && node.getDisplay().equals("values"))
+            if(node.getDisplay().equals("values"))
             g2.drawString(node.getValue(), x + 20, y + 30);
             	
             else

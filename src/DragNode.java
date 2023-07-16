@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class DragNode {
 	//name of node
     private String name;
@@ -17,11 +19,15 @@ public class DragNode {
     private int level;
     //children is the arrayList of nodes that represents the current object's children nodes
     private ArrayList<DragNode> children;
+    private ArrayList<DragNode> pointsTo;
     //orientation of the children
     private ArrayList<String> orient;
     //used to indicate a loop in graph
     private boolean isBold  = false;
-     
+    //type of boolean expression
+    private int type;
+    
+    //constants for Boolean operation statements:
     static final int IN = 1;
     static final int OUT = 2;
     static final int NOT = 3;
@@ -33,7 +39,7 @@ public class DragNode {
     static final int XNOR = 9;
     	
     
-    private int type;
+    
 
     public DragNode(String name, int x, int y) {
     	
@@ -46,17 +52,18 @@ public class DragNode {
         this.level = 0;
         children = new ArrayList<DragNode>();
         orient = new ArrayList<String>();
+        pointsTo = new ArrayList<DragNode>();
         this.isBold = false;
         this.type = this.IN;
     }
     
     // getters:::
+    
     public String getName() {  
         return name;
     }
     
-    public String getValue()
-    {
+    public String getValue(){
     	return value;
     }
     
@@ -85,21 +92,43 @@ public class DragNode {
     {
     	return children;
     }
+    
     public boolean getBold()
     {
     	return isBold;
     }
+    
     public ArrayList<String> getOrient()
     {
     	return orient;
     }
+    
     public int getType()
     {
     	return type;
     }
+    
+    public ArrayList<DragNode> getParent()
+    {
+    	return pointsTo;
+    }
+    
+    public String dumpParent()
+    {
+		return pointsTo.toString();
+    	
+    }
+    
+    public String dumpChildren()
+    {
+    	return children.toString();
+    }
     //:::getters
     
+    
+    
     //setters:::
+    
     public void setX(int x) {
         this.x = x;
     }
@@ -126,10 +155,12 @@ public class DragNode {
     {
     	display = disp;
     }
+    
     public void setLevel(int lev)
     {
     	level = lev;
     }
+    
     public void setBold(boolean set)
     {
     	isBold = set;
@@ -207,6 +238,76 @@ public class DragNode {
     	return false;
     }
     
+    public int evaluate()
+    {
+    	try {
+    	if(this.getType() == DragNode.OUT)
+    	{
+    		this.setDisplay("values");
+    		this.setValue("" + this.getParent().get(0).evaluate());
+    		return Integer.parseInt(this.getValue());
+    	}
+    	else if(this.getType() == DragNode.IN)
+    	{
+    		this.setDisplay("values");
+    		return Integer.parseInt(this.getValue());
+    	}
+    	else if(this.getType() == DragNode.NOT)
+    	{
+    		return convert(!convert(this.getParent().get(0).evaluate()));
+    	}
+    	else if(this.getType() == DragNode.AND)
+    	{
+    		this.getParent().get(0).setDisplay("values");
+    		this.getParent().get(1).setDisplay("values");
+    		return convert(convert(this.getParent().get(0).evaluate()) && convert(this.getParent().get(1).evaluate()));
+    	}
+    	else if(this.getType() == DragNode.OR)
+    	{
+    		return convert(convert(this.getParent().get(0).evaluate()) || convert(this.getParent().get(1).evaluate()));
+    	}
+    	else if(this.getType() == DragNode.XOR)
+    	{
+    		return convert(convert(this.getParent().get(0).evaluate()) ^ convert(this.getParent().get(1).evaluate()));
+    	}
+    	else if(this.getType() == DragNode.NAND)
+    	{
+    		this.getParent().get(0).setDisplay("values");
+    		this.getParent().get(1).setDisplay("values");
+    		return convert(!(convert(this.getParent().get(0).evaluate()) && convert(this.getParent().get(1).evaluate())));
+    	}
+    	else if(this.getType() == DragNode.NOR)
+    	{
+    		return convert(!(convert(this.getParent().get(0).evaluate()) || convert(this.getParent().get(1).evaluate())));
+    	}
+    	else if(this.getType() == DragNode.XNOR)
+    	{
+    		return convert(!(convert(this.getParent().get(0).evaluate()) ^ convert(this.getParent().get(1).evaluate())));
+    	}
+    	
+    	return 0;
+    }
+    catch(StackOverflowError e)
+    {
+    	return 2;
+    }
+    }
+    
+    public int convert(boolean bool)
+    {
+    	if(bool)
+    		return 1;
+    	else
+    		return 0;
+    }
+    
+    public boolean convert(int i)
+    {
+    	if(i == 1)
+    		return true;
+    	else
+    		return false;
+    }
     public void organize(int xdiff, int ydiff)
     {
     	if(this.getLevel() == 0)

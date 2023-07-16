@@ -22,7 +22,8 @@ public class VisionMain {
         overall.setLayout(c1);
         frame.add(overall);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        frame.pack();
+        //frame.setResizable(false);
         try {
         final BinaryPanel binPanel = new BinaryPanel();
         final GraphPanel graphPanel = new GraphPanel();
@@ -56,7 +57,7 @@ public class VisionMain {
         final JMenuItem setUndirected = new JMenuItem("make graph non-directional");//set all edges to undirected 
         final JMenuItem graphClear = new JMenuItem("Clear Workspace");//clear
         //----------------------------------------------------------------------------------------------
-        
+         
         //Binary Tree Main Menu Items:
         final JMenuItem OrganizeTree = new JMenuItem("Organize Binary Tree"); //organizes tree in level order
         final JMenuItem helpBin = new JMenuItem("Help"); // help screen for tree
@@ -157,18 +158,18 @@ public class VisionMain {
       		  logScreen.setVisible(true);
       		  helpLog.setVisible(false);
       		  addNLog.setVisible(false);
-      		graphScreen.setVisible(true);
-  		    flowScreen.setVisible(true);
-  		    binScreen.setVisible(false);
-  		  addNBin.setVisible(true);
-  		 addNGraph.setVisible(false);
-		  addNFlow.setVisible(false);
-  		  helpBin.setVisible(true);
-		  helpGraph.setVisible(false);
-		  helpFlow.setVisible(false);
-		  OrganizeTree.setVisible(true);
-		  binDisp.setVisible(true);
-		  setUndirected.setVisible(true);
+      		  graphScreen.setVisible(true);
+  		      flowScreen.setVisible(true);
+  		      binScreen.setVisible(false);
+  		      addNBin.setVisible(true);
+	  		  addNGraph.setVisible(false);
+			  addNFlow.setVisible(false);
+	  		  helpBin.setVisible(true);
+			  helpGraph.setVisible(false);
+			  helpFlow.setVisible(false);
+			  OrganizeTree.setVisible(true);
+			  binDisp.setVisible(true);
+			  setUndirected.setVisible(true);
       	  } 
       	} );
         
