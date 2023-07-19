@@ -14,10 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class LogicPanel extends JPanel {
     private List<DragNode> nodes;
@@ -31,7 +34,7 @@ public class LogicPanel extends JPanel {
     public JPopupMenu menuLine = new JPopupMenu("Menu");
     public JMenuItem c = new JMenuItem("Color");
     public JMenuItem m = new JMenuItem("merge node");
-
+    public JMenuItem r = new JMenuItem("Rename Input");
     public JMenuItem dC = new JMenuItem("Delete Connection");
  
     public JMenuItem aC = new JMenuItem("Add Non-directed Edge");
@@ -40,6 +43,7 @@ public class LogicPanel extends JPanel {
     public JMenuItem aLI = new JMenuItem("Set Node as input for another logic structure");
     public JMenuItem aLO = new JMenuItem("Set Node as output for another logic structure");
     public JMenuItem E = new JMenuItem("Evaluate to this output");
+    public JMenuItem ET = new JMenuItem("Generate Truth Table at this Output");
     
     public JMenuItem cD =  new JMenuItem("Toggle display (value or name)");
     
@@ -53,6 +57,7 @@ public class LogicPanel extends JPanel {
 
         // Options in the pop-up menu for Nodes
         menu.add(c);
+        menu.add(r);
         menu.add(dC);
         menu.add(dN);
         menu.add(v);
@@ -61,7 +66,7 @@ public class LogicPanel extends JPanel {
         menu.add(cD);
         menu.add(m);
         menu.add(E);
-       
+        menu.add(ET);
         
         //Edge menu
         menuLine.add(cL);
@@ -69,7 +74,22 @@ public class LogicPanel extends JPanel {
 
         
        
-
+        //renaming a node
+        r.addActionListener(new ActionListener() { 
+        	  public void actionPerformed(ActionEvent e) { 
+        	    
+        		  menu.setVisible(false);
+	
+        		  String name = selectedNode.getName();
+        		  name = JOptionPane.showInputDialog("rename the node:", name);
+        		  selectedNode.setName(name);
+        		  
+        		  if(!name.equals(null))
+        		  repaint(); 
+	
+        	  } 
+        	} );
+        
         // Re-coloring a node
         c.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -459,10 +479,66 @@ public class LogicPanel extends JPanel {
                 selectedNode.evaluate();
             
                 repaint();
-                JOptionPane.showConfirmDialog(null, "this node evaluated to: " + selectedNode.convert(Integer.parseInt(selectedNode.getValue())),"Evaluation Successful" ,JOptionPane.CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showConfirmDialog(null, "this node evaluated to: " + DragNode.convert(Integer.parseInt(selectedNode.getValue())),"Evaluation Successful" ,JOptionPane.CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
            
             }
         });
+        
+        
+        
+        ET.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                menu.setVisible(false);
+
+                ArrayList<DragNode> ins = new ArrayList<DragNode>();
+                for (DragNode node : nodes) {
+                    if (node.getType() == DragNode.IN) {
+                        ins.add(node);
+                    }
+                }
+
+                DragNode[] inputs = new DragNode[ins.size()];
+                String[] names = new String[ins.size()];
+                for (int i = 0; i < ins.size(); i++) {
+                    inputs[i] = ins.get(i);
+                    names[i] = ins.get(i).getName();
+                }
+
+                ArrayList<String> combos = (ArrayList<String>) generateBinaryCombinations(inputs.length);
+                String[][] data = new String[combos.size()][inputs.length + 1];
+                for (int i = 0; i < combos.size(); i++) {
+                    for (int j = 0; j < inputs.length; j++) {
+                        data[i][j] = "" + DragNode.convert(Integer.parseInt("" + combos.get(i).charAt(j)));
+                        inputs[j].setValue(combos.get(i).charAt(j) + "");
+                    }
+                    selectedNode.evaluate();
+                    data[i][inputs.length] = "" + DragNode.convert(Integer.parseInt(selectedNode.getValue()));
+                }
+
+                // Create an array of column names
+                String[] columnNames = new String[inputs.length + 1];
+                for (int i = 0; i < inputs.length; i++) {
+                    columnNames[i] = names[i];
+                }
+                columnNames[inputs.length] = selectedNode.getName();
+
+                JTable table = new JTable(data, columnNames);
+                JScrollPane scrollPane = new JScrollPane(table);
+                table.setFillsViewportHeight(true);
+
+                // Creating the JFrame and adding the JScrollPane to it
+                JFrame tableFrame = new JFrame("Evaluation Results");
+                tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                tableFrame.add(scrollPane); // Adding the JScrollPane to the JFrame
+
+                tableFrame.pack(); // Adjusts the JFrame size to fit its components
+                tableFrame.setVisible(true); // Make the JFrame visible
+
+                repaint();
+                JOptionPane.showConfirmDialog(null, "This node evaluated to: " + selectedNode.convert(Integer.parseInt(selectedNode.getValue())), "Evaluation Successful", JOptionPane.CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -493,10 +569,12 @@ public class LogicPanel extends JPanel {
                     		cD.setVisible(false);
                     		m.setVisible(false);
                     		E.setVisible(false);
+                    		ET.setVisible(false);
                     		if(selectedNode.getType() == DragNode.OUT)
                         	{
                         		aLI.setVisible(true);
                         		E.setVisible(true);
+                        		ET.setVisible(true);
                         	
                         	}
                     		 menu.show(null, selectedNode.getX(), selectedNode.getY());
@@ -509,6 +587,8 @@ public class LogicPanel extends JPanel {
                     		cD.setVisible(true);
                     		m.setVisible(true);
                     		E.setVisible(false);
+                    		ET.setVisible(false);
+                    		r.setVisible(true);
                         menu.show(null, selectedNode.getX(), selectedNode.getY());
                     	}
                     }
@@ -811,11 +891,11 @@ public class LogicPanel extends JPanel {
 		  else if( pf == p3)
 			  line.setPreset(3);
 		  else if( pf == p4)
-			  line.setPreset(4);
-		  else if( pf == p5)
+ 			  line.setPreset(4);
+ 		  else if( pf == p5)
 			  line.setPreset(5);
-		  else if( pf == p6)
-			  line.setPreset(6);			  
+ 		  else if( pf == p6)
+  			  line.setPreset(6);			  
 		  else if( pf == p7)
 			  line.setPreset(7);				  
 		  else if(pf == p8)
@@ -912,6 +992,22 @@ public class LogicPanel extends JPanel {
     	
     	
     }
+   
+	    public List<String> generateBinaryCombinations(int numDigits) {
+	        List<String> combinations = new ArrayList<>();
+	        generateBinaryCombinationsHelper(numDigits, "", combinations);
+	        return combinations;
+	    }
+
+	    private void generateBinaryCombinationsHelper(int numDigits, String current, List<String> combinations) {
+	        if (current.length() == numDigits) {
+	            combinations.add(current);
+	            return;
+	        }
+
+	        generateBinaryCombinationsHelper(numDigits, current + "0", combinations);
+	        generateBinaryCombinationsHelper(numDigits, current + "1", combinations);
+	    }
     
   
     

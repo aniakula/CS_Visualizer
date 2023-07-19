@@ -302,7 +302,7 @@ public class DragNode {
     		return 0;
     }
     
-    public boolean convert(int i)
+    public static boolean convert(int i)
     {
     	if(i == 1)
     		return true;
