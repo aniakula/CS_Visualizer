@@ -4,21 +4,18 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
+@SuppressWarnings("serial")
 public class GraphPanel extends JPanel {
     private List<DragNode> nodes;
     private List<LineComp> lines;
@@ -131,7 +128,7 @@ public class GraphPanel extends JPanel {
                 menu.setVisible(false);
                 // Option colors for drop-down menu
                 String[] options = {"White", "Cyan", "Green", "Yellow", "Magenta", "Orange", "Gray"};
-                DragNode node = selectedNode;
+   
                 String selection = (String) JOptionPane.showInputDialog(null, "Choose color", "Menu",
                         JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
                 // Change color based on choice
@@ -272,7 +269,6 @@ public class GraphPanel extends JPanel {
                 menuLine.setVisible(false);
                 // Option colors for drop-down menu
                 String[] options = {"Black", "Cyan", "Green", "Yellow", "Magenta", "Orange", "Gray"};
-                LineComp line = selectedLine;
                 String selection = (String) JOptionPane.showInputDialog(null, "Choose color", "Menu",
                         JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
                 // Change color based on choice

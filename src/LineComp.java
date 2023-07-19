@@ -3,6 +3,7 @@ import java.awt.geom.Line2D;
 
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class LineComp extends JPanel {
     private int stx;
     private int sty;

@@ -1,19 +1,14 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -22,6 +17,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+@SuppressWarnings("serial")
 public class LogicPanel extends JPanel {
     private List<DragNode> nodes;
     private List<LineComp> lines;
@@ -94,11 +90,11 @@ public class LogicPanel extends JPanel {
         c.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 menu.setVisible(false);
-                System.out.println(selectedNode.dumpChildren());
-                System.out.println(selectedNode.dumpParent());
+                System.out.println("c" + selectedNode.dumpChildren());
+                System.out.println("p" + selectedNode.dumpParent());
                 // Option colors for drop-down menu
                 String[] options = {"White", "Cyan", "Green", "Yellow", "Magenta", "Orange", "Gray"};
-                DragNode node = selectedNode;
+               
                 String selection = (String) JOptionPane.showInputDialog(null, "Choose color", "Menu",
                         JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
                 // Change color based on choice
@@ -149,6 +145,24 @@ public class LogicPanel extends JPanel {
                         JOptionPane.YES_NO_OPTION);
 
                 if (choice == 0) {
+                	if(selectedNode.getType() != DragNode.NOT) {
+                		System.out.println(selectedNode.getParent().get(1));
+                		if(selectedNode.getChildren().get(0).getChildren().size() == 0)
+                			nodes.remove(selectedNode.getChildren().remove(0));
+                		if(selectedNode.getParent().get(0).getParent().size() == 0)
+                			nodes.remove(selectedNode.getParent().remove(0));
+                		if(selectedNode.getParent().get(selectedNode.getParent().size()-1).getParent().size() == 0)
+                			nodes.remove(selectedNode.getParent().remove(selectedNode.getParent().size()-1));
+                	}
+                	
+                	else
+                	{
+                		if(selectedNode.getChildren().get(0).getChildren().size() == 0)
+                			nodes.remove(selectedNode.getChildren().remove(0));
+                		if(selectedNode.getParent().get(0).getParent().size() == 0)
+                			nodes.remove(selectedNode.getParent().remove(0));
+                	}
+                	
                     for (int i = 0; i < lines.size(); i++) {
                         if (lines.get(i).getStartNode().equals(selectedNode)
                                 || lines.get(i).getEndNode().equals(selectedNode)) {
@@ -156,6 +170,8 @@ public class LogicPanel extends JPanel {
                             i--;
                         }
                     }
+                
+                	
                     nodes.remove(selectedNode);
 
                     repaint();
@@ -302,7 +318,6 @@ public class LogicPanel extends JPanel {
                 menuLine.setVisible(false);
                 // Option colors for drop-down menu
                 String[] options = {"Black", "Cyan", "Green", "Yellow", "Magenta", "Orange", "Gray"};
-                LineComp line = selectedLine;
                 String selection = (String) JOptionPane.showInputDialog(null, "Choose color", "Menu",
                         JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
                 // Change color based on choice
@@ -535,7 +550,7 @@ public class LogicPanel extends JPanel {
                 tableFrame.setVisible(true); // Make the JFrame visible
 
                 repaint();
-                JOptionPane.showConfirmDialog(null, "This node evaluated to: " + selectedNode.convert(Integer.parseInt(selectedNode.getValue())), "Evaluation Successful", JOptionPane.CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                
             }
         });
 
@@ -570,12 +585,13 @@ public class LogicPanel extends JPanel {
                     		m.setVisible(false);
                     		E.setVisible(false);
                     		ET.setVisible(false);
+                    		dN.setVisible(true);
                     		if(selectedNode.getType() == DragNode.OUT)
                         	{
                         		aLI.setVisible(true);
                         		E.setVisible(true);
                         		ET.setVisible(true);
-                        	
+                        		dN.setVisible(false);
                         	}
                     		 menu.show(null, selectedNode.getX(), selectedNode.getY());
                     	}
@@ -589,6 +605,7 @@ public class LogicPanel extends JPanel {
                     		E.setVisible(false);
                     		ET.setVisible(false);
                     		r.setVisible(true);
+                    		dN.setVisible(false);
                         menu.show(null, selectedNode.getX(), selectedNode.getY());
                     	}
                     }

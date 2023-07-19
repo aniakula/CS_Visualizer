@@ -1,8 +1,6 @@
 import java.awt.Color;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 public class DragNode {
 	//name of node
     private String name;
@@ -55,7 +53,7 @@ public class DragNode {
         orient = new ArrayList<String>();
         pointsTo = new ArrayList<DragNode>();
         this.isBold = false;
-        this.type = this.IN;
+        this.type = DragNode.IN;
         
     }
     
@@ -174,38 +172,38 @@ public class DragNode {
     	switch(x)
     	{
     	case(1):
-    		type = this.IN;
+    		type = DragNode.IN;
     		break;
     	case(2):
-    		type = this.OUT;
+    		type = DragNode.OUT;
     		this.setName("OUTPUT");
     		break;
     	case(3):
-    		type = this.NOT;
+    		type = DragNode.NOT;
     		this.setName("NOT");
     		break;
     	case(4):
-    		type = this.AND;
+    		type = DragNode.AND;
     	    this.setName("AND");
     		break;
     	case(5):
-    		type = this.OR;
+    		type = DragNode.OR;
     	 	this.setName("OR");
     		break;
     	case(6):
-    		type = this.XOR;
+    		type = DragNode.XOR;
     		this.setName("XOR");
     		break;
     	case(7):
-    		type = this.NAND;
+    		type = DragNode.NAND;
     		this.setName("NAND");
     		break;
     	case(8):
-    		type = this.NOR;
+    		type = DragNode.NOR;
     		this.setName("NOR");
     		break;
     	case(9):
-    		type = this.XNOR;
+    		type = DragNode.XNOR;
     		this.setName("XNOR");
     		break;
     	}
