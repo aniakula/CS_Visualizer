@@ -12,11 +12,4 @@ Interactive model builder for graph theory, binary trees, and programming flow-c
 
 
 
-# Version History:
 
-version 1.0 : CS_Vision_1.0.exe
-- first version
-- includes implementation of binary tree, graph, and digital electronics workspaces
-- interactive nodes, draggable and name-able
-- cosmetic options such as color changing, renaming, and boldening of edges
-- evaluation of circuits and generation of truth tables in Digital Electronics panel
