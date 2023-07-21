@@ -6,7 +6,7 @@ Interactive model builder for graph theory, binary trees, and programming flow-c
 - Download desired version of CS_Vision (download the .jar file found in each release)
 - Once download is complete, navigate to the .jar file for CS_Vision from your terminal and run the following command:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/aee44a90-2a78-4a26-804e-6fa3a003f7ac)
-- Refer to documentation version history and user guide
+- Refer to version history and user guide
   
 # How to use:
 CS_Vision in an interactive model building application for computer science concepts (Binary Trees, Graph Theory, Digital Electronics, and Programming Flowcharts). Each panel uses Draggable nodes, and connecting lines to create various structures, and perform calculations with these structures. There are four workspaces included in the CS_Vision application, each involvedin one of the CS concepts described above. The rest of this guide will explore all options that are available in each workspace of the application. Each workspace contains main menu options and Node options, both of which will be described below in detail.
