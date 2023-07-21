@@ -17,7 +17,7 @@ this is the panel that is opened on launch of the program. The actions menu in t
 ### Options:
 - the first three options will allow the user to navigate to the other panels
 - the help option will open a window which outlines how to use the Binary Tree Panel
-- the Add new node option will allow the user to generate a new node onto the screen. After selecting the option, the user will be prompted to enter a name for the new node, and generates a Binary Tree node on the screen once name is selected. ex:
+- the Add new node option will allow the user to generate a new node onto the screen. After selecting the option, the user will be prompted to enter a name for the new node, and a Binary Tree node is generated once a name is selected. ex:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/52d27b7b-d80c-45be-bf2d-013884d34a68)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/d85a4a30-805a-4a02-868d-b0fbe0402cbe)
 - the Change display option will allow the user to select a new display type for the nodes. There are three displays: name, value, and level. A node with a name display will display the its name in front of the node, a node with value display will display the set value of a node(default is 0), a node with level display will display its depth within the tree(the root is 0, its children are 1, etc.) ex:
