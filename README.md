@@ -11,7 +11,7 @@ Interactive model builder for graph theory, binary trees, and programming flow-c
 # How to use:
 CS_Vision in an interactive model building application for computer science concepts (Binary Trees, Graph Theory, Digital Electronics, and Programming Flowcharts). Each panel uses Draggable nodes, and connecting lines to create various structures, and perform calculations with these structures. There are four workspaces included in the CS_Vision application, each involvedin one of the CS concepts described above. The rest of this guide will explore all options that are available in each workspace of the application. Each workspace contains main menu options and Node options, both of which will be described below in detail.
 
-## Binary Tree Panel options:
+## Binary Tree Panel:
 this is the panel that is opened on launch of the program. The actions menu in this panel has the following options: 
 ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/2aa6daac-71f7-49b7-b133-8fd05fd1d3f1)
 ### Options:
@@ -67,3 +67,14 @@ this is the panel that is opened on launch of the program. The actions menu in t
 - under construction (as of version 1.0)
 
 ## Graph Panel:
+This Panel can be navigated to through the "Graph" workspace option in the other panels. The actions menu in this panel has the following options: 
+![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/9f3c3e28-da05-4d9f-b9f0-e90788f6f8bc)
+
+## Options:
+- the first three options will allow the user to navigate to the other panels
+- the help option will open a window which outlines how to use the Graph Panel
+- the Add new node option will allow the user to generate a new node onto the screen. After selecting the option, the user will be prompted to enter a name for the new node, and a Graph node is generated once a name is selected.
+- the make Graph non-directional option changes any directional edges in the graph to un-directed edges ex:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/873268b5-1f89-4981-9991-4ccebf10fc62)
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/cf5deec9-ff12-4991-8b2f-6710daf1ca37)
+
