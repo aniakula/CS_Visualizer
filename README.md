@@ -72,9 +72,15 @@ This Panel can be navigated to through the "Graph" workspace option in the other
 
 ## Options:
 - the first three options will allow the user to navigate to the other panels
+  
 - the help option will open a window which outlines how to use the Graph Panel
+  
 - the Add new node option will allow the user to generate a new node onto the screen. After selecting the option, the user will be prompted to enter a name for the new node, and a Graph node is generated once a name is selected.
+  
 - the make Graph non-directional option changes any directional edges in the graph to un-directed edges ex:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/873268b5-1f89-4981-9991-4ccebf10fc62)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/cf5deec9-ff12-4991-8b2f-6710daf1ca37)
 
+- the clear workspace option deletes all nodes and edges in the current workspace.
+
+## Graph Panel Node Options:
