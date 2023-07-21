@@ -265,7 +265,9 @@ public class DragNode {
     		return convert(convert(this.getParent().get(0).evaluate()) && convert(this.getParent().get(1).evaluate()));
     	}
     	else if(this.getType() == DragNode.OR)
-    	{
+    	{	
+    		this.getParent().get(0).setDisplay("values");
+		this.getParent().get(1).setDisplay("values");
     		return convert(convert(this.getParent().get(0).evaluate()) || convert(this.getParent().get(1).evaluate()));
     	}
     	else if(this.getType() == DragNode.XOR)
@@ -280,6 +282,8 @@ public class DragNode {
     	}
     	else if(this.getType() == DragNode.NOR)
     	{
+    		this.getParent().get(0).setDisplay("values");
+    		this.getParent().get(1).setDisplay("values");
     		return convert(!(convert(this.getParent().get(0).evaluate()) || convert(this.getParent().get(1).evaluate())));
     	}
     	else if(this.getType() == DragNode.XNOR)
@@ -331,6 +335,27 @@ public class DragNode {
     	{
     		return validMerge(in, out.getParent().get(0)) && validMerge(in, out.getParent().get(1));
     	} 
+    }
+    
+    public ArrayList<DragNode> getIn(ArrayList<DragNode>ins)
+    {
+    	if(this.getType() == DragNode.OUT || this.getType() == DragNode.NOT)
+    	{
+    		this.getParent().get(0).getIn(ins);
+    	}
+    	
+    	else if(this.getType() != DragNode.IN)
+    	{
+    		this.getParent().get(0).getIn(ins);
+    		this.getParent().get(1).getIn(ins);
+    	}
+    	
+    	else
+    	{
+    		ins.add(this);
+    	}
+    	
+    	return ins;
     }
     
     public void organize(int xdiff, int ydiff)

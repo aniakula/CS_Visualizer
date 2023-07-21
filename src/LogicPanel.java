@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -505,12 +506,11 @@ public class LogicPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 menu.setVisible(false);
 
+              
                 ArrayList<DragNode> ins = new ArrayList<DragNode>();
-                for (DragNode node : nodes) {
-                    if (node.getType() == DragNode.IN) {
-                        ins.add(node);
-                    }
-                }
+         
+                        ins = selectedNode.getIn(ins);
+                
 
                 DragNode[] inputs = new DragNode[ins.size()];
                 String[] names = new String[ins.size()];
@@ -518,7 +518,7 @@ public class LogicPanel extends JPanel {
                     inputs[i] = ins.get(i);
                     names[i] = ins.get(i).getName();
                 }
-
+                Arrays.sort(names);
                 ArrayList<String> combos = (ArrayList<String>) generateBinaryCombinations(inputs.length);
                 String[][] data = new String[combos.size()][inputs.length + 1];
                 for (int i = 0; i < combos.size(); i++) {
@@ -539,7 +539,7 @@ public class LogicPanel extends JPanel {
 
                 JTable table = new JTable(data, columnNames);
                 JScrollPane scrollPane = new JScrollPane(table);
-                table.setFillsViewportHeight(true);
+                table.setFillsViewportHeight(false);
 
                 // Creating the JFrame and adding the JScrollPane to it
                 JFrame tableFrame = new JFrame("Evaluation Results");
@@ -548,7 +548,10 @@ public class LogicPanel extends JPanel {
 
                 tableFrame.pack(); // Adjusts the JFrame size to fit its components
                 tableFrame.setVisible(true); // Make the JFrame visible
-
+                for(DragNode node: nodes)
+                {
+                	node.setDisplay("names");
+                }
                 repaint();
                 
             }
