@@ -85,3 +85,6 @@ This Panel can be navigated to through the "Graph" workspace option in the other
 - the clear workspace option deletes all nodes and edges in the current workspace.
 
 ## Graph Panel Node Options:
+- these options can be activated with a right click on any Node in the workspace, below is the Node menu in the graph panel:
+![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/16b876d1-1646-44a4-8f29-2fd62718c4b9)
+
