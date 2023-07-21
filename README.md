@@ -9,9 +9,9 @@ Interactive model builder for graph theory, binary trees, and programming flow-c
 - Refer to documentation version history and user guide
   
 # How to use:
-CS_Vision in an interactive model building application for computer science concepts (Binary Trees, Graph Theory, Digital Electronics, and Programming Flowcharts). Each panel uses Draggable nodes, and connecting lines to create various structures, and perform calculations woth these structures. Upon first launchin the application the user will begin on the "Binary tree" panel, and have access to the other three panels through the "Actions Menu". The rest of this guide will outline each panel, and its functionality.
+CS_Vision in an interactive model building application for computer science concepts (Binary Trees, Graph Theory, Digital Electronics, and Programming Flowcharts). Each panel uses Draggable nodes, and connecting lines to create various structures, and perform calculations with these structures. There are four workspaces included in the CS_Vision application, each involvedin one of the CS concepts described above. The rest of this guide will explore all options that are available in each workspace of the application. Each workspace contains main menu options and Node options, both of which will be described below in detail.
 
-## Binary Tree Panel:
+## Binary Tree Panel options:
 this is the panel that is opened on launch of the program. The actions menu in this panel has the following options: 
 ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/2aa6daac-71f7-49b7-b133-8fd05fd1d3f1)
 ### Options:
@@ -35,3 +35,27 @@ this is the panel that is opened on launch of the program. The actions menu in t
 
   ### after selecting organize:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/38feebc7-8aef-49b5-97e4-a9f051625c51)
+- the clear workspace option deletes all nodes and connections in the current workspace.
+  
+## Binary Tree panel Node options:
+- these options can be activated with a right click on any Node in the workspace, below is the Node menu in the binary tree panel:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/0ec023a1-05c6-4874-8b08-ff4620a052af)
+- the rename option allows the user to change the name of the selected node
+- the color option allows the user to change the fill color of the selected node ex:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/01c52050-6746-48b8-9440-5376da836375)
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/8b9d202c-68c3-4fe8-9551-0d3645adfab5)
+- the Add Child Node option adds a new node as a child to the selected node (each node may only have two children) ex:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/f4c86b66-8971-4efd-874c-6b05f73d4f1d)
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/673043b8-f986-44c7-9eac-59e436955684)
+- the Delete connection option is under construction (as of version 1.0)
+- The Delete Node option deletes the selected node, and all connections between it, and other nodes ex:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/8e2f4fef-d22a-44c7-95f5-df14e0f1628a)
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/b1cd40e3-a1e0-40a8-8934-11eb94755aa5)
+- The Select Value option will allow the user to set the value of the selected node ex:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/cbf4e026-f6e0-4d00-bfaa-e8046dcfc258)
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/ee62e2a4-ba50-40a1-ae59-f36bd2ed1a89)
+  
+## Flow Chart Panel:
+- under construction (as of version 1.0)
+
+## Graph Panel:
