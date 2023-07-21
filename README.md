@@ -40,17 +40,23 @@ this is the panel that is opened on launch of the program. The actions menu in t
 ## Binary Tree panel Node options:
 - these options can be activated with a right click on any Node in the workspace, below is the Node menu in the binary tree panel:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/0ec023a1-05c6-4874-8b08-ff4620a052af)
+  
 - the rename option allows the user to change the name of the selected node
+  
 - the color option allows the user to change the fill color of the selected node ex:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/01c52050-6746-48b8-9440-5376da836375)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/8b9d202c-68c3-4fe8-9551-0d3645adfab5)
+  
 - the Add Child Node option adds a new node as a child to the selected node (each node may only have two children) ex:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/f4c86b66-8971-4efd-874c-6b05f73d4f1d)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/673043b8-f986-44c7-9eac-59e436955684)
+  
 - the Delete connection option is under construction (as of version 1.0)
+- 
 - The Delete Node option deletes the selected node, and all connections between it, and other nodes ex:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/8e2f4fef-d22a-44c7-95f5-df14e0f1628a)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/b1cd40e3-a1e0-40a8-8934-11eb94755aa5)
+  
 - The Select Value option will allow the user to set the value of the selected node ex:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/cbf4e026-f6e0-4d00-bfaa-e8046dcfc258)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/ee62e2a4-ba50-40a1-ae59-f36bd2ed1a89)
