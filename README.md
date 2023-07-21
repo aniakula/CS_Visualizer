@@ -52,12 +52,13 @@ this is the panel that is opened on launch of the program. The actions menu in t
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/673043b8-f986-44c7-9eac-59e436955684)
   
 - the Delete connection option is under construction (as of version 1.0)
-- 
+  
 - The Delete Node option deletes the selected node, and all connections between it, and other nodes ex:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/8e2f4fef-d22a-44c7-95f5-df14e0f1628a)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/b1cd40e3-a1e0-40a8-8934-11eb94755aa5)
   
 - The Select Value option will allow the user to set the value of the selected node ex:
+  
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/cbf4e026-f6e0-4d00-bfaa-e8046dcfc258)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/ee62e2a4-ba50-40a1-ae59-f36bd2ed1a89)
   
