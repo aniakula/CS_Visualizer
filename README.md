@@ -29,4 +29,9 @@ this is the panel that is opened on launch of the program. The actions menu in t
   ### levels display:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/e06794ab-0487-495f-84dd-a770a73cbe3f)
 
+- the Organize Binary Tree option will organize the tree in decreasing-depth order. This option is helpful if the nodes in the tree have been misplaced by dragging ex:
+  ### before selecting organize:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/f53fc294-4a06-4c44-9248-d6b8d0d7ef79)
 
+  ### after selecting organize:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/38feebc7-8aef-49b5-97e4-a9f051625c51)
