@@ -13,14 +13,20 @@ CS_Vision in an interactive model building application for computer science conc
 
 ## Binary Tree Panel:
 this is the panel that is opened on launch of the program. The actions menu in this panel has the following options: 
-![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/34adc965-1597-47fd-b73d-808d7c629123)
+![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/2aa6daac-71f7-49b7-b133-8fd05fd1d3f1)
 ### Options:
 - the first three options will allow the user to navigate to the other panels
 - the help option will open a window which outlines how to use the Binary Tree Panel
-- Add New Node option will allow the user to generate a new node onto the screen. After selecting the option, the user will be prompted to enter a name for the new node, and generates a Binary Tree node on the screen once name is selected. ex:
-  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/cbe8facd-0a42-431e-aed6-f3d2b4e0ebca)
+- the Add new node option will allow the user to generate a new node onto the screen. After selecting the option, the user will be prompted to enter a name for the new node, and generates a Binary Tree node on the screen once name is selected. ex:
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/52d27b7b-d80c-45be-bf2d-013884d34a68)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/d85a4a30-805a-4a02-868d-b0fbe0402cbe)
-
+- the Change display option will allow the user to select a new display type for the nodes. There are three displays: name, value, and level. A node with a name display will display the its name in front of the node, a node with value display will display the set value of a node(default is 0), a node with level display will display its depth within the tree(the root is 0, its children are 1, etc.) ex:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/718d2137-2bd8-4b1f-8a72-0b583dfef90a)
+  ### names display:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/3f7a1490-59de-45ae-a6a4-5950870de767)
+  ### values display:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/2904840b-9eeb-4af5-8075-ca5ee378f173)
+  ### levels display:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/e06794ab-0487-495f-84dd-a770a73cbe3f)
 
 
