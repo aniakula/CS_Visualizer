@@ -44,7 +44,7 @@ this is the panel that is opened on launch of the program. The actions menu in t
 - the rename option allows the user to change the name of the selected node
   
 - the color option allows the user to change the fill color of the selected node ex:
-  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/01c52050-6746-48b8-9440-5376da836375)
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/e99f3ce1-b8f2-4d88-95bf-2ea657053bbc)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/8b9d202c-68c3-4fe8-9551-0d3645adfab5)
   
 - the Add Child Node option adds a new node as a child to the selected node (each node may only have two children) ex:
