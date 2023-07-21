@@ -13,6 +13,7 @@ CS_Vision in an interactive model building application for computer science conc
 
 ## Binary Tree Panel:
 this is the panel that is opened on launch of the program. The actions menu in this panel has the following options: 
+
 ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/2aa6daac-71f7-49b7-b133-8fd05fd1d3f1)
 ### Options:
 - the first three options will allow the user to navigate to the other panels
