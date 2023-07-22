@@ -108,5 +108,18 @@ This Panel can be navigated to through the "Graph" workspace option in the other
 ### directed away from new node:
 ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/757d9552-a49c-423a-bbeb-55bd55aa1ccc)
 
+- the Delete connection option is under construction (as of version 1.0)
+
+- the Add Directed Edge option adss an edge between the selected node, directed to the next node that is selected ex:
+
+  ### before selecting the Add Directed Edge option:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/29dd32bf-7c24-40de-a926-502324813ac0)
+  ### after selecting the Add Directed Edge option on Node 2:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/87bff801-cdd4-45e6-90f4-e800ff26fad6)
+  ### after selecting Graph Node as the node to draw an edge to from Node 2:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/cad02d03-fff5-4e1f-b379-aba972fcc062)
 
 
+- The Delete Node option deletes the selected node, and all connections between it, and other nodes
+
+- 
