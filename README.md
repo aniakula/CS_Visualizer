@@ -86,5 +86,16 @@ This Panel can be navigated to through the "Graph" workspace option in the other
 
 ## Graph Panel Node Options:
 - these options can be activated with a right click on any Node in the workspace, below is the Node menu in the graph panel:
+  
 ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/16b876d1-1646-44a4-8f29-2fd62718c4b9)
+
+- the rename option allows the user to change the name of the selected node
+  
+- the color option allows the user to change the fill color of the selected node
+
+- the Add Node option allows the user to add a new graph node connected to the selected graph node. The user is prompted to select a name and edge directionality for the new node. Once both of these choices are made, a new graph node will be generated ex:
+
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/31022810-9385-48b7-b6a4-00697326b0e7)
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/f1b72459-c6ac-4b88-984c-0a54aedf7fc8)
+
 
