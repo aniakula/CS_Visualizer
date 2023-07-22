@@ -98,4 +98,14 @@ This Panel can be navigated to through the "Graph" workspace option in the other
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/31022810-9385-48b7-b6a4-00697326b0e7)
   ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/f1b72459-c6ac-4b88-984c-0a54aedf7fc8)
 
+### non-directed edge:
+![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/9b8cbdbe-d8b6-4840-a189-8d6dc8102f0c)
+
+### directed towards new node:
+![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/3313b86f-4744-4868-8aa4-304551749161)
+
+### directed away from new node:
+![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/757d9552-a49c-423a-bbeb-55bd55aa1ccc)
+
+
 
