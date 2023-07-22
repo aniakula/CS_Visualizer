@@ -137,7 +137,7 @@ public class VisionMain {
         		  helpFlow.setVisible(true);
         		  OrganizeTree.setVisible(false);
         		  binDisp.setVisible(false);
-        		  setUndirected.setVisible(true);
+        		  setUndirected.setVisible(false);
         	  } 
         	} );
         
@@ -163,7 +163,7 @@ public class VisionMain {
 			  helpFlow.setVisible(false);
 			  OrganizeTree.setVisible(true);
 			  binDisp.setVisible(true);
-			  setUndirected.setVisible(true);
+			  setUndirected.setVisible(false);
       	  } 
       	} );
         
@@ -280,8 +280,10 @@ public class VisionMain {
           		  String disp = "";
           		  String[] options = {"names", "values", "levels"};
           		  disp = (String) JOptionPane.showInputDialog(null, "Choose Display Type", "Menu", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+          		  if(disp != null) {
           		  //change color based on choice
           		  binPanel.changeDisplay(disp);
+          		  }
         	  } 
         	} );
         
@@ -426,7 +428,7 @@ public class VisionMain {
 	  helpFlow.setVisible(false);
 	  OrganizeTree.setVisible(true);
 	  binDisp.setVisible(true);
-	  setUndirected.setVisible(true);
+	  setUndirected.setVisible(false);
 		
     	bar.add(options);
     	frame.setJMenuBar(bar);

@@ -74,10 +74,12 @@ public class BinaryPanel extends JPanel {
         //re-coloring a nodes
         c.addActionListener(new ActionListener() { 
       	  public void actionPerformed(ActionEvent e) { 
-      	    
+      		
       		  menu.setVisible(false);
       		  //option colors for drop down menu
       		  String[] options = {"White", "Cyan", "Green", "Yellow", "Magenta", "Orange", "Gray"};
+      		System.out.println("c" + selectedNode.dumpChildren());
+            System.out.println("p" + selectedNode.dumpParent());
       		  String selection = (String) JOptionPane.showInputDialog(null, "Choose color", "Menu", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
       		  //change color based on choice
       		  if(selection != null)
@@ -176,6 +178,12 @@ public class BinaryPanel extends JPanel {
       				   i--;
       			   }
       		   }
+      		   selectedNode.getParent().get(0).getChildren().remove(selectedNode);
+      		   for(DragNode node : selectedNode.getChildren())
+      		   {
+      			   node.getParent().clear();
+      		   }
+      		   
       		   nodes.remove(selectedNode);
       		   
       		   repaint(); 
@@ -432,6 +440,7 @@ public class BinaryPanel extends JPanel {
         		
         }
         startNode.getChildren().add(nodes.get(nodes.size()-1));
+        nodes.get(nodes.size()-1).getParent().add(startNode);
         repaint();
     }
     

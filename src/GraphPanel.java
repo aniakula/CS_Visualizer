@@ -237,7 +237,7 @@ public class GraphPanel extends JPanel {
                 value = JOptionPane.showInputDialog("Set Node Value:", value);
                 selectedNode.setValue(value);
 
-                if (!value.equals(null))
+                if (value != null)
                     repaint();
             }
         });
