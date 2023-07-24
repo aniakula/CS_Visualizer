@@ -75,7 +75,8 @@ this is the panel that is opened on launch of the program. The actions menu in t
 ## Graph Panel:
 This Panel can be navigated to through the "Graph" workspace option in the other panels. The actions menu in this panel has the following options: 
 
-![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/9f3c3e28-da05-4d9f-b9f0-e90788f6f8bc)
+![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/aa0db955-3e5e-4fd6-b3a7-c0586725fcd6)
+
 
 ## Options:
 - the first three options will allow the user to navigate to the other panels
