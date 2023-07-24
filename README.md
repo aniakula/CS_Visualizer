@@ -92,6 +92,15 @@ This Panel can be navigated to through the "Graph" workspace option in the other
 
 - the clear workspace option deletes all nodes and edges in the current workspace.
 
+- the Generate Adjacency Matrix option will display a table representing the adjacency matrix of the graph in the workspace, the tabel is labeled with the names of the nodes in the graph ex:
+
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/719dd5ff-4047-4a86-8b8a-12ee0197ba03)
+
+  ### Generated Matrix:
+  ![image](https://github.com/Anidragon/CS_Visualizer/assets/81329162/e832213c-2e41-4b07-94e4-53caebcd3d90)
+
+  
+
 ## Graph Panel Node Options:
 - these options can be activated with a right click on any Node in the workspace, below is the Node menu in the graph panel:
   
