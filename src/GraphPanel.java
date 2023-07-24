@@ -1,5 +1,7 @@
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,11 +11,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.*;
 
 @SuppressWarnings("serial")
 public class GraphPanel extends JPanel {
@@ -37,7 +44,8 @@ public class GraphPanel extends JPanel {
     public JMenuItem sW = new JMenuItem("Set Edge Weight");
     public JMenuItem cL = new JMenuItem("Set Edge Color");
     public JMenuItem sT = new JMenuItem("Set Edge Thickness");
-
+    public JMenuItem fC = new JMenuItem("count the number of cycles to this node");
+    public JMenuItem gA = new JMenuItem("Generate adjacency matrix");
     public GraphPanel() {
         // List of all nodes and lines currently on the workspace
         nodes = new ArrayList<>();
@@ -47,15 +55,16 @@ public class GraphPanel extends JPanel {
         menu.add(r);
         menu.add(c);
         menu.add(aN);
-        menu.add(dC);
+        //menu.add(gA);
         menu.add(aCD);
         menu.add(dN);
         menu.add(v);
-        
+        menu.add(fC);
         //Edge menu
         menuLine.add(sW);
         menuLine.add(cL);
         menuLine.add(sT);
+        menuLine.add(dC);
 
         // Renaming a node
         r.addActionListener(new ActionListener() {
@@ -99,6 +108,7 @@ public class GraphPanel extends JPanel {
                         			addEdge(startNode, selectedNode, true);
                         			
                         			startNode.getChildren().add(selectedNode);
+                        			selectedNode.getParent().add(startNode);
                         			
                         		}
                         		
@@ -122,11 +132,14 @@ public class GraphPanel extends JPanel {
             }
         });
 
+
         // Re-coloring a node
         c.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 menu.setVisible(false);
                 // Option colors for drop-down menu
+            	System.out.println("c" + selectedNode.dumpChildren());
+                System.out.println("p" + selectedNode.dumpParent());
                 String[] options = {"White", "Cyan", "Green", "Yellow", "Magenta", "Orange", "Gray"};
    
                 String selection = (String) JOptionPane.showInputDialog(null, "Choose color", "Menu",
@@ -221,6 +234,17 @@ public class GraphPanel extends JPanel {
                             i--;
                         }
                     }
+                    for(int i = 0; i < nodes.size(); i++)
+                    {
+                    	if(nodes.get(i).getParent().contains(selectedNode))
+                    	{
+                    		nodes.get(i).getParent().remove(selectedNode);
+                    	}
+                    	if(nodes.get(i).getChildren().contains(selectedNode))
+        				{
+                    		nodes.get(i).getChildren().remove(selectedNode);
+        				}
+                    }
                     nodes.remove(selectedNode);
 
                     repaint();
@@ -308,10 +332,35 @@ public class GraphPanel extends JPanel {
             }
         });
 
+
+        dC.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                menuLine.setVisible(false);
+                
+                if(selectedLine.isDirected())
+                	{
+                		selectedLine.getStartNode().getChildren().remove(selectedLine.getEndNode());
+                		selectedLine.getEndNode().getParent().remove(selectedLine.getStartNode());
+                	}
+                	else
+                	{
+                		selectedLine.getStartNode().getChildren().remove(selectedLine.getEndNode());
+                		selectedLine.getEndNode().getParent().remove(selectedLine.getStartNode());
+                		selectedLine.getStartNode().getParent().remove(selectedLine.getEndNode());
+                		selectedLine.getEndNode().getChildren().remove(selectedLine.getStartNode());
+                	}
+                	
+                    lines.remove(selectedLine);
+
+                    repaint();
+                }
+               
+            
+        });
         
         sT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	menu.setVisible(false);
+            	menuLine.setVisible(false);
             	 String[] options = {"Light", "Bold", "Ultra-Bold"};
                 String directed = "";
                 directed = (String) JOptionPane.showInputDialog(null, "Choose Edge Specifics", "Menu",
@@ -342,7 +391,48 @@ public class GraphPanel extends JPanel {
                 
             }
         });
+        
+        // Renaming a node
+        fC.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                menu.setVisible(false);
+                boolean ret = true;
+                int c = 0;
+                String count = "";
+                while(ret) {
+                count = JOptionPane.showInputDialog("find cycles of length:", "3");
+                
+                try {
+                	c = Integer.parseInt(count);
+                	ret = false;
+                }
+                catch(Exception e1)
+                {
+                	if(count == null)
+                	{
+                		ret = false;
+                	}
+                	else
+                	JOptionPane.showMessageDialog(null, "did not provide valid Integer value for cycle length", "non-Integer input", JOptionPane.ERROR_MESSAGE);
+                }
+             
+                }
+                
+                if(count != null)
+                JOptionPane.showMessageDialog(null, "there are " + selectedNode.countCycles(c) + " cycles of length " + c + " starting from " + selectedNode.getName(), "number of cycles", JOptionPane.PLAIN_MESSAGE);
 
+               
+            }
+        });
+        
+        /*gA.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+            	 int[][] adjacencyMatrix = generateAdjacencyMatrix(selectedNode);
+                 displayAdjacencyMatrix(adjacencyMatrix, nodes);
+               
+            }
+        });*/
+       
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 selectNode(e.getX(), e.getY());
@@ -433,7 +523,10 @@ public class GraphPanel extends JPanel {
         nodes.get(nodes.size()-1).setDisplay(startNode.getDisplay());
         nodes.get(nodes.size()-1).setLevel(startNode.getLevel()+1);
         startNode.getChildren().add(nodes.get(nodes.size()-1));
+        startNode.getParent().add(nodes.get(nodes.size()-1));
         nodes.get(nodes.size()-1).getChildren().add(startNode);
+        nodes.get(nodes.size()-1).getParent().add(startNode);
+        
         repaint();
     }
     
@@ -447,12 +540,14 @@ public class GraphPanel extends JPanel {
         {
         	addEdge(startNode, endNode, true);
         	startNode.getChildren().add(endNode);
+        	endNode.getParent().add(startNode);
         }
         
         else if (direction.equals("toOld"))
         {
         	addEdge(endNode, startNode, true);
         	endNode.getChildren().add(startNode);
+        	startNode.getParent().add(endNode);
         }
         
         repaint();
@@ -465,7 +560,6 @@ public class GraphPanel extends JPanel {
         lines.get(lines.size()-1).setDirected(isDirected);
         lines.get(lines.size()-1).setEndNode(endNode);
         lines.get(lines.size()-1).setStartNode(startNode);
-        startNode.getChildren().add(endNode);
     	}
     	
     	else
@@ -474,8 +568,6 @@ public class GraphPanel extends JPanel {
             lines.get(lines.size()-1).setDirected(isDirected);
             lines.get(lines.size()-1).setEndNode(endNode);
             lines.get(lines.size()-1).setStartNode(startNode);
-            startNode.getChildren().add(endNode);
-            endNode.getChildren().add(startNode);
     	}
         repaint();
     }
@@ -507,6 +599,7 @@ public class GraphPanel extends JPanel {
             g2.setColor(node.getColor());
             g2.fillOval(x, y, 50, 50);
             g2.setColor(Color.BLACK);
+            g2.setStroke(new BasicStroke(1));
             if(node.getBold())
             {
             	g2.setStroke(new BasicStroke(3));
@@ -656,6 +749,11 @@ switch(line.getPreset()) {
             }
         }
     }
+    
+    
+    
+
+  
     
     //getter method for the list of nodes in the workspace
     public java.util.List<DragNode> getNodeList()

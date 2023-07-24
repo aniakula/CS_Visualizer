@@ -24,6 +24,8 @@ public class DragNode {
     private boolean isBold  = false;
     //type of boolean expression
     private int type;
+    //boolean to represent visitation in recursive functions
+    private boolean visited = false;
     
     
     //constants for Boolean operation  :
@@ -124,6 +126,10 @@ public class DragNode {
     	return children.toString();
     }
    
+    public boolean isVisited()
+    {
+    	return visited;
+    }
     //:::getters
     
     
@@ -209,6 +215,10 @@ public class DragNode {
     	}
     }
 
+    public void setVisit(boolean v)
+    {
+    	visited = v;
+    }
     //:::setters^^^
     
     //recursive method to update the levels when a node is deleted
@@ -358,6 +368,40 @@ public class DragNode {
     	return ins;
     }
     
+    private int CountCycles(int length, int currentLength) {
+        // Base case: if the current length is equal to the desired length, we found a cycle
+        if (currentLength == length) {
+            return 1;
+        }
+
+        int cycleCount = 0;
+        setVisit(true);
+
+        // Recursively explore children nodes that have not been visited yet
+        for (DragNode child : children) {
+            if (!child.isVisited()) {
+                cycleCount += child.CountCycles(length, currentLength + 1);
+            }
+        }
+
+        // Reset the visit status of the current node before backtracking
+        setVisit(false);
+        return cycleCount;
+    }
+
+    // Method to compute the number of cycles of a given length in the graph starting from this node
+    public int countCycles(int length) {
+        int cycleCount = 0;
+
+        // Perform DFS starting from this node
+        for (DragNode node : children) {
+            cycleCount += node.CountCycles(length, 1);
+        }
+
+        return cycleCount;
+    }
+    		
+    
     public void organize(int xdiff, int ydiff)
     {
     	if(this.getLevel() == 0)
@@ -406,6 +450,7 @@ public class DragNode {
     	}
     	
     }
+    
     
     
 }

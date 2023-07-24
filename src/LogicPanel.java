@@ -32,7 +32,7 @@ public class LogicPanel extends JPanel {
     public JMenuItem c = new JMenuItem("Color");
     public JMenuItem m = new JMenuItem("merge node");
     public JMenuItem r = new JMenuItem("Rename Input");
-    public JMenuItem dC = new JMenuItem("Delete Connection");
+
  
     public JMenuItem aC = new JMenuItem("Add Non-directed Edge");
     public JMenuItem dN = new JMenuItem("Delete Node");
@@ -55,7 +55,7 @@ public class LogicPanel extends JPanel {
         // Options in the pop-up menu for Nodes
         menu.add(c);
         menu.add(r);
-        menu.add(dC);
+ 
         menu.add(dN);
         menu.add(v);
         menu.add(aLI);

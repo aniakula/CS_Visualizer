@@ -15,8 +15,9 @@ public class VisionMain {
         final CardLayout c1 = new CardLayout();
         overall.setLayout(c1);
         frame.add(overall);
+        frame.setMinimumSize(new java.awt.Dimension(500, 500));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        //frame.pack();
         //frame.setResizable(false);
         try {
         final BinaryPanel binPanel = new BinaryPanel();

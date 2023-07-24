@@ -27,7 +27,7 @@ public class BinaryPanel extends JPanel {
 	public JMenuItem c = new JMenuItem("Color");
 	public JMenuItem r = new JMenuItem("Rename");
 	public JMenuItem aN = new JMenuItem("Add Child Node");
-	public JMenuItem dC = new JMenuItem("Delete Connection");
+	
 	public JMenuItem dN = new JMenuItem("Delete This Node");
 	public JMenuItem v = new JMenuItem("Set Node Value");
 	public JMenuItem cL = new JMenuItem("Set line Color");
@@ -44,7 +44,7 @@ public class BinaryPanel extends JPanel {
         menu.add(r);
         menu.add(c);
         menu.add(aN);
-        menu.add(dC);
+     
         menu.add(dN);
         menu.add(v);
         
@@ -470,18 +470,18 @@ public class BinaryPanel extends JPanel {
      
         for (DragNode node : nodes) 
         {
-        	if(node.getX() >= 1485)
+        	if(node.getX() >= this.getWidth())
         	{
-        		node.setX(1485);
+        		node.setX(this.getWidth());
         	}
         	else if(node.getX() <= 0)
         	{
         		node.setX(0);
         	}
         	
-        	if(node.getY() >= 720)
+        	if(node.getY() >= this.getHeight())
         	{
-        		node.setY(720);
+        		node.setY(this.getHeight());
         	}
         	else if(node.getY() <= 0)
         	{
