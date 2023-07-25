@@ -50,6 +50,7 @@ public class VisionMain {
         final JMenuItem addNGraph = new JMenuItem("Add new Node"); //add graph node
         final JMenuItem graphScreen = new JMenuItem("Go to \"Graph work\" space");//go to graph space
         final JMenuItem setUndirected = new JMenuItem("make graph non-directional");//set all edges to undirected 
+        final JMenuItem adjMatrix = new JMenuItem("Generate Adjacency Matrix");//clear
         final JMenuItem graphClear = new JMenuItem("Clear Workspace");//clear
         //----------------------------------------------------------------------------------------------
          
@@ -85,6 +86,7 @@ public class VisionMain {
       		  OrganizeTree.setVisible(false);
       		  binDisp.setVisible(false);
       		  setUndirected.setVisible(false);
+      		  adjMatrix.setVisible(false);
       	  } 
       	} );
       
@@ -112,6 +114,7 @@ public class VisionMain {
         		  OrganizeTree.setVisible(false);
         		  binDisp.setVisible(false);
         		  setUndirected.setVisible(true);
+        		  adjMatrix.setVisible(true);
         	  } 
         	} );
         
@@ -139,6 +142,7 @@ public class VisionMain {
         		  OrganizeTree.setVisible(false);
         		  binDisp.setVisible(false);
         		  setUndirected.setVisible(false);
+        		  adjMatrix.setVisible(false);
         	  } 
         	} );
         
@@ -165,6 +169,7 @@ public class VisionMain {
 			  OrganizeTree.setVisible(true);
 			  binDisp.setVisible(true);
 			  setUndirected.setVisible(false);
+			  adjMatrix.setVisible(false);
       	  } 
       	} );
         
@@ -349,6 +354,17 @@ public class VisionMain {
       	} );
         
    
+        adjMatrix.addActionListener(new ActionListener() {
+
+        	
+			public void actionPerformed(ActionEvent e) {
+				graphPanel.generateMatrix();
+				
+			}
+            
+               
+            
+        });
         
         logClear.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
@@ -408,6 +424,7 @@ public class VisionMain {
     	options.add(logClear);
     	options.add(graphClear);
     	options.add(flowClear);
+    	options.add(adjMatrix);
     
     	  
     	//initialize visible options to Binary Tree Screen defaults:
@@ -430,6 +447,7 @@ public class VisionMain {
 	  OrganizeTree.setVisible(true);
 	  binDisp.setVisible(true);
 	  setUndirected.setVisible(false);
+	  adjMatrix.setVisible(false);
 		
     	bar.add(options);
     	frame.setJMenuBar(bar);

@@ -11,16 +11,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.*;
+
+import javax.swing.*;
+
+
 
 @SuppressWarnings("serial")
 public class GraphPanel extends JPanel {
@@ -44,18 +39,19 @@ public class GraphPanel extends JPanel {
     public JMenuItem sW = new JMenuItem("Set Edge Weight");
     public JMenuItem cL = new JMenuItem("Set Edge Color");
     public JMenuItem sT = new JMenuItem("Set Edge Thickness");
-    public JMenuItem fC = new JMenuItem("count the number of cycles to this node");
-    public JMenuItem gA = new JMenuItem("Generate adjacency matrix");
+    public JMenuItem fC = new JMenuItem("Count the cycles from this node");
+    public JButton path = new JButton("generate matrix for path length");
+    String[][] orig;
     public GraphPanel() {
         // List of all nodes and lines currently on the workspace
-        nodes = new ArrayList<>();
-        lines = new ArrayList<>();
+        nodes = new ArrayList<DragNode>();
+        lines = new ArrayList<LineComp>();
 
         // Options in the pop-up menu for Nodes
         menu.add(r);
         menu.add(c);
         menu.add(aN);
-        //menu.add(gA);
+
         menu.add(aCD);
         menu.add(dN);
         menu.add(v);
@@ -425,13 +421,39 @@ public class GraphPanel extends JPanel {
             }
         });
         
-        /*gA.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-            	 int[][] adjacencyMatrix = generateAdjacencyMatrix(selectedNode);
-                 displayAdjacencyMatrix(adjacencyMatrix, nodes);
-               
+       /* path.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                menuLine.setVisible(false);
+                menu.setVisible(false);
+                boolean ret = true;
+                String valS = "";
+                while(ret) {
+                    int c = 0;
+                	valS = JOptionPane.showInputDialog("path length for new matrix:", "2");
+                    try {
+                    	c = Integer.parseInt(valS);
+                    	ret = false;
+                    }
+                    catch(Exception e1)
+                    {
+                    	if(valS == null)
+                    	{
+                    		ret = false;
+                    	}
+                    	else
+                    	JOptionPane.showMessageDialog(null, "did not provide valid Integer value for cycle length", "non-Integer input", JOptionPane.ERROR_MESSAGE);
+                    }
+                 
+                    }
+                
+                if(valS != null)
+                {
+                	int[][] newMat = powMatrix(orig, Integer.parseInt(valS));
+                }
             }
         });*/
+        
+        
        
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -752,9 +774,72 @@ switch(line.getPreset()) {
     
     
     
+    public void generateMatrix()
+    {
+    	final List<DragNode> nodes2 = nodes;
+    	String[][] Matrix = new String[nodes.size()][nodes.size()+1];
+    	String[] names = new String[nodes.size()+1];
+    	names[0] = "";
+//    	for(DragNode node: nodes)
+//    	{
+//    		names[nodes.indexOf(node) + 1] = node.getName();
+//    		Matrix[nodes.indexOf(node)][0] = node.getName();
+//    	}
+    	for(DragNode node: nodes)
+    	{
+    		names[nodes.indexOf(node) + 1] = node.getName() + ":";
+    		Matrix[nodes.indexOf(node)][0] = node.getName() + ":";
+    		for(int i = 0; i < nodes2.size(); i++)
+    		{
+    			if(node.getChildren().contains(nodes2.get(i)))
+    			{
+    				Matrix[nodes.indexOf(node)][i + 1] = "1";
+    			}
+    			
+    			else
+    			{
+    				Matrix[nodes.indexOf(node)][i + 1] = "0";
+    			}
+    		}
+    	}
+    	orig = Matrix;
+    	 JTable table = new JTable(Matrix, names);
+         JScrollPane scrollPane = new JScrollPane(table);
+         table.setFillsViewportHeight(false);
 
+         // Creating the JFrame and adding the JScrollPane to it
+         JFrame tableFrame = new JFrame("Adjacency Matrix");
+         tableFrame.setLayout(new BorderLayout());
+         tableFrame.setPreferredSize(new Dimension(500, 500));
+         tableFrame.setMaximumSize(new Dimension(500,500));
+         tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+         tableFrame.add(scrollPane, BorderLayout.CENTER); // Adding the JScrollPane to the JFrame
+         tableFrame.add(path, BorderLayout.NORTH);
+         tableFrame.pack(); // Adjusts the JFrame size to fit its components
+         tableFrame.setVisible(true); // Make the JFrame visible
+    }
   
+    public String[][] powMatrix(String[][] matrix, String[][] orig)
+    {
+        int rows = matrix.length;
+        int cols = matrix[0].length ;
     
+
+        String[][] result = new String[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 1; j < cols; j++) {
+                for (int k = 1; k < cols; k++) {
+                    result[i][j] = "" + Integer.parseInt(result[i][j]) +  Integer.parseInt(matrix[i][k]) * Integer.parseInt(orig[k-1][j]);
+                }
+            }
+        }
+    	
+		return result;
+    	
+    }
+    
+   
     //getter method for the list of nodes in the workspace
     public java.util.List<DragNode> getNodeList()
     {
