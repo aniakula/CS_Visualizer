@@ -595,6 +595,7 @@ public class LogicPanel extends JPanel {
                         		E.setVisible(true);
                         		ET.setVisible(true);
                         		dN.setVisible(false);
+                        		r.setVisible(false);
                         	}
                     		 menu.show(null, selectedNode.getX(), selectedNode.getY());
                     	}

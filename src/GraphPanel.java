@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +20,9 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class GraphPanel extends JPanel {
+	private ArrayList<JTextField> nameList = new ArrayList<JTextField>();
+	private ArrayList<JTextField> nameList2 = new ArrayList<JTextField>();
+	private ArrayList<ArrayList<JTextField>> numList = new ArrayList<ArrayList<JTextField>>();
     private List<DragNode> nodes;
     private List<LineComp> lines;
     private DragNode selectedNode;
@@ -40,8 +44,9 @@ public class GraphPanel extends JPanel {
     public JMenuItem cL = new JMenuItem("Set Edge Color");
     public JMenuItem sT = new JMenuItem("Set Edge Thickness");
     public JMenuItem fC = new JMenuItem("Count the cycles from this node");
-    public JButton path = new JButton("generate matrix for path length");
-    String[][] orig;
+   // public JButton path = new JButton("generate matrix for path length");
+    public String[][] orig;
+    public String[] nam;
     public GraphPanel() {
         // List of all nodes and lines currently on the workspace
         nodes = new ArrayList<DragNode>();
@@ -421,7 +426,7 @@ public class GraphPanel extends JPanel {
             }
         });
         
-       /* path.addActionListener(new ActionListener() {
+     /* path.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 menuLine.setVisible(false);
                 menu.setVisible(false);
@@ -448,11 +453,28 @@ public class GraphPanel extends JPanel {
                 
                 if(valS != null)
                 {
-                	int[][] newMat = powMatrix(orig, Integer.parseInt(valS));
+                	 String[][] matrix = new String[orig.length][orig[0].length];
+                	 String[][] newMat = multMatrix(matrix, orig, Integer.parseInt(valS));
+                	 JTable table = new JTable(newMat, nam);
+                     JScrollPane scrollPane = new JScrollPane(table);
+                     table.setFillsViewportHeight(false);
+
+                     // Creating the JFrame and adding the JScrollPane to it
+                     JFrame tableFrame = new JFrame("Adjacency Matrix");
+                     tableFrame.setLayout(new BorderLayout());
+                     tableFrame.setPreferredSize(new Dimension(500, 500));
+                     tableFrame.setMaximumSize(new Dimension(500,500));
+                     tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                     tableFrame.add(scrollPane, BorderLayout.CENTER); // Adding the JScrollPane to the JFrame
+                     tableFrame.add(path, BorderLayout.NORTH);
+                     tableFrame.pack(); // Adjusts the JFrame size to fit its components
+                     tableFrame.setVisible(true); // Make the JFrame visible
                 }
+                
+                
             }
-        });*/
-        
+        });
+        */
         
        
         addMouseListener(new MouseAdapter() {
@@ -576,12 +598,16 @@ public class GraphPanel extends JPanel {
     }
 
     public void addEdge(DragNode startNode, DragNode endNode, boolean isDirected) {
+    	
+    	if(!(startNode.equals(endNode))) {
     	if(isDirected)
     	{
         lines.add(new LineComp("", startNode.getX()+25, startNode.getY()+50, endNode.getX()+25, endNode.getY()));
         lines.get(lines.size()-1).setDirected(isDirected);
         lines.get(lines.size()-1).setEndNode(endNode);
         lines.get(lines.size()-1).setStartNode(startNode);
+        startNode.getChildren().add(endNode);
+        endNode.getParent().add(startNode);
     	}
     	
     	else
@@ -590,6 +616,19 @@ public class GraphPanel extends JPanel {
             lines.get(lines.size()-1).setDirected(isDirected);
             lines.get(lines.size()-1).setEndNode(endNode);
             lines.get(lines.size()-1).setStartNode(startNode);
+            startNode.getChildren().add(endNode);
+            endNode.getParent().add(startNode);
+            startNode.getParent().add(endNode);
+            endNode.getChildren().add(startNode);
+            
+    	}
+    	}
+    	
+    	else
+    	{
+    		startNode.setBold(true);
+    		startNode.getChildren().add(endNode);
+    		startNode.getParent().add(endNode);
     	}
         repaint();
     }
@@ -780,11 +819,7 @@ switch(line.getPreset()) {
     	String[][] Matrix = new String[nodes.size()][nodes.size()+1];
     	String[] names = new String[nodes.size()+1];
     	names[0] = "";
-//    	for(DragNode node: nodes)
-//    	{
-//    		names[nodes.indexOf(node) + 1] = node.getName();
-//    		Matrix[nodes.indexOf(node)][0] = node.getName();
-//    	}
+
     	for(DragNode node: nodes)
     	{
     		names[nodes.indexOf(node) + 1] = node.getName() + ":";
@@ -803,6 +838,7 @@ switch(line.getPreset()) {
     		}
     	}
     	orig = Matrix;
+    	nam = names;
     	 JTable table = new JTable(Matrix, names);
          JScrollPane scrollPane = new JScrollPane(table);
          table.setFillsViewportHeight(false);
@@ -814,19 +850,171 @@ switch(line.getPreset()) {
          tableFrame.setMaximumSize(new Dimension(500,500));
          tableFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
          tableFrame.add(scrollPane, BorderLayout.CENTER); // Adding the JScrollPane to the JFrame
-         tableFrame.add(path, BorderLayout.NORTH);
+        // tableFrame.add(path, BorderLayout.NORTH);
          tableFrame.pack(); // Adjusts the JFrame size to fit its components
          tableFrame.setVisible(true); // Make the JFrame visible
     }
-  
-    public String[][] powMatrix(String[][] matrix, String[][] orig)
+    
+    
+   
+
+        public void inputGrid(int gridSize) {
+            // Create the main frame
+        	for(int i = 0; i < gridSize; i++)
+        	{
+        		numList.add(new ArrayList<JTextField>());
+        	}
+            final JFrame frame = new JFrame("Grid Panel");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            
+
+            // Create the grid panel
+            JPanel gridPanel = new JPanel(new GridLayout(gridSize+1, gridSize+1));
+
+            // Add text boxes to the grid panel
+            for (int i = 0; i < gridSize + 1; i++) {
+                for (int j = 0; j < gridSize + 1; j++) {
+                    JTextField textField = new JTextField(5);
+                    gridPanel.add(textField);
+                    if(i == 0 && j == 0)
+                    {
+                    	textField.setBackground(Color.yellow);
+                    	textField.setText("Names:");
+                    	textField.setEditable(false);
+                    	 textField.addMouseListener(new MouseAdapter() {            
+                        	   @Override
+                        	   public void mouseClicked(MouseEvent e) {
+                        	      for(int i = 0; i < nameList.size(); i++)
+                        	      {
+                        	    	  nameList2.get(i).setText(nameList.get(i).getText());
+                        	      }
+                        	   }
+                        	});
+                    }
+                    else if(i == 0)
+                    {
+                    	textField.setBackground(Color.yellow);
+                    	nameList.add(textField);
+                    	 textField.addMouseListener(new MouseAdapter() {            
+                        	   @Override
+                        	   public void mouseClicked(MouseEvent e) {
+                        	      for(int i = 0; i < nameList.size(); i++)
+                        	      {
+                        	    	  nameList2.get(i).setText(nameList.get(i).getText());
+                        	      }
+                        	   }
+                        	});
+                    }
+                    else if(j == 0)
+                    {
+                    	textField.setEditable(false);
+						nameList2.add(textField);
+						 textField.addMouseListener(new MouseAdapter() {            
+	                      	   @Override
+	                      	   public void mouseClicked(MouseEvent e) {
+	                      	      for(int i = 0; i < nameList.size(); i++)
+	                      	      {
+	                      	    	  nameList2.get(i).setText(nameList.get(i).getText());
+	                      	      }
+	                      	   }
+	                      	});
+                    }
+                    else
+                    {
+                    	 textField.addMouseListener(new MouseAdapter() {            
+                      	   @Override
+                      	   public void mouseClicked(MouseEvent e) {
+                      	      for(int i = 0; i < nameList.size(); i++)
+                      	      {
+                      	    	  nameList2.get(i).setText(nameList.get(i).getText());
+                      	      }
+                      	   }
+                      	});
+                    	numList.get(i-1).add(textField);
+                    }
+                }
+            }
+
+            // Create the buttons
+            JButton submitButton = new JButton("submit");
+            JButton fillWithZeroButton = new JButton("fill empty cells with zero");
+
+            // Add the buttons to a separate panel
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.add(submitButton);
+            buttonPanel.add(fillWithZeroButton);
+
+            // Add action listeners to the buttons (you can implement their functionality)
+            submitButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                	boolean error = false;
+                	for(int i = 0; i < numList.size();i++)
+                	{
+                		for(int j = 0; j < numList.get(i).size(); j++)
+                		{
+                			try {
+                				Integer.parseInt(numList.get(i).get(j).getText());
+                			}
+                			catch(Exception e1)
+                			{
+                				numList.get(i).get(j).setText("");
+                				error = true;
+          
+                			}
+                		}
+                	}
+                	if(error)
+                	{
+                		JOptionPane.showMessageDialog(null, "Incorrect input, there were empty or non-integer cells present", "error", JOptionPane.PLAIN_MESSAGE);
+                	}
+                	else {
+                	  generateGraph();
+                      frame.dispose();
+                	}
+                }
+            });
+
+            fillWithZeroButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                	for(int i = 0; i < numList.size(); i++) {
+                		for(int j = 0; j < numList.get(i).size(); j++)
+                		if(numList.get(i).get(j).getText().equals(""))
+            			{
+                			numList.get(i).get(j).setText("0");
+            			}
+                	}
+                    
+                }
+            });
+
+           
+            // Add the grid panel and button panel to the main frame
+            frame.add(gridPanel, BorderLayout.CENTER);
+            frame.add(buttonPanel, BorderLayout.SOUTH);
+
+            // Display the frame
+            frame.pack();
+            frame.setVisible(true);
+        }
+
+      
+
+    
+  /*
+    public String[][] multMatrix(String[][] matrix, String[][] orig, int pow)
     {
         int rows = matrix.length;
         int cols = matrix[0].length ;
-    
-
         String[][] result = new String[rows][cols];
-
+        System.out.println(cols);
+        for(int l = 0; l < pow-1; l++) {
+        result = new String[rows][cols];
+        for(int h = 0; h<rows; h++) {
+            Arrays.fill(result[h], 0, cols, "0");
+        }
+        System.out.println(result.toString());
         for (int i = 0; i < rows; i++) {
             for (int j = 1; j < cols; j++) {
                 for (int k = 1; k < cols; k++) {
@@ -834,12 +1022,43 @@ switch(line.getPreset()) {
                 }
             }
         }
-    	
+        matrix = result;
+        }
 		return result;
-    	
+    
+    }
+    */
+        
+    public void generateGraph()
+    {
+    	ArrayList<DragNode> holder = new ArrayList<DragNode>();
+    	 for(int i = 0; i < numList.size();i++)
+  	   	 {
+  		   addNode(nameList.get(i).getText(), i*5, i*5);
+  		   holder.add(nodes.get(nodes.size()-1));
+  	     }
+    	 
+	   for(int i = 0; i < numList.size();i++)
+	   {
+		
+		   for(int j = 0; j < numList.get(i).size(); j++)
+		   {
+			   if(!(numList.get(i).get(j).getText().equals("0"))){
+				   
+				   for(int k = 0; k < Integer.parseInt(numList.get(i).get(j).getText()); k++)
+				   {
+					   addEdge(holder.get(i), holder.get(j), true);  
+				   }
+				   
+			   }
+		   }
+	   } 
+	   numList.clear();
+	   nameList.clear();
+	   nameList2.clear();
+	   repaint();
     }
     
-   
     //getter method for the list of nodes in the workspace
     public java.util.List<DragNode> getNodeList()
     {
@@ -851,5 +1070,7 @@ switch(line.getPreset()) {
     {
     	return lines;
     }
+    
+    
     
 }

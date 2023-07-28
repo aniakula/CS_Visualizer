@@ -403,7 +403,9 @@ public class BinaryPanel extends JPanel {
         });
     }
 
-    //addNode helper method to initialize new node with connecting Line
+    
+
+	//addNode helper method to initialize new node with connecting Line
     public void addNode(DragNode startNode, String name, int x, int y) {
         nodes.add(new DragNode(name, x, y));
         lines.add(new LineComp("", startNode.getX() + 25, startNode.getY() + 50, nodes.get(nodes.size()-1).getX() + 25, nodes.get(nodes.size()-1).getY()));

@@ -20,6 +20,7 @@ public class VisionMain {
         //frame.pack();
         //frame.setResizable(false);
         try {
+        	
         final BinaryPanel binPanel = new BinaryPanel();
         final GraphPanel graphPanel = new GraphPanel();
         final FlowPanel flowPanel = new FlowPanel();
@@ -52,6 +53,7 @@ public class VisionMain {
         final JMenuItem setUndirected = new JMenuItem("make graph non-directional");//set all edges to undirected 
         final JMenuItem adjMatrix = new JMenuItem("Generate Adjacency Matrix");//clear
         final JMenuItem graphClear = new JMenuItem("Clear Workspace");//clear
+        final JMenuItem genGraph = new JMenuItem("Generate Graph from Adjacency matrix");
         //----------------------------------------------------------------------------------------------
          
         //Binary Tree Main Menu Items:
@@ -87,6 +89,7 @@ public class VisionMain {
       		  binDisp.setVisible(false);
       		  setUndirected.setVisible(false);
       		  adjMatrix.setVisible(false);
+      		  genGraph.setVisible(false);
       	  } 
       	} );
       
@@ -115,6 +118,7 @@ public class VisionMain {
         		  binDisp.setVisible(false);
         		  setUndirected.setVisible(true);
         		  adjMatrix.setVisible(true);
+        		  genGraph.setVisible(true);
         	  } 
         	} );
         
@@ -143,6 +147,7 @@ public class VisionMain {
         		  binDisp.setVisible(false);
         		  setUndirected.setVisible(false);
         		  adjMatrix.setVisible(false);
+        		  genGraph.setVisible(false);
         	  } 
         	} );
         
@@ -170,8 +175,44 @@ public class VisionMain {
 			  binDisp.setVisible(true);
 			  setUndirected.setVisible(false);
 			  adjMatrix.setVisible(false);
+			  genGraph.setVisible(false);
       	  } 
       	} );
+        
+        genGraph.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+      		  
+    		  
+    		  int n = 0;
+    		  while (true) {
+                  try {
+                	  String choice = JOptionPane.showInputDialog(null,
+                              "How many verticies are in your graph?", "generate graph",
+                              JOptionPane.YES_NO_OPTION);
+                	  if(choice == null)
+                	  {
+                		  break;
+                	  }
+                      n = Integer.parseInt(choice);
+                      if(n <= 0)
+                      {
+                    	  throw new Exception();
+                      }
+                      graphPanel.inputGrid(n);
+                      break;
+                  } catch (Exception e1) {
+                      JOptionPane.showMessageDialog(null, "not a valid number try again", "error", JOptionPane.PLAIN_MESSAGE);
+                      
+                  }
+              }
+              
+    		  
+              
+              graphPanel.repaint();
+              
+    	  }
+    	} );
+    
         
         setUndirected.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
@@ -425,6 +466,7 @@ public class VisionMain {
     	options.add(graphClear);
     	options.add(flowClear);
     	options.add(adjMatrix);
+    	options.add(genGraph);
     
     	  
     	//initialize visible options to Binary Tree Screen defaults:
@@ -448,7 +490,7 @@ public class VisionMain {
 	  binDisp.setVisible(true);
 	  setUndirected.setVisible(false);
 	  adjMatrix.setVisible(false);
-		
+		genGraph.setVisible(false);
     	bar.add(options);
     	frame.setJMenuBar(bar);
     	options.setVisible(true);

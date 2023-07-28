@@ -362,6 +362,7 @@ public class DragNode {
     	
     	else
     	{
+    		if(!ins.contains(this))
     		ins.add(this);
     	}
     	
