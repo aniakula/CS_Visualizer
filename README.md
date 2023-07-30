@@ -142,6 +142,6 @@ This Panel can be navigated to through the "Graph" workspace option in the other
 
 - The Set Node Value option will allow the user to set the value of the selected node
 
-- The Count Cycles option allows the user to find the number of cycles of any length that occur with the selected node as the start. ex:
+
 
   
