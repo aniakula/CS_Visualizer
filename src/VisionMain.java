@@ -31,7 +31,7 @@ public class VisionMain {
         overall.add(logPanel, "Digital Electronics Builder");
         JMenuBar bar = new JMenuBar();
         JMenu options = new JMenu("Actions");
-        
+        JMenu nav = new JMenu("Navigation");
         //Digital Electronics Main Menu Items:
         final JMenuItem addNLog = new JMenuItem("Add new Logic gate or input"); //add new flow structure
         final JMenuItem  helpLog = new JMenuItem("Help"); // help screen for logic space
@@ -49,7 +49,7 @@ public class VisionMain {
         //Graph Main Menu Items:
         final JMenuItem helpGraph = new JMenuItem("Help"); //help screen for graph
         final JMenuItem addNGraph = new JMenuItem("Add new Node"); //add graph node
-        final JMenuItem graphScreen = new JMenuItem("Go to \"Graph work\" space");//go to graph space
+        final JMenuItem graphScreen = new JMenuItem("Go to \"Graph\" work space");//go to graph space
         final JMenuItem setUndirected = new JMenuItem("make graph non-directional");//set all edges to undirected 
         final JMenuItem adjMatrix = new JMenuItem("Generate Adjacency Matrix");//clear
         final JMenuItem graphClear = new JMenuItem("Clear Workspace");//clear
@@ -446,10 +446,10 @@ public class VisionMain {
         	} );
         
         
-    	options.add(flowScreen);
-    	options.add(graphScreen);
-    	options.add(binScreen);
-    	options.add(logScreen);
+    	nav.add(flowScreen);
+    	nav.add(graphScreen);
+    	nav.add(binScreen);
+    	nav.add(logScreen);
     	options.add(helpBin);
     	options.add(helpGraph);
     	options.add(helpFlow);
@@ -491,8 +491,11 @@ public class VisionMain {
 	  setUndirected.setVisible(false);
 	  adjMatrix.setVisible(false);
 		genGraph.setVisible(false);
+		bar.add(nav);
+		//bar.add(new JSeparator(SwingConstants.VERTICAL));
     	bar.add(options);
     	frame.setJMenuBar(bar);
+    	nav.setVisible(true);
     	options.setVisible(true);
     	
         
