@@ -1,4 +1,5 @@
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -7,11 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("serial")
 public class BinaryPanel extends JPanel {
@@ -33,6 +32,13 @@ public class BinaryPanel extends JPanel {
 	public JMenuItem cL = new JMenuItem("Set line Color");
     public JMenuItem sT = new JMenuItem("Set line Thickness");
 
+    public JButton step = new JButton("Animate next step");
+    public JButton back = new JButton("Previous step");
+
+ 
+    public ArrayList<DragNode> nodeAni = new ArrayList<DragNode>();
+    public ArrayList<LineComp> lineAni = new ArrayList<LineComp>();
+    public int stepCount = 0;
     public BinaryPanel() {
     
     	//list of all nodes and lines currently on the Workspace
@@ -52,7 +58,72 @@ public class BinaryPanel extends JPanel {
         menuLine.add(cL);
         menuLine.add(sT);
         
-        
+        back.setEnabled(false);
+    	step.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+            	boolean inc = true;
+            if(stepCount == nodeAni.size()-1)
+            {
+            	step.setEnabled(false);
+            	inc = false;
+            }
+            back.setEnabled(true);
+            
+            	DragNode currNode = nodeAni.get(stepCount);
+            	LineComp currLine = lineAni.get(stepCount);
+            if(stepCount > 0)
+            {
+            	nodeAni.get(stepCount-1).setCol(Color.WHITE);
+            	nodeAni.get(stepCount-1).setBold(false);
+            	if(lineAni.get(stepCount-1) != null) {
+            	lineAni.get(stepCount-1).setThick(1);
+            	lineAni.get(stepCount-1).setCol(Color.black);
+            	}
+            }
+         
+            currNode.setBold(true);
+            currNode.setCol(Color.yellow);
+            if(lineAni.get(stepCount) != null) {
+            currLine.setThick(3);
+            currLine.setCol(Color.red);
+            }
+            repaint();
+            if(inc)
+            stepCount++;
+            }
+                
+        });
+    	
+    	back.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+            	
+            if(stepCount == 1)
+            {
+            	back.setEnabled(false);
+            }
+            step.setEnabled(true);
+            stepCount--;
+            	DragNode currNode = nodeAni.get(stepCount);
+            	LineComp currLine = lineAni.get(stepCount);
+            
+            	nodeAni.get(stepCount+1).setCol(Color.WHITE);
+            	nodeAni.get(stepCount+1).setBold(false);
+            	if(lineAni.get(stepCount+1) != null) {
+            	lineAni.get(stepCount+1).setThick(1);
+            	lineAni.get(stepCount+1).setCol(Color.black);
+            	}
+            
+         
+            currNode.setBold(true);
+            currNode.setCol(Color.yellow);
+            if(lineAni.get(stepCount) != null) {
+            currLine.setThick(3);
+            currLine.setCol(Color.red);
+            }
+            repaint();
+            }
+                
+        });
         //renaming a node
         r.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
@@ -61,9 +132,10 @@ public class BinaryPanel extends JPanel {
 	
         		  String name = selectedNode.getName();
         		  name = JOptionPane.showInputDialog("rename the node:", name);
-        		  selectedNode.setName(name);
+        		 
         		  
-        		  if(!name.equals(null))
+        		  if(!(name == null))
+        			 selectedNode.setName(name);
         		  repaint(); 
 	
         	  } 
@@ -178,6 +250,7 @@ public class BinaryPanel extends JPanel {
       				   i--;
       			   }
       		   }
+      		   if(selectedNode.getParent().size() > 0)
       		   selectedNode.getParent().get(0).getChildren().remove(selectedNode);
       		   for(DragNode node : selectedNode.getChildren())
       		   {
@@ -200,11 +273,25 @@ public class BinaryPanel extends JPanel {
         		  menu.setVisible(false);
         			
         		  String value = selectedNode.getValue();
-        		  value = JOptionPane.showInputDialog("rename the node:", value);
-        		  selectedNode.setValue(value);
+        		  while(true) {
+        			  value = JOptionPane.showInputDialog("rename the node:", value);
+        		  		try {
+        		  			Integer.parseInt(value);
+        		  			break;
+        		  		}
+        		  		
+        		  		catch(Exception e1)
+        		  		{
+        		  			JOptionPane.showMessageDialog(null, "Value must be an integer", "invalid value", JOptionPane.ERROR_MESSAGE);
+        		  		}
+        			  
+        		  }
+        		 
         		  
-        		  if(!value.equals(null))
+        		  if(!(value == null))
+        			  selectedNode.setValue(value);
         		  repaint(); 
+        		  
         		  
   	
         	  } 
@@ -659,6 +746,219 @@ public class BinaryPanel extends JPanel {
 	  }
     }
     
+    
+    
+    
+    public void traverse(String option) throws InterruptedException
+    {
+    	stepCount = 0;
+    	nodeAni.clear();
+    	lineAni.clear();
+    	for(DragNode node: nodes)
+		{
+			node.setVisit(false);
+		}
+    	switch(option) {
+    	case("pre"):
+    		
+    		ArrayList<String> boom = new ArrayList<String>();
+    		boom = DragNode.preOrder(getRoot(), boom);
+    		for(int i = 0; i < boom.size(); i++)
+    		{
+    			for(DragNode node: nodes)
+        		{
+        			if(node.getName().equals(boom.get(i)))
+        			{
+        				nodeAni.add(node);
+        				if(node.getParent().size() > 0)
+        				{
+        					for(LineComp line: lines) 
+        					{
+        						if(line.getEndNode().equals(node))
+        						{
+        							lineAni.add(line);
+        						}
+        					}
+        					
+        				}
+        				else
+        				{
+        					lineAni.add(null);
+        				}
+        				break;
+        			}
+        		}
+    		}
+    		boom.add(0, "Nodes Traversed:");
+    		JList list = new JList(boom.toArray());
+    		
+    		JFrame f = new JFrame();
+    		f.setLayout(new BorderLayout());
+    		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    		f.add(list, BorderLayout.CENTER);
+    		JPanel buttons = new JPanel(new BorderLayout());
+    		buttons.add(step, BorderLayout.EAST);
+    		buttons.add(back, BorderLayout.WEST);
+    		f.add(buttons, BorderLayout.SOUTH);
+    		f.pack();
+    		f.setVisible(true);
+    		
+    		break;
+    	
+    	case("in"):
+    		ArrayList<String> boom1 = new ArrayList<String>();
+		boom1 = DragNode.inOrder(getRoot(), boom1);
+		for(int i = 0; i < boom1.size(); i++)
+		{
+			for(DragNode node: nodes)
+    		{
+    			if(node.getName().equals(boom1.get(i)))
+    			{
+    				nodeAni.add(node);
+    				if(node.getParent().size() > 0)
+    				{
+    					for(LineComp line: lines) 
+    					{
+    						if(line.getEndNode().equals(node))
+    						{
+    							lineAni.add(line);
+    						}
+    					}
+    					
+    				}
+    				else
+    				{
+    					lineAni.add(null);
+    				}
+    				break;
+    			}
+    		}
+		}
+		boom1.add(0, "Nodes Traversed:");
+		JList list1 = new JList(boom1.toArray());
+		
+		JFrame f1 = new JFrame();
+		f1.setLayout(new BorderLayout());
+		f1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		f1.add(list1, BorderLayout.CENTER);
+		JPanel buttons1 = new JPanel(new BorderLayout());
+		buttons1.add(step, BorderLayout.EAST);
+		buttons1.add(back, BorderLayout.WEST);
+		f1.add(buttons1, BorderLayout.SOUTH);
+		f1.pack();
+		f1.setVisible(true);
+    		break;
+    		
+    	case("post"):
+    		ArrayList<String> boom11 = new ArrayList<String>();
+		boom11 = DragNode.preOrder(getRoot(), boom11);
+		for(int i = 0; i < boom11.size(); i++)
+		{
+			for(DragNode node: nodes)
+    		{
+    			if(node.getName().equals(boom11.get(i)))
+    			{
+    				nodeAni.add(node);
+    				if(node.getParent().size() > 0)
+    				{
+    					for(LineComp line: lines) 
+    					{
+    						if(line.getEndNode().equals(node))
+    						{
+    							lineAni.add(line);
+    						}
+    					}
+    					
+    				}
+    				else
+    				{
+    					lineAni.add(null);
+    				}
+    				break;
+    			}
+    		}
+		}
+		boom11.add(0, "Nodes Traversed:");
+		JList list11 = new JList(boom11.toArray());
+		
+		JFrame f11 = new JFrame();
+		f11.setLayout(new BorderLayout());
+		f11.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		f11.add(list11, BorderLayout.CENTER);
+		JPanel buttons11 = new JPanel(new BorderLayout());
+		buttons11.add(step, BorderLayout.EAST);
+		buttons11.add(back, BorderLayout.WEST);
+		f11.add(buttons11, BorderLayout.SOUTH);
+		f11.pack();
+		f11.setVisible(true);
+    		break;
+    		
+    	case("level"):
+    		ArrayList<String> boom111 = new ArrayList<String>();
+		boom111 = DragNode.preOrder(getRoot(), boom111);
+		for(int i = 0; i < boom111.size(); i++)
+		{
+			for(DragNode node: nodes)
+    		{
+    			if(node.getName().equals(boom111.get(i)))
+    			{
+    				nodeAni.add(node);
+    				if(node.getParent().size() > 0)
+    				{
+    					for(LineComp line: lines) 
+    					{
+    						if(line.getEndNode().equals(node))
+    						{
+    							lineAni.add(line);
+    						}
+    					}
+    					
+    				}
+    				else
+    				{
+    					lineAni.add(null);
+    				}
+    				break;
+    			}
+    		}
+		}
+		boom111.add(0, "Nodes Traversed:");
+		JList list111 = new JList(boom111.toArray());
+		
+		JFrame f111 = new JFrame();
+		f111.setLayout(new BorderLayout());
+		f111.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		f111.add(list111, BorderLayout.CENTER);
+		JPanel buttons111 = new JPanel(new BorderLayout());
+		buttons111.add(step, BorderLayout.EAST);
+		buttons111.add(back, BorderLayout.WEST);
+		f111.add(buttons111, BorderLayout.SOUTH);
+		f111.pack();
+		f111.setVisible(true);
+    		break;
+    	
+    	
+    	}
+    }
+    
+    
+    
+
+    
+	
+    public DragNode getRoot()
+    {
+    	for(DragNode node: nodes)
+    	{
+    		if(node.isRoot())
+    		{
+    			return node;
+    		}
+    	}
+    	
+    	return null;
+    }
+    
     //getter method for the list of nodes in the workspace
     public java.util.List<DragNode> getNodeList()
     {
@@ -672,6 +972,5 @@ public class BinaryPanel extends JPanel {
     }
     
    
-    
     
 }

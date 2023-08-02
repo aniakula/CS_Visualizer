@@ -452,6 +452,112 @@ public class DragNode {
     	
     }
     
+    public static ArrayList<String> inOrder(DragNode root, ArrayList<String> passed)
+    {
+		return passed;
+    }
     
+    public static ArrayList<String> postOrder(DragNode root, ArrayList<String> passed)
+    {
+		return passed;
+    }
+    
+    public static ArrayList<String> lvlOrder(DragNode root, ArrayList<String> passed)
+    {
+		return passed;
+    }
+    
+    public static ArrayList<String> preOrder(DragNode root, ArrayList<String> passed)
+    {
+    	
+    	if(root.isLeaf() && !root.isVisited())
+    	{
+    		passed.add(root.getName());
+    		root.setVisit(true);
+    		return passed;
+    	}
+    	
+    	else if(root.isRoot() && !root.isVisited())
+    	{
+    		
+    		if(root.getChildren().size() == 0)
+    		{
+    			root.setVisit(true);
+    			passed.add(root.getName());
+    			return preOrder(root, passed);
+    		}
+    		else if(root.getChildren().size() == 1)
+    		{
+    			root.setVisit(true);
+    			ArrayList<String> temp = preOrder(root.getChildren().get(0), passed);
+    			temp.add(0, root.getName());
+    			return temp;
+    		}
+    		else if(root.getChildren().size() == 2)
+    		{
+    			if(root.getChildren().get(0).getX() < root.getChildren().get(1).getX())
+    			{
+    				ArrayList<String> temp = new ArrayList<String>();
+    				temp = preOrder(root.getChildren().get(0),passed);
+    				ArrayList<String> temp2 = new ArrayList<String>();
+    				temp.addAll(preOrder(root.getChildren().get(1), temp2));
+    				temp.add(0, root.getName());
+    				return temp;
+    			}
+    			
+    			else
+    			{
+    				ArrayList<String> temp = new ArrayList<String>();
+    				temp = preOrder(root.getChildren().get(1),passed);
+    				ArrayList<String> temp2 = new ArrayList<String>();
+    				temp.addAll(preOrder(root.getChildren().get(0), temp2));
+    				temp.add(0, root.getName());
+    				return temp;
+    			}
+    		}
+    	}
+    	
+    	else if(root.isRoot() && root.isVisited())
+    	{
+    		return passed;
+    	}
+    	
+    	else
+    	{
+    		if(root.getChildren().size() == 1)
+    		{
+    			root.setVisit(true);
+    			ArrayList<String> temp = preOrder(root.getChildren().get(0), passed);
+    			temp.add(0, root.getName());
+    			return temp;
+    		}
+    		else if(root.getChildren().size() == 2)
+    		{
+    			if(root.getChildren().get(0).getX() < root.getChildren().get(1).getX())
+    			{
+    				ArrayList<String> temp = new ArrayList<String>();
+    				temp = preOrder(root.getChildren().get(0),passed);
+    				ArrayList<String> temp2 = new ArrayList<String>();
+    				temp.addAll(preOrder(root.getChildren().get(1), temp2));
+    				temp.add(0, root.getName());
+    				return temp;
+    			}
+    			else
+    			{
+    				ArrayList<String> temp = new ArrayList<String>();
+    				temp = preOrder(root.getChildren().get(1),passed);
+    				ArrayList<String> temp2 = new ArrayList<String>();
+    				temp.addAll(preOrder(root.getChildren().get(0), temp2));
+    				temp.add(0, root.getName());
+    				return temp;
+    			}
+    		}
+    	}
+    	
+    	
+    	
+    	
+    	return passed;
+    }
     
 }

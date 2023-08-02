@@ -63,6 +63,7 @@ public class VisionMain {
         final JMenuItem binScreen = new JMenuItem("Go to \"Binary Tree\" work space");// go to binary tree space
         final JMenuItem binDisp = new JMenuItem("Change Display"); // change display mode of nodes (name, value, level)
         final JMenuItem binClear = new JMenuItem("Clear Workspace");//clear
+        final JMenuItem binTraverse = new JMenuItem("Traverse Tree");//traverse tree with a slected mode of traversal
         //----------------------------------------------------------------------------------------------
         
         logScreen.addActionListener(new ActionListener() { 
@@ -90,6 +91,7 @@ public class VisionMain {
       		  setUndirected.setVisible(false);
       		  adjMatrix.setVisible(false);
       		  genGraph.setVisible(false);
+      		  binTraverse.setVisible(false);
       	  } 
       	} );
       
@@ -119,6 +121,7 @@ public class VisionMain {
         		  setUndirected.setVisible(true);
         		  adjMatrix.setVisible(true);
         		  genGraph.setVisible(true);
+        		  binTraverse.setVisible(false);
         	  } 
         	} );
         
@@ -148,6 +151,7 @@ public class VisionMain {
         		  setUndirected.setVisible(false);
         		  adjMatrix.setVisible(false);
         		  genGraph.setVisible(false);
+        		  binTraverse.setVisible(false);
         	  } 
         	} );
         
@@ -176,8 +180,62 @@ public class VisionMain {
 			  setUndirected.setVisible(false);
 			  adjMatrix.setVisible(false);
 			  genGraph.setVisible(false);
+			  binTraverse.setVisible(true);
       	  } 
       	} );
+        
+        
+        
+        binTraverse.addActionListener(new ActionListener() { 
+        	  public void actionPerformed(ActionEvent e) { 
+        		// Option Operators for drop-down menu
+                  String[] options = {"Preorder", "Inorder", "Postorder", "Level order" };
+                  String selection = (String) JOptionPane.showInputDialog(null, "Choose traversal Technique", "Menu",
+                          JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+                  // Change color based on choice
+                  if(selection != null)
+                  {
+                  switch (selection) {
+                      case "Preorder":
+					try {
+						binPanel.traverse("pre");
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                          break;
+                      case "Inorder":
+					try {
+						binPanel.traverse("in");
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                          break;
+                      case "Postorder":
+					try {
+						binPanel.traverse("post");
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                          break;
+                      case "Level order":
+					try {
+						binPanel.traverse("lvl");
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                          break;
+                      
+                     }
+                  }
+        		 
+                 binPanel.repaint();
+                  
+        	  }
+        	} );
         
         genGraph.addActionListener(new ActionListener() { 
       	  public void actionPerformed(ActionEvent e) { 
@@ -467,30 +525,32 @@ public class VisionMain {
     	options.add(flowClear);
     	options.add(adjMatrix);
     	options.add(genGraph);
+    	options.add(binTraverse);
     
     	  
     	//initialize visible options to Binary Tree Screen defaults:
-    	 binClear.setVisible(true);
- 		  logClear.setVisible(false);
- 		  flowClear.setVisible(false);
- 		  graphClear.setVisible(false);
- 		  logScreen.setVisible(true);
- 		  helpLog.setVisible(false);
- 		  addNLog.setVisible(false);
+    	binClear.setVisible(true);
+ 		logClear.setVisible(false);
+ 		flowClear.setVisible(false);
+ 		graphClear.setVisible(false);
+ 		logScreen.setVisible(true);
+ 		helpLog.setVisible(false);
+ 		addNLog.setVisible(false);
  		graphScreen.setVisible(true);
-		    flowScreen.setVisible(true);
-		    binScreen.setVisible(false);
-		  addNBin.setVisible(true);
-		 addNGraph.setVisible(false);
-	  addNFlow.setVisible(false);
-		  helpBin.setVisible(true);
-	  helpGraph.setVisible(false);
-	  helpFlow.setVisible(false);
-	  OrganizeTree.setVisible(true);
-	  binDisp.setVisible(true);
-	  setUndirected.setVisible(false);
-	  adjMatrix.setVisible(false);
+		flowScreen.setVisible(true);
+		binScreen.setVisible(false);
+		addNBin.setVisible(true);
+		addNGraph.setVisible(false);
+		addNFlow.setVisible(false);
+		helpBin.setVisible(true);
+		helpGraph.setVisible(false);
+	  	helpFlow.setVisible(false);
+	  	OrganizeTree.setVisible(true);
+	  	binDisp.setVisible(true);
+	  	setUndirected.setVisible(false);
+	  	adjMatrix.setVisible(false);
 		genGraph.setVisible(false);
+		binTraverse.setVisible(true);
 		bar.add(nav);
 		//bar.add(new JSeparator(SwingConstants.VERTICAL));
     	bar.add(options);

@@ -919,6 +919,7 @@ switch(line.getPreset()) {
 	                      	   }
 	                      	});
                     }
+                    
                     else
                     {
                     	 textField.addMouseListener(new MouseAdapter() {            
