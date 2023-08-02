@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("serial")
 public class BinaryPanel extends JPanel {
-    private java.util.List<DragNode> nodes;
+    private ArrayList<DragNode> nodes;
     private java.util.List<LineComp> lines;
     private DragNode selectedNode;
     private LineComp selectedLine;
@@ -61,13 +61,20 @@ public class BinaryPanel extends JPanel {
         back.setEnabled(false);
     	step.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-            	boolean inc = true;
+            	
             if(stepCount == nodeAni.size()-1)
             {
             	step.setEnabled(false);
-            	inc = false;
+            	
             }
             back.setEnabled(true);
+            if(nodeAni.size() == 1)
+            {
+            	back.setEnabled(false);
+            }
+            
+            if(nodeAni.get(stepCount).getBold())
+            	stepCount++;
             
             	DragNode currNode = nodeAni.get(stepCount);
             	LineComp currLine = lineAni.get(stepCount);
@@ -81,31 +88,48 @@ public class BinaryPanel extends JPanel {
             	}
             }
          
+            
             currNode.setBold(true);
             currNode.setCol(Color.yellow);
             if(lineAni.get(stepCount) != null) {
             currLine.setThick(3);
             currLine.setCol(Color.red);
             }
+            
+            
+            	
             repaint();
-            if(inc)
+            
             stepCount++;
+            if(stepCount >= nodeAni.size())
+            {
+            	step.setEnabled(false);
+            }
+            System.out.println(stepCount);
             }
                 
         });
     	
     	back.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-            	
+            	if(stepCount == nodeAni.size())
+                {
+                	stepCount--;
+                }
             if(stepCount == 1)
             {
             	back.setEnabled(false);
+            	
             }
+            
             step.setEnabled(true);
+            
             stepCount--;
+            if(nodeAni.get(stepCount).getBold())
+            	stepCount--;
             	DragNode currNode = nodeAni.get(stepCount);
             	LineComp currLine = lineAni.get(stepCount);
-            
+            	
             	nodeAni.get(stepCount+1).setCol(Color.WHITE);
             	nodeAni.get(stepCount+1).setBold(false);
             	if(lineAni.get(stepCount+1) != null) {
@@ -121,6 +145,11 @@ public class BinaryPanel extends JPanel {
             currLine.setCol(Color.red);
             }
             repaint();
+            if(stepCount <= 0)
+            {
+            	back.setEnabled(false);
+            }
+            System.out.println(stepCount);
             }
                 
         });
@@ -754,6 +783,8 @@ public class BinaryPanel extends JPanel {
     	stepCount = 0;
     	nodeAni.clear();
     	lineAni.clear();
+    	step.setEnabled(true);
+    	back.setEnabled(false);
     	for(DragNode node: nodes)
 		{
 			node.setVisit(false);
@@ -769,6 +800,7 @@ public class BinaryPanel extends JPanel {
         		{
         			if(node.getName().equals(boom.get(i)))
         			{
+        				if(!nodeAni.contains(node)) {
         				nodeAni.add(node);
         				if(node.getParent().size() > 0)
         				{
@@ -786,7 +818,10 @@ public class BinaryPanel extends JPanel {
         					lineAni.add(null);
         				}
         				break;
+        				}
+        				
         			}
+        			
         		}
     		}
     		boom.add(0, "Nodes Traversed:");
@@ -807,134 +842,134 @@ public class BinaryPanel extends JPanel {
     	
     	case("in"):
     		ArrayList<String> boom1 = new ArrayList<String>();
-		boom1 = DragNode.inOrder(getRoot(), boom1);
-		for(int i = 0; i < boom1.size(); i++)
-		{
-			for(DragNode node: nodes)
-    		{
-    			if(node.getName().equals(boom1.get(i)))
-    			{
-    				nodeAni.add(node);
-    				if(node.getParent().size() > 0)
-    				{
-    					for(LineComp line: lines) 
-    					{
-    						if(line.getEndNode().equals(node))
-    						{
-    							lineAni.add(line);
-    						}
-    					}
-    					
-    				}
-    				else
-    				{
-    					lineAni.add(null);
-    				}
-    				break;
-    			}
-    		}
-		}
-		boom1.add(0, "Nodes Traversed:");
-		JList list1 = new JList(boom1.toArray());
-		
-		JFrame f1 = new JFrame();
-		f1.setLayout(new BorderLayout());
-		f1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		f1.add(list1, BorderLayout.CENTER);
-		JPanel buttons1 = new JPanel(new BorderLayout());
-		buttons1.add(step, BorderLayout.EAST);
-		buttons1.add(back, BorderLayout.WEST);
-		f1.add(buttons1, BorderLayout.SOUTH);
-		f1.pack();
-		f1.setVisible(true);
-    		break;
-    		
+			boom1 = DragNode.inOrder(getRoot(), boom1);
+			for(int i = 0; i < boom1.size(); i++)
+			{
+				for(DragNode node: nodes)
+	    		{
+	    			if(node.getName().equals(boom1.get(i)))
+	    			{
+	    				nodeAni.add(node);
+	    				if(node.getParent().size() > 0)
+	    				{
+	    					for(LineComp line: lines) 
+	    					{
+	    						if(line.getEndNode().equals(node))
+	    						{
+	    							lineAni.add(line);
+	    						}
+	    					}
+	    					
+	    				}
+	    				else
+	    				{
+	    					lineAni.add(null);
+	    				}
+	    				break;
+	    			}
+	    		}
+			}
+			boom1.add(0, "Nodes Traversed:");
+			JList list1 = new JList(boom1.toArray());
+			
+			JFrame f1 = new JFrame();
+			f1.setLayout(new BorderLayout());
+			f1.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			f1.add(list1, BorderLayout.CENTER);
+			JPanel buttons1 = new JPanel(new BorderLayout());
+			buttons1.add(step, BorderLayout.EAST);
+			buttons1.add(back, BorderLayout.WEST);
+			f1.add(buttons1, BorderLayout.SOUTH);
+			f1.pack();
+			f1.setVisible(true);
+	    	break;
+	    		
     	case("post"):
-    		ArrayList<String> boom11 = new ArrayList<String>();
-		boom11 = DragNode.preOrder(getRoot(), boom11);
-		for(int i = 0; i < boom11.size(); i++)
-		{
-			for(DragNode node: nodes)
-    		{
-    			if(node.getName().equals(boom11.get(i)))
-    			{
-    				nodeAni.add(node);
-    				if(node.getParent().size() > 0)
-    				{
-    					for(LineComp line: lines) 
-    					{
-    						if(line.getEndNode().equals(node))
-    						{
-    							lineAni.add(line);
-    						}
-    					}
-    					
-    				}
-    				else
-    				{
-    					lineAni.add(null);
-    				}
-    				break;
-    			}
-    		}
-		}
-		boom11.add(0, "Nodes Traversed:");
-		JList list11 = new JList(boom11.toArray());
-		
-		JFrame f11 = new JFrame();
-		f11.setLayout(new BorderLayout());
-		f11.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		f11.add(list11, BorderLayout.CENTER);
-		JPanel buttons11 = new JPanel(new BorderLayout());
-		buttons11.add(step, BorderLayout.EAST);
-		buttons11.add(back, BorderLayout.WEST);
-		f11.add(buttons11, BorderLayout.SOUTH);
-		f11.pack();
-		f11.setVisible(true);
-    		break;
+	    	ArrayList<String> boom11 = new ArrayList<String>();
+			boom11 = DragNode.postOrder(getRoot(), boom11);
+			for(int i = 0; i < boom11.size(); i++)
+			{
+				for(DragNode node: nodes)
+	    		{
+	    			if(node.getName().equals(boom11.get(i)))
+	    			{
+	    				nodeAni.add(node);
+	    				if(node.getParent().size() > 0)
+	    				{
+	    					for(LineComp line: lines) 
+	    					{
+	    						if(line.getEndNode().equals(node))
+	    						{
+	    							lineAni.add(line);
+	    						}
+	    					}
+	    					
+	    				}
+	    				else
+	    				{
+	    					lineAni.add(null);
+	    				}
+	    				break;
+	    			}
+	    		}
+			}
+			boom11.add(0, "Nodes Traversed:");
+			JList list11 = new JList(boom11.toArray());
+			
+			JFrame f11 = new JFrame();
+			f11.setLayout(new BorderLayout());
+			f11.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			f11.add(list11, BorderLayout.CENTER);
+			JPanel buttons11 = new JPanel(new BorderLayout());
+			buttons11.add(step, BorderLayout.EAST);
+			buttons11.add(back, BorderLayout.WEST);
+			f11.add(buttons11, BorderLayout.SOUTH);
+			f11.pack();
+			f11.setVisible(true);
+	    	break;
     		
-    	case("level"):
+    	case("lvl"):
     		ArrayList<String> boom111 = new ArrayList<String>();
-		boom111 = DragNode.preOrder(getRoot(), boom111);
-		for(int i = 0; i < boom111.size(); i++)
-		{
-			for(DragNode node: nodes)
-    		{
-    			if(node.getName().equals(boom111.get(i)))
-    			{
-    				nodeAni.add(node);
-    				if(node.getParent().size() > 0)
-    				{
-    					for(LineComp line: lines) 
-    					{
-    						if(line.getEndNode().equals(node))
-    						{
-    							lineAni.add(line);
-    						}
-    					}
-    					
-    				}
-    				else
-    				{
-    					lineAni.add(null);
-    				}
-    				break;
-    			}
-    		}
-		}
-		boom111.add(0, "Nodes Traversed:");
-		JList list111 = new JList(boom111.toArray());
-		
-		JFrame f111 = new JFrame();
-		f111.setLayout(new BorderLayout());
-		f111.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		f111.add(list111, BorderLayout.CENTER);
-		JPanel buttons111 = new JPanel(new BorderLayout());
-		buttons111.add(step, BorderLayout.EAST);
-		buttons111.add(back, BorderLayout.WEST);
-		f111.add(buttons111, BorderLayout.SOUTH);
-		f111.pack();
-		f111.setVisible(true);
+			boom111 = DragNode.lvlOrder(nodes, boom111);
+			for(int i = 0; i < boom111.size(); i++)
+			{
+				for(DragNode node: nodes)
+	    		{
+	    			if(node.getName().equals(boom111.get(i)))
+	    			{
+	    				nodeAni.add(node);
+	    				if(node.getParent().size() > 0)
+	    				{
+	    					for(LineComp line: lines) 
+	    					{
+	    						if(line.getEndNode().equals(node))
+	    						{
+	    							lineAni.add(line);
+	    						}
+	    					}
+	    					
+	    				}
+	    				else
+	    				{
+	    					lineAni.add(null);
+	    				}
+	    				break;
+	    			}
+	    		}
+			}
+			boom111.add(0, "Nodes Traversed:");
+			JList list111 = new JList(boom111.toArray());
+			
+			JFrame f111 = new JFrame();
+			f111.setLayout(new BorderLayout());
+			f111.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			f111.add(list111, BorderLayout.CENTER);
+			JPanel buttons111 = new JPanel(new BorderLayout());
+			buttons111.add(step, BorderLayout.EAST);
+			buttons111.add(back, BorderLayout.WEST);
+			f111.add(buttons111, BorderLayout.SOUTH);
+			f111.pack();
+			f111.setVisible(true);
     		break;
     	
     	

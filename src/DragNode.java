@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class DragNode {
 	//name of node
@@ -462,8 +464,15 @@ public class DragNode {
 		return passed;
     }
     
-    public static ArrayList<String> lvlOrder(DragNode root, ArrayList<String> passed)
+    public static ArrayList<String> lvlOrder(ArrayList<DragNode> nodes, ArrayList<String> passed)
     {
+    	nodes.sort(
+    			  Comparator.comparing(DragNode::getLevel).thenComparing(DragNode::getX)
+    			);
+    	for(DragNode node: nodes)
+    	{
+    		passed.add(node.getName());
+    	}
 		return passed;
     }
     
