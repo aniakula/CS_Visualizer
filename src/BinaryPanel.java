@@ -791,41 +791,33 @@ public class BinaryPanel extends JPanel {
 		}
     	switch(option) {
     	case("pre"):
-    		
-    		ArrayList<String> boom = new ArrayList<String>();
+    		ArrayList<String> order = new ArrayList<String>();
+    		ArrayList<DragNode> boom = new ArrayList<DragNode>();
     		boom = DragNode.preOrder(getRoot(), boom);
-    		for(int i = 0; i < boom.size(); i++)
+    		for(DragNode node: boom)
     		{
-    			for(DragNode node: nodes)
-        		{
-        			if(node.getName().equals(boom.get(i)))
-        			{
-        				if(!nodeAni.contains(node)) {
-        				nodeAni.add(node);
-        				if(node.getParent().size() > 0)
-        				{
-        					for(LineComp line: lines) 
-        					{
-        						if(line.getEndNode().equals(node))
-        						{
-        							lineAni.add(line);
-        						}
-        					}
-        					
-        				}
-        				else
-        				{
-        					lineAni.add(null);
-        				}
-        				break;
-        				}
-        				
-        			}
-        			
-        		}
+    			order.add(node.getName());
+    			if(!nodeAni.contains(node)) {
+    				nodeAni.add(node);
+    				if(node.getParent().size() > 0)
+    				{
+    					for(LineComp line: lines) 
+    					{
+    						if(line.getEndNode().equals(node))
+    						{
+    							lineAni.add(line);
+    						}
+    					}
+    					
+    				}
+    				else
+    				{
+    					lineAni.add(null);
+    				}
     		}
-    		boom.add(0, "Nodes Traversed:");
-    		JList list = new JList(boom.toArray());
+    		}
+    		order.add(0, "Nodes Traversed:");
+    		JList list = new JList(order.toArray());
     		
     		JFrame f = new JFrame();
     		f.setLayout(new BorderLayout());
