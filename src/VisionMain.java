@@ -342,6 +342,8 @@ public class VisionMain {
       	  } 
       	} );
         
+   
+        
         helpGraph.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
 

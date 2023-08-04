@@ -833,36 +833,33 @@ public class BinaryPanel extends JPanel {
     		break;
     	
     	case("in"):
-    		ArrayList<String> boom1 = new ArrayList<String>();
-			boom1 = DragNode.inOrder(getRoot(), boom1);
-			for(int i = 0; i < boom1.size(); i++)
+    		ArrayList<String> order2 = new ArrayList<String>();
+			ArrayList<DragNode> boom2 = new ArrayList<DragNode>();
+			boom2 = DragNode.preOrder(getRoot(), boom2);
+			for(DragNode node: boom2)
 			{
-				for(DragNode node: nodes)
-	    		{
-	    			if(node.getName().equals(boom1.get(i)))
-	    			{
-	    				nodeAni.add(node);
-	    				if(node.getParent().size() > 0)
-	    				{
-	    					for(LineComp line: lines) 
-	    					{
-	    						if(line.getEndNode().equals(node))
-	    						{
-	    							lineAni.add(line);
-	    						}
-	    					}
-	    					
-	    				}
-	    				else
-	    				{
-	    					lineAni.add(null);
-	    				}
-	    				break;
-	    			}
-	    		}
+				order2.add(node.getName());
+				if(!nodeAni.contains(node)) {
+					nodeAni.add(node);
+					if(node.getParent().size() > 0)
+					{
+						for(LineComp line: lines) 
+						{
+							if(line.getEndNode().equals(node))
+							{
+								lineAni.add(line);
+							}
+						}
+						
+					}
+					else
+					{
+						lineAni.add(null);
+					}
 			}
-			boom1.add(0, "Nodes Traversed:");
-			JList list1 = new JList(boom1.toArray());
+			}
+			order2.add(0, "Nodes Traversed:");
+			JList list1 = new JList(order2.toArray());
 			
 			JFrame f1 = new JFrame();
 			f1.setLayout(new BorderLayout());
@@ -877,36 +874,33 @@ public class BinaryPanel extends JPanel {
 	    	break;
 	    		
     	case("post"):
-	    	ArrayList<String> boom11 = new ArrayList<String>();
-			boom11 = DragNode.postOrder(getRoot(), boom11);
-			for(int i = 0; i < boom11.size(); i++)
+    		ArrayList<String> order3 = new ArrayList<String>();
+			ArrayList<DragNode> boom3 = new ArrayList<DragNode>();
+			boom3 = DragNode.preOrder(getRoot(), boom3);
+			for(DragNode node: boom3)
 			{
-				for(DragNode node: nodes)
-	    		{
-	    			if(node.getName().equals(boom11.get(i)))
-	    			{
-	    				nodeAni.add(node);
-	    				if(node.getParent().size() > 0)
-	    				{
-	    					for(LineComp line: lines) 
-	    					{
-	    						if(line.getEndNode().equals(node))
-	    						{
-	    							lineAni.add(line);
-	    						}
-	    					}
-	    					
-	    				}
-	    				else
-	    				{
-	    					lineAni.add(null);
-	    				}
-	    				break;
-	    			}
-	    		}
+				order3.add(node.getName());
+				if(!nodeAni.contains(node)) {
+					nodeAni.add(node);
+					if(node.getParent().size() > 0)
+					{
+						for(LineComp line: lines) 
+						{
+							if(line.getEndNode().equals(node))
+							{
+								lineAni.add(line);
+							}
+						}
+						
+					}
+					else
+					{
+						lineAni.add(null);
+					}
 			}
-			boom11.add(0, "Nodes Traversed:");
-			JList list11 = new JList(boom11.toArray());
+			}
+			order3.add(0, "Nodes Traversed:");
+			JList list11 = new JList(order3.toArray());
 			
 			JFrame f11 = new JFrame();
 			f11.setLayout(new BorderLayout());
@@ -921,36 +915,33 @@ public class BinaryPanel extends JPanel {
 	    	break;
     		
     	case("lvl"):
-    		ArrayList<String> boom111 = new ArrayList<String>();
-			boom111 = DragNode.lvlOrder(nodes, boom111);
-			for(int i = 0; i < boom111.size(); i++)
-			{
-				for(DragNode node: nodes)
-	    		{
-	    			if(node.getName().equals(boom111.get(i)))
-	    			{
-	    				nodeAni.add(node);
-	    				if(node.getParent().size() > 0)
-	    				{
-	    					for(LineComp line: lines) 
-	    					{
-	    						if(line.getEndNode().equals(node))
-	    						{
-	    							lineAni.add(line);
-	    						}
-	    					}
-	    					
-	    				}
-	    				else
-	    				{
-	    					lineAni.add(null);
-	    				}
-	    				break;
-	    			}
-	    		}
-			}
-			boom111.add(0, "Nodes Traversed:");
-			JList list111 = new JList(boom111.toArray());
+    		ArrayList<DragNode> boom4 = new ArrayList<DragNode>();
+    		ArrayList<String> order4 = new ArrayList<String>();
+			boom4 = DragNode.lvlOrder(nodes, boom4);
+			for(DragNode node: boom4)
+    		{
+    			order4.add(node.getName());
+    			if(!nodeAni.contains(node)) {
+    				nodeAni.add(node);
+    				if(node.getParent().size() > 0)
+    				{
+    					for(LineComp line: lines) 
+    					{
+    						if(line.getEndNode().equals(node))
+    						{
+    							lineAni.add(line);
+    						}
+    					}
+    					
+    				}
+    				else
+    				{
+    					lineAni.add(null);
+    				}
+    		}
+    		}
+			order4.add(0, "Nodes Traversed:");
+			JList list111 = new JList(order4.toArray());
 			
 			JFrame f111 = new JFrame();
 			f111.setLayout(new BorderLayout());

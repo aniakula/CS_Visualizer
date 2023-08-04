@@ -454,25 +454,201 @@ public class DragNode {
     	
     }
     
-    public static ArrayList<String> inOrder(DragNode root, ArrayList<String> passed)
+    public static ArrayList<DragNode> inOrder(DragNode root, ArrayList<DragNode> passed)
     {
+    	
+
+    	if(root.isLeaf() && !root.isVisited())
+    	{
+    		passed.add(root);
+    		root.setVisit(true);
+    		return passed;
+    	}
+    	
+    	else if(root.isRoot() && !root.isVisited())
+    	{
+    		
+    		if(root.getChildren().size() == 0)
+    		{
+    			root.setVisit(true);
+    			passed.add(root);
+    			return preOrder(root, passed);
+    		}
+    		else if(root.getChildren().size() == 1)
+    		{
+    			root.setVisit(true);
+    			ArrayList<DragNode> temp = preOrder(root.getChildren().get(0), passed);
+    			temp.add(0, root);
+    			return temp;
+    		}
+    		else if(root.getChildren().size() == 2)
+    		{
+    			if(root.getChildren().get(0).getX() < root.getChildren().get(1).getX())
+    			{
+    				ArrayList<DragNode> temp = new ArrayList<DragNode>();
+    				temp = preOrder(root.getChildren().get(0),passed);
+    				ArrayList<DragNode> temp2 = new ArrayList<DragNode>();
+    				temp.addAll(preOrder(root.getChildren().get(1), temp2));
+    				temp.add(0, root);
+    				return temp;
+    			}
+    			
+    			else
+    			{
+    				ArrayList<DragNode> temp = new ArrayList<DragNode>();
+    				temp = preOrder(root.getChildren().get(1),passed);
+    				ArrayList<DragNode> temp2 = new ArrayList<DragNode>();
+    				temp.addAll(preOrder(root.getChildren().get(0), temp2));
+    				temp.add(0, root);
+    				return temp;
+    			}
+    		}
+    	}
+    	
+    	else if(root.isRoot() && root.isVisited())
+    	{
+    		return passed;
+    	}
+    	
+    	else
+    	{
+    		if(root.getChildren().size() == 1)
+    		{
+    			root.setVisit(true);
+    			ArrayList<DragNode> temp = preOrder(root.getChildren().get(0), passed);
+    			temp.add(0, root);
+    			return temp;
+    		}
+    		else if(root.getChildren().size() == 2)
+    		{
+    			if(root.getChildren().get(0).getX() < root.getChildren().get(1).getX())
+    			{
+    				ArrayList<DragNode> temp = new ArrayList<DragNode>();
+    				temp = preOrder(root.getChildren().get(0),passed);
+    				ArrayList<DragNode> temp2 = new ArrayList<DragNode>();
+    				temp.addAll(preOrder(root.getChildren().get(1), temp2));
+    				temp.add(0, root);
+    				return temp;
+    			}
+    			else
+    			{
+    				ArrayList<DragNode> temp = new ArrayList<DragNode>();
+    				temp = preOrder(root.getChildren().get(1),passed);
+    				ArrayList<DragNode> temp2 = new ArrayList<DragNode>();
+    				temp.addAll(preOrder(root.getChildren().get(0), temp2));
+    				temp.add(0, root);
+    				return temp;
+    			}
+    		}
+    	}
+    	
+    	
+    	
     	
     	return passed;
     }
     
-    public static ArrayList<String> postOrder(DragNode root, ArrayList<String> passed)
+    public static ArrayList<DragNode> postOrder(DragNode root, ArrayList<DragNode> passed)
     {
-		return passed;
+
+    	if(root.isLeaf() && !root.isVisited())
+    	{
+    		passed.add(root);
+    		root.setVisit(true);
+    		return passed;
+    	}
+    	
+    	else if(root.isRoot() && !root.isVisited())
+    	{
+    		
+    		if(root.getChildren().size() == 0)
+    		{
+    			root.setVisit(true);
+    			passed.add(root);
+    			return preOrder(root, passed);
+    		}
+    		else if(root.getChildren().size() == 1)
+    		{
+    			root.setVisit(true);
+    			ArrayList<DragNode> temp = preOrder(root.getChildren().get(0), passed);
+    			temp.add(0, root);
+    			return temp;
+    		}
+    		else if(root.getChildren().size() == 2)
+    		{
+    			if(root.getChildren().get(0).getX() < root.getChildren().get(1).getX())
+    			{
+    				ArrayList<DragNode> temp = new ArrayList<DragNode>();
+    				temp = preOrder(root.getChildren().get(0),passed);
+    				ArrayList<DragNode> temp2 = new ArrayList<DragNode>();
+    				temp.addAll(preOrder(root.getChildren().get(1), temp2));
+    				temp.add(0, root);
+    				return temp;
+    			}
+    			
+    			else
+    			{
+    				ArrayList<DragNode> temp = new ArrayList<DragNode>();
+    				temp = preOrder(root.getChildren().get(1),passed);
+    				ArrayList<DragNode> temp2 = new ArrayList<DragNode>();
+    				temp.addAll(preOrder(root.getChildren().get(0), temp2));
+    				temp.add(0, root);
+    				return temp;
+    			}
+    		}
+    	}
+    	
+    	else if(root.isRoot() && root.isVisited())
+    	{
+    		return passed;
+    	}
+    	
+    	else
+    	{
+    		if(root.getChildren().size() == 1)
+    		{
+    			root.setVisit(true);
+    			ArrayList<DragNode> temp = preOrder(root.getChildren().get(0), passed);
+    			temp.add(0, root);
+    			return temp;
+    		}
+    		else if(root.getChildren().size() == 2)
+    		{
+    			if(root.getChildren().get(0).getX() < root.getChildren().get(1).getX())
+    			{
+    				ArrayList<DragNode> temp = new ArrayList<DragNode>();
+    				temp = preOrder(root.getChildren().get(0),passed);
+    				ArrayList<DragNode> temp2 = new ArrayList<DragNode>();
+    				temp.addAll(preOrder(root.getChildren().get(1), temp2));
+    				temp.add(0, root);
+    				return temp;
+    			}
+    			else
+    			{
+    				ArrayList<DragNode> temp = new ArrayList<DragNode>();
+    				temp = preOrder(root.getChildren().get(1),passed);
+    				ArrayList<DragNode> temp2 = new ArrayList<DragNode>();
+    				temp.addAll(preOrder(root.getChildren().get(0), temp2));
+    				temp.add(0, root);
+    				return temp;
+    			}
+    		}
+    	}
+    	
+    	
+    	
+    	
+    	return passed;
     }
     
-    public static ArrayList<String> lvlOrder(ArrayList<DragNode> nodes, ArrayList<String> passed)
+    public static ArrayList<DragNode> lvlOrder(ArrayList<DragNode> nodes, ArrayList<DragNode> passed)
     {
     	nodes.sort(
     			  Comparator.comparing(DragNode::getLevel).thenComparing(DragNode::getX)
     			);
     	for(DragNode node: nodes)
     	{
-    		passed.add(node.getName());
+    		passed.add(node);
     	}
 		return passed;
     }
