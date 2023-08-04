@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 
 
@@ -336,9 +337,14 @@ public class VisionMain {
         helpBin.addActionListener(new ActionListener() { 
       	  public void actionPerformed(ActionEvent e) { 
 
-        		  JFrame help = new JFrame("Binary Tree Builder Help");
-        		  help.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        		  help.setVisible(true);
+      		final String targetUrl = "https://github.com/Anidragon/CS_Visualizer/blob/main/README.md#binary-tree-panel";
+
+      		try {
+				java.awt.Desktop.getDesktop().browse(java.net.URI.create(targetUrl));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
       	  } 
       	} );
         
@@ -347,9 +353,14 @@ public class VisionMain {
         helpGraph.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
 
-        		  JFrame help = new JFrame("Graph Builder Help");
-        		  help.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        		  help.setVisible(true);
+        		  final String targetUrl = "https://github.com/Anidragon/CS_Visualizer/blob/main/README.md#graph-panel";
+
+        		  try {
+					java.awt.Desktop.getDesktop().browse(java.net.URI.create(targetUrl));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
           		
         	  } 
         	} );
@@ -357,11 +368,30 @@ public class VisionMain {
         helpFlow.addActionListener(new ActionListener() { 
         	  public void actionPerformed(ActionEvent e) { 
 
-          		  JFrame help = new JFrame("Flow Chart Builder Help");
-          		  help.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-          		  help.setVisible(true);
+        		  final String targetUrl = "https://github.com/Anidragon/CS_Visualizer/blob/main/README.md#flow-chart-panel";
+
+        		  try {
+					java.awt.Desktop.getDesktop().browse(java.net.URI.create(targetUrl));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
         	  } 
         	} );
+        
+        helpLog.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+
+      		  final String targetUrl = "https://github.com/Anidragon/CS_Visualizer/blob/main/README.md#digital-electronics-panel";
+
+      		  try {
+				java.awt.Desktop.getDesktop().browse(java.net.URI.create(targetUrl));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+      	  } 
+      	} );
         
         OrganizeTree.addActionListener(new ActionListener() { 
       	  public void actionPerformed(ActionEvent e) { 
