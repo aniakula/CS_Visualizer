@@ -142,6 +142,7 @@ This Panel can be navigated to through the "Graph" workspace option in the other
 
 - The Set Node Value option will allow the user to set the value of the selected node
 
+## Digital Electronics Panel:
 
 
   
