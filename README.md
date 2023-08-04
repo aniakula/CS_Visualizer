@@ -9,7 +9,7 @@ Interactive model builder for graph theory, binary trees, and programming flow-c
 - Refer to version history and user guide
   
 # How to use:
-CS_Vision in an interactive model building application for computer science concepts (Binary Trees, Graph Theory, Digital Electronics, and Programming Flowcharts). Each panel uses Draggable nodes, and connecting lines to create various structures, and perform calculations with these structures. There are four workspaces included in the CS_Vision application, each involvedin one of the CS concepts described above. The rest of this guide will explore all options that are available in each workspace of the application. Each workspace contains main menu options and Node options, both of which will be described below in detail.
+CS_Vision in an interactive model building application for computer science concepts (Binary Trees, Graph Theory, Digital Electronics, and Programming Flowcharts). Each panel uses Draggable nodes, and connecting lines to create various structures, and perform calculations with these structures. There are four workspaces included in the CS_Vision application, each involved in one of the CS concepts described above. The rest of this guide will explore all the options that are available in each workspace of the application. Each workspace contains main menu options and Node options, both of which will be described below in detail.
 
 ## Binary Tree Panel:
 this is the panel that is opened on launch of the program. The actions menu in this panel has the following options: 
